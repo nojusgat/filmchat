@@ -39,6 +39,7 @@ class SignUp extends Component {
 
   changeHandler = (event) => {
     const { name, value } = event.target;
+    const { password } = this.state;
   
     let errors = this.state.errors;
 
@@ -56,16 +57,19 @@ class SignUp extends Component {
             : 'Email is not valid!';
         break;
       case 'password': 
+        this.setState({password: value});
         errors.password = 
           value.length < 8
             ? 'Password must be 8 characters long!'
             : '';
         break;
-      case 'password_confirmation': 
+      case 'password_confirmation':
         errors.password_confirmation = 
           value.length < 8
             ? 'Password must be 8 characters long!'
-            : '';
+            : (password != value
+            ? 'Passwords must match'
+            : '');
         break;
       default:
         break;
@@ -94,11 +98,21 @@ class SignUp extends Component {
           });
         },
         error => {
-          console.log("Fail! Error = " + error.toString());
+          var errors = "Unkown error";
+
+          if(error.response.data) {
+            var errorsArray = [];
+            errors = JSON.parse(error.response.data);
+            
+            for (var i in errors) {
+              errorsArray.push(errors[i][0]);
+            }
+            errors = errorsArray.join(' ');
+          }
           
           this.setState({
             successful: false,
-            message: error.toString()
+            message: errors
           });
         }
       );  

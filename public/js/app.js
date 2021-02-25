@@ -2910,6 +2910,7 @@ var SignUp = /*#__PURE__*/function (_Component) {
       var _event$target = event.target,
           name = _event$target.name,
           value = _event$target.value;
+      var password = _this.state.password;
       var errors = _this.state.errors;
 
       switch (name) {
@@ -2922,11 +2923,15 @@ var SignUp = /*#__PURE__*/function (_Component) {
           break;
 
         case 'password':
+          _this.setState({
+            password: value
+          });
+
           errors.password = value.length < 8 ? 'Password must be 8 characters long!' : '';
           break;
 
         case 'password_confirmation':
-          errors.password_confirmation = value.length < 8 ? 'Password must be 8 characters long!' : '';
+          errors.password_confirmation = value.length < 8 ? 'Password must be 8 characters long!' : password != value ? 'Passwords must match' : '';
           break;
 
         default:
@@ -2955,11 +2960,22 @@ var SignUp = /*#__PURE__*/function (_Component) {
             successful: true
           });
         }, function (error) {
-          console.log("Fail! Error = " + error.toString());
+          var errors = "Unkown error";
+
+          if (error.response.data) {
+            var errorsArray = [];
+            errors = JSON.parse(error.response.data);
+
+            for (var i in errors) {
+              errorsArray.push(errors[i][0]);
+            }
+
+            errors = errorsArray.join(' ');
+          }
 
           _this.setState({
             successful: false,
-            message: error.toString()
+            message: errors
           });
         });
       }

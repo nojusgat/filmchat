@@ -6,6 +6,9 @@ import {Button} from 'react-bootstrap';
 import AuthenticationService from "../services/AuthenticationService";
 
 import '../../App.css';
+import { Link } from 'react-router-dom';
+
+
 
 class Login extends Component {
 
@@ -52,7 +55,7 @@ class Login extends Component {
         <Container fluid>
           <Row style={{marginTop:"20px"}}>
           <Col sm="12" md={{ size: 3, offset: 4 }}>
-          <h2>Login</h2>
+          <h2>Forgot password</h2>
             <Form  onSubmit={this.doLogin}>
               <FormGroup>
                 <Label for="email"><strong>Email</strong></Label>
@@ -77,9 +80,42 @@ class Login extends Component {
                 />
               </FormGroup>
 
-              <Button type="submit" variant="primary" size="lg" block>
-                Sign In
+              <div>
+                <center>
+                  <hr>
+                  <input type = "checkbox" name ="remember"/>Remember password
+                  </hr>
+                  <div>
+                    
+                  </div>
+                </center>
+              </div>
+
+
+              <Button type="submit" variant="primary" size="lg" block >
+                Log in
               </Button>
+              <div>
+                <b>
+                  No account?
+                </b>
+              </div>
+              <div>
+                <a> 
+                  <Link to="/signup">
+                    Sign up
+                  </Link>
+                </a> 
+                <a>                   
+                  <Link to="/forgotpassword">
+                    Forgot password?
+                  </Link></a>
+              </div>
+              <div>
+                <b>
+                  Or sign up using
+                </b>
+              </div>
               {
                 this.state.error && (
                   <Alert color="danger">

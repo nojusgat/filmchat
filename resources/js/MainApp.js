@@ -6,6 +6,7 @@ import Home from './app/components/Home';
 import UserPage from './app/components/UserPage';
 import SignUp from './app/components/SignUp';
 import Login from './app/components/Login';
+import EmailVerify from './app/components/EmailVerify';
 
 class MainApp extends Component {
   render() {
@@ -17,7 +18,8 @@ class MainApp extends Component {
           <Route path='/profile' exact={true} component={Profile}/>
           <Route path='/user' exact={true} component={UserPage}/>
           <Route path='/signin' exact={true} component={Login}/>
-          <Route path='/signup' exact={true} component={SignUp}/>  
+          <Route path='/signup' exact={true} component={SignUp}/>
+          <Route path='/verify-email/:verify_id' exact={true} component={EmailVerify}/>  
         </Switch>
       </Router>
     )

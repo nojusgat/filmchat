@@ -28,6 +28,12 @@ class AuthenticationService {
     });
   }
 
+  verifyEmail = async(verification_code) => {
+    return axios.post("/api/auth/verify", {
+      verification_code
+    });
+  }
+
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));
   }

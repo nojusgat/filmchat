@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use Validator;
-
 
 class AuthController extends Controller
 {
@@ -16,7 +18,7 @@ class AuthController extends Controller
      * @return void
      */
     public function __construct() {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'verify']]);
     }
 
     /**
@@ -34,8 +36,12 @@ class AuthController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        if (! $token = auth()->attempt($validator->validated())) {
+        if (!$token = auth()->attempt($validator->validated())) {
             return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        if (auth()->user()->is_verified == 0) {
+            return response()->json(['error' => 'Please verify your email address before logging in.'], 401);
         }
 
         return $this->createNewToken($token);
@@ -62,10 +68,66 @@ class AuthController extends Controller
                     ['password' => bcrypt($request->password)]
                 ));
 
+
+        $username = $request->username;
+        $email = $request->email;
+
+        $verification_code = Str::random(30);
+        DB::table('user_verifications')->insert(['user_id' => $user->id, 'token' => $verification_code]);
+        
+        $subject = "Please verify your email address.";
+        Mail::send('email.verify', ['username' => $username, 'verification_code' => $verification_code],
+            function($mail) use ($email, $username, $subject){
+                $mail->from(env('MAIL_FROM_ADDRESS', 'hello@example.com'), env('MAIL_FROM_NAME', 'Example'));
+                $mail->to($email, $username);
+                $mail->subject($subject);
+            });
+
         return response()->json([
-            'message' => 'User successfully registered',
+            'message' => 'User successfully registered. Please check your email to complete your registration.',
             'user' => $user
         ], 201);
+    }
+
+    /**
+     * user email verification
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function verify(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'verification_code' => 'required|string|between:5,100',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        $verification_code = $request->verification_code;
+        $check = DB::table('user_verifications')->where('token', $verification_code)->first();
+
+        if(!is_null($check)){
+            $user = User::find($check->user_id);
+
+            if($user->is_verified == 1){
+                return response()->json([
+                    'success'=> true,
+                    'message'=> 'This account is already verified'
+                ]);
+            }
+
+            $user->is_verified = 1;
+            $user->save();
+
+            DB::table('user_verifications')->where('token', $verification_code)->delete();
+
+            return response()->json([
+                'success'=> true,
+                'message'=> 'You have successfully verified your email address.'
+            ]);
+        }
+
+        return response()->json(['success'=> false, 'error'=> "Verification code is invalid."]);
     }
 
 

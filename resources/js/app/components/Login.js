@@ -36,8 +36,11 @@ class Login extends Component {
           this.props.history.push('/profile');
         },
         error => {
-          console.log("Login fail: error = { " + error.toString() + " }");
-          this.setState({error: "Can not signin successfully ! Please check email/password again"});
+          if(error.response.data && error.response.data.error) {
+            this.setState({error: error.response.data.error});
+          } else {
+            this.setState({error: "Can not signin successfully! Please check email/password again"});
+          }
         }
     );
   }

@@ -4,6 +4,7 @@ import { Container } from 'reactstrap';
 import { Form, Alert, FormGroup, Input, Label, Row, Col } from "reactstrap";
 import {Button} from 'react-bootstrap';
 import AuthenticationService from "../services/AuthenticationService";
+import CheckBox from './checkbox'
 
 import '../../App.css';
 import { Link } from 'react-router-dom';
@@ -55,7 +56,9 @@ class Login extends Component {
         <Container fluid>
           <Row style={{marginTop:"20px"}}>
           <Col sm="12" md={{ size: 3, offset: 4 }}>
-          <h2>Forgot password</h2>
+            <center>
+            <h2>Login</h2>
+            </center>
             <Form  onSubmit={this.doLogin}>
               <FormGroup>
                 <Label for="email"><strong>Email</strong></Label>
@@ -80,42 +83,56 @@ class Login extends Component {
                 />
               </FormGroup>
 
-              <div>
-                <center>
-                  <hr>
-                  <input type = "checkbox" name ="remember"/>Remember password
-                  </hr>
-                  <div>
-                    
-                  </div>
-                </center>
-              </div>
-
+              <React.StrictMode>
+            <div>
+                <b>Remember passsword </b>
+                <input type = "checkbox" name = "rememberPassword"/>
+            </div>
+              </React.StrictMode>
 
               <Button type="submit" variant="primary" size="lg" block >
                 Log in
               </Button>
+
               <div>
+                <center>
                 <b>
                   No account?
                 </b>
+                </center>
               </div>
-              <div>
+
+        <div>
+          <Container>
+            <Row xs="4">
+              <Col>
+
+            </Col>
+            <Col>
                 <a> 
                   <Link to="/signup">
                     Sign up
                   </Link>
                 </a> 
+            </Col>
+            <Col xs={5}>
                 <a>                   
                   <Link to="/forgotpassword">
                     Forgot password?
-                  </Link></a>
-              </div>
-              <div>
+                  </Link>
+                </a>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+              {/* <div>
+                <center>
                 <b>
                   Or sign up using
                 </b>
-              </div>
+                </center>
+              </div> */}
+
               {
                 this.state.error && (
                   <Alert color="danger">

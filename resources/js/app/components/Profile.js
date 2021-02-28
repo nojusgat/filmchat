@@ -99,9 +99,9 @@ class Profile extends Component {
               <Col></Col>
               </Row>
               <Row style={{marginTop:"30px"}}> 
-              <Col></Col>
-              <Col></Col>
-              <Col></Col>
+              <Col>Hello world</Col>
+              <Col>Hello world</Col>
+              <Col>Hello world</Col>
               </Row>
               
               <Row style={{marginTop:"30px"}}>

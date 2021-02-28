@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import AppNavbar from './AppNavbar';
-import { Container } from 'reactstrap';
-import { Button, Form, FormGroup, Input, Label, Row, Col } from "reactstrap";
+import { Container, Button, Form, FormGroup, Input, Label, Row, Col, CustomInput } from "reactstrap";
 import { Alert } from "react-bootstrap"
 
 import Authentication from '../services/AuthenticationService'
@@ -21,15 +20,18 @@ class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
+      firstname: "",
+      lastname: "",
       email: "",
       password: "",
       password_confirmation: "",
+      gender: "",
       message: "",
       successful: false,
       validForm: true,
       errors: {
-        username: '',
+        firstname: '',
+        lastname: '',
         email: '',
         password: '',
         password_confirmation: ''
@@ -44,10 +46,16 @@ class SignUp extends Component {
     let errors = this.state.errors;
 
     switch (name) {
-      case 'username':
-        errors.username = 
+      case 'firstname':
+        errors.firstname = 
           value.length < 5
-            ? 'Username must be 5 characters long!'
+            ? 'First name must be 5 characters long!'
+            : '';
+        break;
+      case 'lastname':
+        errors.lastname = 
+          value.length < 5
+            ? 'Last name must be 5 characters long!'
             : '';
         break;
       case 'email': 
@@ -86,10 +94,12 @@ class SignUp extends Component {
     this.setState({validForm: valid});
     if(valid){
       Authentication.register(
-        this.state.username,
+        this.state.firstname,
+        this.state.lastname,
         this.state.email,
         this.state.password,
-        this.state.password_confirmation
+        this.state.password_confirmation,
+        this.state.gender
       ).then(
         response => {
           this.setState({
@@ -149,20 +159,39 @@ class SignUp extends Component {
           <Col sm="12" md={{ size: 4, offset: 4 }}>
           {title}
             <Form onSubmit={this.signUp}>
-              <FormGroup controlId="forUsername">
-                <Label for="username">Username</Label>
+            <FormGroup controlId="forFirstname">
+                <Label for="firstname">Firstname</Label>
                 <Input
                   type="text" 
-                  placeholder="Enter UserName"
-                  name="username" id="username"
-                  value={this.state.username}
-                  autoComplete="username"
+                  placeholder="Enter First Name"
+                  name="firstname" id="firstname"
+                  value={this.state.firstname}
+                  autoComplete="firstname"
                   onChange={this.changeHandler}
                 />
                 {
-                  errors.username && ( 
+                  errors.firstname && ( 
                       <Alert variant="danger">
-                        {errors.username}
+                        {errors.firstname}
+                      </Alert>
+                    )
+                }
+              </FormGroup>
+
+              <FormGroup controlId="forLastname">
+                <Label for="lastname">Lastname</Label>
+                <Input
+                  type="text" 
+                  placeholder="Enter Last Name"
+                  name="lastname" id="lastname"
+                  value={this.state.lastname}
+                  autoComplete="lastname"
+                  onChange={this.changeHandler}
+                />
+                {
+                  errors.lastname && ( 
+                      <Alert variant="danger">
+                        {errors.lastname}
                       </Alert>
                     )
                 }
@@ -223,6 +252,15 @@ class SignUp extends Component {
                       </Alert>
                     )
                 }
+              </FormGroup>
+
+              <FormGroup>
+                <Label for="gender">Gender</Label>
+                <div>
+                  <CustomInput onChange={this.changeHandler} type="radio" value="Male" id="Male" name="gender" label="Male" />
+                  <CustomInput onChange={this.changeHandler} type="radio" value="Female" id="Female" name="gender" label="Female" />
+                  <CustomInput onChange={this.changeHandler} type="radio" value="Other" id="Other" name="gender" label="Other" />
+                </div>
               </FormGroup>
 
               <Button variant="primary" type="submit">

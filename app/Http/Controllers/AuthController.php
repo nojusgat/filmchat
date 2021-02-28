@@ -54,9 +54,11 @@ class AuthController extends Controller
      */
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|between:5,100',
+            'firstname' => 'required|string|between:5,100',
+            'lastname' => 'required|string|between:5,100',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|min:8',
+            'gender' => 'required|in:Male,Female,Other',
         ]);
 
         if($validator->fails()){
@@ -69,17 +71,17 @@ class AuthController extends Controller
                 ));
 
 
-        $username = $request->username;
+        $name = $request->firstname." ".$request->lastname;
         $email = $request->email;
 
         $verification_code = Str::random(30);
         DB::table('user_verifications')->insert(['user_id' => $user->id, 'token' => $verification_code]);
         
         $subject = "Please verify your email address.";
-        Mail::send('email.verify', ['username' => $username, 'verification_code' => $verification_code],
-            function($mail) use ($email, $username, $subject){
+        Mail::send('email.verify', ['username' => $name, 'verification_code' => $verification_code],
+            function($mail) use ($email, $name, $subject){
                 $mail->from(env('MAIL_FROM_ADDRESS', 'hello@example.com'), env('MAIL_FROM_NAME', 'Example'));
-                $mail->to($email, $username);
+                $mail->to($email, $name);
                 $mail->subject($subject);
             });
 
@@ -96,7 +98,7 @@ class AuthController extends Controller
      */
     public function verify(Request $request) {
         $validator = Validator::make($request->all(), [
-            'verification_code' => 'required|string|between:5,100',
+            'verification_code' => 'required|string',
         ]);
 
         if($validator->fails()){
@@ -111,7 +113,7 @@ class AuthController extends Controller
 
             if($user->is_verified == 1){
                 return response()->json([
-                    'success'=> true,
+                    'success'=> false,
                     'message'=> 'This account is already verified'
                 ]);
             }

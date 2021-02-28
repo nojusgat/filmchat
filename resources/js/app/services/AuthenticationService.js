@@ -19,12 +19,14 @@ class AuthenticationService {
     localStorage.removeItem("user");
   }
 
-  register = async(username, email, password, password_confirmation) => {
+  register = async(firstname, lastname, email, password, password_confirmation, gender) => {
     return axios.post("/api/auth/register", {
-      username,
+      firstname,
+      lastname,
       email,
       password,
-      password_confirmation
+      password_confirmation,
+      gender
     });
   }
 

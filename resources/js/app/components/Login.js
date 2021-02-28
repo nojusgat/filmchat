@@ -4,7 +4,7 @@ import { Container } from 'reactstrap';
 import { Form, Alert, FormGroup, Input, Label, Row, Col } from "reactstrap";
 import {Button} from 'react-bootstrap';
 import AuthenticationService from "../services/AuthenticationService";
-import CheckBox from './checkbox'
+//import CheckBox from './checkbox'
 
 import '../../App.css';
 import { Link } from 'react-router-dom';
@@ -109,18 +109,14 @@ class Login extends Component {
 
             </Col>
             <Col>
-                <a> 
-                  <Link to="/signup">
-                    Sign up
-                  </Link>
-                </a> 
+                <Link to="/signup">
+                   Sign up
+                </Link>
             </Col>
-            <Col xs={5}>
-                <a>                   
-                  <Link to="/forgotpassword">
-                    Forgot password?
-                  </Link>
-                </a>
+            <Col xs={5}>                 
+                <Link to="/forgotpassword">
+                   Forgot password?
+                </Link>
             </Col>
           </Row>
         </Container>

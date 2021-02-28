@@ -47,7 +47,7 @@ class AppNavbar extends Component {
     return <Navbar color="dark" dark expand="md">
       <NavbarBrand tag={Link} to="/home">Filmchat</NavbarBrand>
       <Nav className="mr-auto">
-        <NavLink href="/home">Home</NavLink>
+        <NavLink tag={Link} to="/home">Home</NavLink>
         {this.state.showUser && <NavLink href="/user">User</NavLink>}
       </Nav>
       <NavbarToggler onClick={this.toggle}/>
@@ -57,7 +57,7 @@ class AppNavbar extends Component {
             <Nav className="ml-auto" navbar>
               <NavItem>
                   <NavbarText>
-                    Signed in as: <a href="/profile">{this.state.username}</a>
+                    Signed in as: <Link to="/profile">{this.state.username}</Link>
                   </NavbarText>
               </NavItem>
               <NavItem>
@@ -67,10 +67,10 @@ class AppNavbar extends Component {
           ) : (
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink href="/signin">Login</NavLink>
+                <NavLink tag={Link} to="/signin">Login</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="/signup">SignUp</NavLink>
+                <NavLink tag={Link} to="/signup">SignUp</NavLink>
               </NavItem>
             </Nav>
           )

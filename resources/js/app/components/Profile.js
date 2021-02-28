@@ -51,18 +51,14 @@ class Profile extends Component {
               
                 <Form  onSubmit={this.doLogin}>
                   <FormGroup>
-                  <Label for="Username"><strong>Username</strong></Label>
-                    <Input disabled autoFocus 
-                      value={user.user.username}
-                    />
                     <Label for="Name"><strong>Name</strong></Label>
                     <Input autoFocus 
-                      value={user.user.name}
+                      value={user.user.firstname}
                       // onChange={this.changeHandler}
                     />
                     <Label for="Surname"><strong>Surname</strong></Label>
                     <Input autoFocus 
-                      value={user.user.surname}
+                      value={user.user.lastname}
                       // onChange={this.changeHandler}
                     />
                     <Label for="Email"><strong>Email</strong></Label>

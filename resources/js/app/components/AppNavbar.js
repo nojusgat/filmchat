@@ -13,7 +13,6 @@ class AppNavbar extends Component {
     this.toggle = this.toggle.bind(this);
 
     this.state = {
-      showUser: false,
       username: undefined,
       login: false
     };
@@ -24,9 +23,8 @@ class AppNavbar extends Component {
 
     if (user) {
       this.setState({
-        showUser: false,
         login: true,
-        username: user.user.username
+        username: user.user.firstname + " " + user.user.lastname
       });
     }
   }
@@ -48,7 +46,6 @@ class AppNavbar extends Component {
       <NavbarBrand tag={Link} to="/home">Filmchat</NavbarBrand>
       <Nav className="mr-auto">
         <NavLink tag={Link} to="/home">Home</NavLink>
-        {this.state.showUser && <NavLink href="/user">User</NavLink>}
       </Nav>
       <NavbarToggler onClick={this.toggle}/>
       <Collapse isOpen={this.state.isOpen} navbar>

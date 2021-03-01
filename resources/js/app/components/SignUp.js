@@ -242,7 +242,7 @@ class SignUp extends Component {
                   placeholder="Enter Password Again"
                   name="password_confirmation" id="password_confirmation"
                   value={this.state.password_confirmation}
-                  autoComplete="password_confirmation"
+                  autoComplete="password"
                   onChange={this.changeHandler}
                 />
                 {

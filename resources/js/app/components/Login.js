@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import AppNavbar from './AppNavbar';
-import { Container } from 'reactstrap';
-import { Form, Alert, FormGroup, Input, Label, Row, Col } from "reactstrap";
-import {Button} from 'react-bootstrap';
+import { Container, Form, Alert, FormGroup, Input, Row, Col, InputGroup, InputGroupAddon, InputGroupText, Button } from "reactstrap";
 import AuthenticationService from "../services/AuthenticationService";
 //import CheckBox from './checkbox'
 
 import '../../App.css';
 import { Link } from 'react-router-dom';
 
-
+import { RiLockPasswordLine } from 'react-icons/ri';
+import { HiOutlineMail } from 'react-icons/hi';
 
 class Login extends Component {
 
@@ -56,86 +55,72 @@ class Login extends Component {
         <Container fluid>
           <Row style={{marginTop:"20px"}}>
           <Col sm="12" md={{ size: 3, offset: 4 }}>
-            <center>
-            <h2>Login</h2>
-            </center>
             <Form  onSubmit={this.doLogin}>
-              <FormGroup>
-                <Label for="email"><strong>Email</strong></Label>
-                <Input autoFocus 
-                  type="text"
-                  name="email" id="email"
-                  value={this.state.email}
-                  placeholder="Enter Email"
-                  autoComplete="email"
-                  onChange={this.changeHandler}
-                />
-              </FormGroup>
-
-              <FormGroup>
-                <Label for="password"><strong>Password</strong></Label>
-                <Input type="password" 
-                  name="password" id="password"
-                  value={this.state.password}
-                  placeholder="Enter Password"
-                  autoComplete="password"
-                  onChange={this.changeHandler}
-                />
-              </FormGroup>
-
-              <React.StrictMode>
-            <div>
-                <b>Remember passsword </b>
-                <input type = "checkbox" name = "rememberPassword"/>
-            </div>
-              </React.StrictMode>
-
-              <Button type="submit" variant="primary" size="lg" block >
-                Log in
-              </Button>
-
-              <div>
-                <center>
-                <b>
-                  No account?
-                </b>
-                </center>
-              </div>
-
-        <div>
-          <Container>
-            <Row xs="4">
-              <Col>
-
-            </Col>
-            <Col>
-                <Link to="/signup">
-                   Sign up
-                </Link>
-            </Col>
-            <Col xs={5}>                 
-                <Link to="/forgotpassword">
-                   Forgot password?
-                </Link>
-            </Col>
-          </Row>
-        </Container>
-      </div>
-              {/* <div>
-                <center>
-                <b>
-                  Or sign up using
-                </b>
-                </center>
-              </div> */}
-
+            <h3 className="h3 mb-3 font-weight-normal text-center">Login</h3>
               {
                 this.state.error && (
-                  <Alert color="danger">
+                  <Alert color="danger" className="mt-3">
                     {this.state.error}
                   </Alert>
                 )
               }
+              <FormGroup>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText><HiOutlineMail /></InputGroupText>
+                  </InputGroupAddon>
+                  <Input type="text"
+                  name="email" id="email"
+                  value={this.state.email}
+                  placeholder="Your e-mail address"
+                  autoComplete="email"
+                  onChange={this.changeHandler} />
+                </InputGroup>
+              </FormGroup>
+
+              <FormGroup>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText><RiLockPasswordLine /></InputGroupText>
+                  </InputGroupAddon>
+                  <Input type="password" 
+                    name="password" id="password"
+                    value={this.state.password}
+                    placeholder="Your password"
+                    autoComplete="password"
+                    onChange={this.changeHandler}
+                  />
+                </InputGroup>
+              </FormGroup>
+
+              <React.StrictMode>
+                <div className="mb-3">
+                  Remember passsword? <input type="checkbox" name="rememberPassword" />
+                </div>
+              </React.StrictMode>
+
+              <Button type="submit" color="primary" size="lg" block>
+                Log in
+              </Button>
+
+              <div className="mt-3 text-center">
+                <b>No account?</b>
+              </div>
+
+              <div className="text-center">
+                <Row xs="2">
+                  <Col>
+                    <Link to="/signup">
+                      Sign up
+                    </Link>
+                  </Col>
+                  <Col>                 
+                    <Link to="/forgotpassword">
+                      Forgot password?
+                    </Link>
+                  </Col>
+                </Row>
+              </div>
             </Form>
             </Col>
           </Row>

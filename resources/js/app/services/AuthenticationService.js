@@ -31,8 +31,28 @@ class AuthenticationService {
   }
 
   verifyEmail = async(verification_code) => {
-    return axios.post("/api/auth/verify", {
+    return axios.post("/api/auth/complete/emailverify", {
       verification_code
+    });
+  }
+
+  checkRecoverToken = async(check_token) => {
+    return axios.post("/api/auth/complete/lostpassword", {
+      check_token
+    });
+  }
+
+  completeRecoverPassword = async(request_token, password, password_confirmation) => {
+    return axios.post("/api/auth/complete/lostpassword", {
+      request_token,
+      password,
+      password_confirmation
+    });
+  }
+
+  requestRecoverPassword = async(email) => {
+    return axios.post("/api/auth/request/lostpassword", {
+      email
     });
   }
 

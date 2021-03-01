@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use Validator;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -18,7 +19,7 @@ class AuthController extends Controller
      * @return void
      */
     public function __construct() {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'verify']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'verify', 'lostPasswordRequest', 'resetPassword']]);
     }
 
     /**
@@ -92,7 +93,7 @@ class AuthController extends Controller
     }
 
     /**
-     * user email verification
+     * User email verification.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -114,7 +115,7 @@ class AuthController extends Controller
             if($user->is_verified == 1){
                 return response()->json([
                     'success'=> false,
-                    'message'=> 'This account is already verified'
+                    'error'=> 'This account is already verified'
                 ]);
             }
 
@@ -132,6 +133,89 @@ class AuthController extends Controller
         return response()->json(['success'=> false, 'error'=> "Verification code is invalid."]);
     }
 
+    /**
+     * Lost password request method.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function lostPasswordRequest(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        $email = $request->email;
+        $check = User::where('email', $email)->first();
+        if(!is_null($check) && $check->is_verified == 1){
+            $isOtherToken = DB::table('password_resets')->where('email', $email)->first();
+
+            if($isOtherToken) {
+                $recover_token = $isOtherToken->token;
+            } else {
+                $recover_token = Str::random(80);
+                DB::table('password_resets')->insert(['email' => $email, 'token' => $recover_token, 'created_at' => Carbon::now()]);
+            }
+            
+            $subject = "Password reset request";
+            Mail::send('email.lostpasssword', ['username' => $check->firstname." ".$check->lastname, 'recover_token' => $recover_token, 'email' => $email],
+                function($mail) use ($email, $check, $subject){
+                    $mail->from(env('MAIL_FROM_ADDRESS', 'hello@example.com'), env('MAIL_FROM_NAME', 'Example'));
+                    $mail->to($email, $check->firstname." ".$check->lastname);
+                    $mail->subject($subject);
+                });
+            return response()->json([
+                'success'=> true,
+                'message'=> 'Password reset email sent. Please check your inbox'
+            ]);
+        } else if(!is_null($check) && $check->is_verified != 1) {
+            return response()->json(['success'=> false, 'error'=> "Can't reset password, email is not verified."]);
+        }
+        return response()->json(['success'=> false, 'error'=> "No account with matching email."]);
+    }
+
+    /**
+     * Reset password method.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function resetPassword(Request $request) {
+        if($request->check_token) {
+            $check = DB::table('password_resets')->where(['token' => $request->check_token])->first();
+            if(!is_null($check)) {
+                return response()->json(['valid'=> true]);
+            }
+            return response()->json(['valid'=> false]);
+        }
+        $validator = Validator::make($request->all(), [
+            'request_token' => 'required|string',
+            'password' => 'required|string|confirmed|min:8',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        $check = DB::table('password_resets')->where(['token' => $request->request_token])->first();
+        if(!is_null($check)) {
+            $userData = User::whereEmail($check->email)->first();
+
+            $userData->update([
+              'password' => bcrypt($request->password)
+            ]);
+
+
+            DB::table('password_resets')->where(['token' => $request->request_token])->delete();
+
+            return response()->json([
+                'success'=> true,
+                'message'=> 'Password has been changed.'
+            ]);
+        }
+        return response()->json(['success'=> false, 'error'=> "Invalid password reset token."]);
+    }
 
     /**
      * Log the user out (Invalidate the token).

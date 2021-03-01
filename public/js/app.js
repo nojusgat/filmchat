@@ -2321,8 +2321,6 @@ var AppNavbar = /*#__PURE__*/function (_Component) {
       _services_AuthenticationService__WEBPACK_IMPORTED_MODULE_1__.default.signOut();
 
       _this.props.history.push('/');
-
-      window.location.reload();
     });
 
     _this.state = {

@@ -22,6 +22,8 @@ Route::group([
 ], function ($router) {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/verify', [AuthController::class, 'verify']);
+    Route::post('/request/lostpassword', [AuthController::class, 'lostPasswordRequest']);
+    Route::post('/complete/emailverify', [AuthController::class, 'verify']);
+    Route::post('/complete/lostpassword', [AuthController::class, 'resetPassword']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });

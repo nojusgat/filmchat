@@ -8,6 +8,7 @@ import Login from './app/components/Login';
 import EmailVerify from './app/components/EmailVerify';
 import AuthenticationService from './app/services/AuthenticationService';
 import ForgotPassword from './app/components/ForgotPassword';
+import ForgotPasswordComplete from './app/components/ForgotPasswordComplete';
 
 const LoggedInRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={(props) => (
@@ -35,7 +36,8 @@ class MainApp extends Component {
           <LoggedInRoute path='/profile' exact={true} component={Profile}/>
           <LoggedOutRoute path='/signin' exact={true} component={Login}/>
           <LoggedOutRoute path='/signup' exact={true} component={SignUp}/>
-          <LoggedOutRoute path='/verify-email/:verify_id' exact={true} component={EmailVerify}/>
+          <LoggedOutRoute path='/email/verify/:verify_id' exact={true} component={EmailVerify}/>
+          <LoggedOutRoute path='/email/reset/:reset_id' exact={true} component={ForgotPasswordComplete}/>
           <LoggedOutRoute path='/forgotpassword' exact={true} component={ForgotPassword}/>
         </Switch>
       </Router>

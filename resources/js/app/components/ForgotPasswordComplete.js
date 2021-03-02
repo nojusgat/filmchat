@@ -17,19 +17,22 @@ class ForgotPasswordComplete extends Component {
       success: "",
       password: "",
       password_confirmation: "",
+      valid: false,
+      checked: false
     };
+  }
 
+  componentDidMount() {
     const { match: { params } } = this.props;
 
     AuthenticationService.checkRecoverToken(params.reset_id).then(
       response => {
-        if(!response.data.valid) {
-          this.props.history.push('/');
+        if(response.data.valid) {
+          this.setState({valid: true, checked: true});
+        } else {
+          this.setState({valid: false, checked: true});
         }
       });
-  }
-
-  componentDidMount() {
   }
 
   changeHandler = (event) => {
@@ -75,65 +78,78 @@ class ForgotPasswordComplete extends Component {
   }
 
   render() {
-    return ( 
-      <div>
-        <AppNavbar/>
-        <Container fluid>
-          <Row style={{marginTop:"20px"}}>
-          <Col sm="12" md={{ size: 3, offset: 4 }}>
-            <Form onSubmit={this.doVerify}>
-              <h3 className="h3 mb-3 font-weight-normal text-center">Password reset</h3>
-              <p className="mb-4">Please enter a password to complete the password reset.</p>
-              {
-                this.state.error && (
-                  <Alert color="danger" className="mt-3">
-                    {this.state.error}
-                  </Alert>
-                )
-              }
-              {
-                this.state.success && (
-                  <Alert color="success" className="mt-3">
-                    {this.state.success}
-                  </Alert>
-                )
-              }
-              <FormGroup>
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText><RiLockPasswordLine /></InputGroupText>
-                  </InputGroupAddon>
-                  <Input type="password"
-                  name="password" id="password"
-                  value={this.state.email}
-                  placeholder="Please enter your new password"
-                  autoComplete="password"
-                  onChange={this.changeHandler} />
-                </InputGroup>
-              </FormGroup>
+    if(this.state.valid && this.state.checked) {
+      return ( 
+        <div>
+          <AppNavbar/>
+          <Container fluid>
+            <Row style={{marginTop:"20px"}}>
+            <Col sm="12" md={{ size: 3, offset: 4 }}>
+              <Form onSubmit={this.doVerify}>
+                <h3 className="h3 mb-3 font-weight-normal text-center">Password reset</h3>
+                <p className="mb-4">Please enter a password to complete the password reset.</p>
+                {
+                  this.state.error && (
+                    <Alert color="danger" className="mt-3">
+                      {this.state.error}
+                    </Alert>
+                  )
+                }
+                {
+                  this.state.success && (
+                    <Alert color="success" className="mt-3">
+                      {this.state.success}
+                    </Alert>
+                  )
+                }
+                <FormGroup>
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText><RiLockPasswordLine /></InputGroupText>
+                    </InputGroupAddon>
+                    <Input type="password"
+                    name="password" id="password"
+                    value={this.state.email}
+                    placeholder="Please enter your new password"
+                    autoComplete="password"
+                    onChange={this.changeHandler} />
+                  </InputGroup>
+                </FormGroup>
 
-              <FormGroup>
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText><RiLockPasswordLine /></InputGroupText>
-                  </InputGroupAddon>
-                  <Input type="password"
-                  name="password_confirmation" id="password_confirmation"
-                  value={this.state.email}
-                  placeholder="Please confirm your new password"
-                  autoComplete="password"
-                  onChange={this.changeHandler} />
-                </InputGroup>
-              </FormGroup>
+                <FormGroup>
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText><RiLockPasswordLine /></InputGroupText>
+                    </InputGroupAddon>
+                    <Input type="password"
+                    name="password_confirmation" id="password_confirmation"
+                    value={this.state.email}
+                    placeholder="Please confirm your new password"
+                    autoComplete="password"
+                    onChange={this.changeHandler} />
+                  </InputGroup>
+                </FormGroup>
 
-              <Button type="submit" color="primary" size="lg" block >
-                Reset password
-              </Button>
-            </Form>
-            </Col>
-          </Row>
-        </Container>
-      </div>);
+                <Button type="submit" color="primary" size="lg" block >
+                  Reset password
+                </Button>
+              </Form>
+              </Col>
+            </Row>
+          </Container>
+        </div>);
+      } else if (!this.state.valid && this.state.checked) {
+        this.props.history.push('/');
+        return (
+          <div>
+          </div>
+        );
+      } else {
+        return (
+          <div>
+          </div>
+        );
+      }
   }
 }
 

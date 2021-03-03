@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import AppNavbar from './AppNavbar';
-import { Link } from 'react-router-dom';
-import { Button, Container, Alert } from 'reactstrap';
+import { Container, Alert, Row, Col } from 'reactstrap';
 
 import AuthenticationService from '../services/AuthenticationService';
 
@@ -23,11 +22,15 @@ class Home extends Component {
         <div>
           <AppNavbar/>
           <Container fluid>
-            <div style={{marginTop:"20px"}}>
-              <Alert variant="primary">
-                <h2>Main page</h2>
-              </Alert>
-            </div>
+          <Row style={{marginTop:"20px"}}>
+            <Col sm="12" md={{ size: 8, offset: 2 }}>
+              <div style={{marginTop:"20px"}}>
+                <Alert variant="primary">
+                  <h2>Main page</h2>
+                </Alert>
+              </div>
+            </Col>
+          </Row>
           </Container>
         </div>
       );

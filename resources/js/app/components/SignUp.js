@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import AppNavbar from './AppNavbar';
-import { Container, Button, Form, FormGroup, Input, Label, Row, Col, CustomInput } from "reactstrap";
-import { Alert } from "react-bootstrap"
+import { Container, Button, Form, FormGroup, Input, Label, Row, Col, CustomInput, FormFeedback, Alert, InputGroup, InputGroupAddon, InputGroupText } from "reactstrap";
 
 import Authentication from '../services/AuthenticationService'
+
+import { FiUser, FiUsers } from 'react-icons/fi'
+import { RiLockPasswordLine } from 'react-icons/ri';
+import { HiOutlineMail } from 'react-icons/hi';
 
 const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
@@ -130,7 +133,6 @@ class SignUp extends Component {
   }
 
   render() {
-    const title = <h2>Register User</h2>;
     const errors = this.state.errors;
 
     let alert = "";
@@ -138,13 +140,13 @@ class SignUp extends Component {
     if(this.state.message){
       if(this.state.successful){
         alert = (
-                  <Alert variant="success">
+                  <Alert color="success" className="mt-3">
                     {this.state.message}
                   </Alert>
                 );
       }else{
         alert = (
-                  <Alert variant="danger">
+                  <Alert color="danger" className="mt-3">
                     {this.state.message}
                   </Alert>
                 );
@@ -156,102 +158,127 @@ class SignUp extends Component {
         <AppNavbar/>
         <Container fluid>
           <Row style={{marginTop:"20px"}}>
-          <Col sm="12" md={{ size: 4, offset: 4 }}>
-          {title}
+            <Col sm="12" md={{ size: 3, offset: 4 }}>
             <Form onSubmit={this.signUp}>
-            <FormGroup controlId="forFirstname">
-                <Label for="firstname">Firstname</Label>
-                <Input
-                  type="text" 
-                  placeholder="Enter First Name"
-                  name="firstname" id="firstname"
-                  value={this.state.firstname}
-                  autoComplete="firstname"
-                  onChange={this.changeHandler}
-                />
-                {
-                  errors.firstname && ( 
-                      <Alert variant="danger">
-                        {errors.firstname}
-                      </Alert>
-                    )
-                }
+              <h3 className="h3 mb-3 font-weight-normal text-center">Register</h3>
+              <p className="mb-4">This site is only for registered users. Please register below to use the site.</p>
+              {
+                  !this.state.validForm && (
+                    <Alert key="validForm" color="danger" className="mt-3">
+                      Please check the inputs again!
+                    </Alert>
+                  )
+              }
+
+              {alert}
+              <FormGroup>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText><FiUser /></InputGroupText>
+                  </InputGroupAddon>
+                  <Input
+                    type="text" 
+                    placeholder="Provide your firstname"
+                    name="firstname" id="firstname"
+                    value={this.state.firstname}
+                    autoComplete="firstname"
+                    onChange={this.changeHandler}
+                    invalid={errors.firstname ? true : null}
+                  />
+                  {
+                    errors.firstname && ( 
+                      <FormFeedback invalid>{errors.firstname}</FormFeedback>
+                      )
+                  }
+                </InputGroup>
               </FormGroup>
 
-              <FormGroup controlId="forLastname">
-                <Label for="lastname">Lastname</Label>
-                <Input
-                  type="text" 
-                  placeholder="Enter Last Name"
-                  name="lastname" id="lastname"
-                  value={this.state.lastname}
-                  autoComplete="lastname"
-                  onChange={this.changeHandler}
-                />
-                {
-                  errors.lastname && ( 
-                      <Alert variant="danger">
-                        {errors.lastname}
-                      </Alert>
-                    )
-                }
+              <FormGroup>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText><FiUsers /></InputGroupText>
+                  </InputGroupAddon>
+                  <Input
+                    type="text" 
+                    placeholder="Provide your lastname"
+                    name="lastname" id="lastname"
+                    value={this.state.lastname}
+                    autoComplete="lastname"
+                    onChange={this.changeHandler}
+                    invalid={errors.lastname ? true : null}
+                  />
+                  {
+                    errors.lastname && ( 
+                      <FormFeedback invalid>{errors.lastname}</FormFeedback>
+                      )
+                  }
+                </InputGroup>
               </FormGroup>
 
-              <FormGroup controlId="formEmail">
-                <Label for="email">Email</Label>
-                <Input required
-                  type="text" 
-                  placeholder="Enter Email"
-                  name="email" id="email"
-                  value={this.state.email}
-                  autoComplete="email"
-                  onChange={this.changeHandler}
-                />
-                {
-                  errors.email && ( 
-                      <Alert variant="danger">
-                        {errors.email}
-                      </Alert>
-                    )
-                }
+              <FormGroup>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText><HiOutlineMail /></InputGroupText>
+                  </InputGroupAddon>
+                  <Input required
+                    type="text" 
+                    placeholder="Provide a valid e-mail address"
+                    name="email" id="email"
+                    value={this.state.email}
+                    autoComplete="email"
+                    onChange={this.changeHandler}
+                    invalid={errors.email ? true : null}
+                  />
+                  {
+                    errors.email && ( 
+                      <FormFeedback invalid>{errors.email}</FormFeedback>
+                      )
+                  }
+                </InputGroup>
               </FormGroup>
 
-              <FormGroup controlId="formPassword">
-                <Label for="password">Password</Label>
-                <Input required 
-                  type="password" 
-                  placeholder="Enter Password"
-                  name="password" id="password"
-                  value={this.state.password}
-                  autoComplete="password"
-                  onChange={this.changeHandler}
-                />
-                {
-                  errors.password && ( 
-                      <Alert key="errorspassword" variant="danger">
-                        {errors.password}
-                      </Alert>
-                    )
-                }
+              <FormGroup>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText><RiLockPasswordLine /></InputGroupText>
+                  </InputGroupAddon>
+                  <Input required 
+                    type="password" 
+                    placeholder="Choose your password"
+                    name="password" id="password"
+                    value={this.state.password}
+                    autoComplete="password"
+                    onChange={this.changeHandler}
+                    invalid={errors.password ? true : null}
+                  />
+                  {
+                    errors.password && ( 
+                      <FormFeedback invalid>{errors.password}</FormFeedback>
+                      )
+                  }
+                </InputGroup>
               </FormGroup>
 
-              <FormGroup controlId="formPasswordConfirmation">
-                <Label for="password_confirmation">Password confirmation</Label>
-                <Input required 
-                  type="password" 
-                  placeholder="Enter Password Again"
-                  name="password_confirmation" id="password_confirmation"
-                  value={this.state.password_confirmation}
-                  autoComplete="password"
-                  onChange={this.changeHandler}
-                />
-                {
-                  errors.password_confirmation && ( 
-                      <Alert key="errorspassword_confirmation" variant="danger">
-                        {errors.password_confirmation}
-                      </Alert>
-                    )
-                }
+              <FormGroup>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText><RiLockPasswordLine /></InputGroupText>
+                  </InputGroupAddon>
+                  <Input required 
+                    type="password" 
+                    placeholder="Confirm your password"
+                    name="password_confirmation" id="password_confirmation"
+                    value={this.state.password_confirmation}
+                    autoComplete="password"
+                    onChange={this.changeHandler}
+                    invalid={errors.password_confirmation ? true : null}
+                  />
+                  {
+                    errors.password_confirmation && ( 
+                      <FormFeedback invalid>{errors.password_confirmation}</FormFeedback>
+                      )
+                  }
+                </InputGroup>
               </FormGroup>
 
               <FormGroup>
@@ -263,18 +290,9 @@ class SignUp extends Component {
                 </div>
               </FormGroup>
 
-              <Button variant="primary" type="submit">
-                Create
+              <Button color="primary" type="submit" size="lg" block>
+                Create account
               </Button>
-              {
-                !this.state.validForm && (
-                  <Alert key="validForm" variant="danger">
-                    Please check the inputs again!
-                  </Alert>
-                )
-              }
-
-              {alert}
             </Form>
             </Col>
           </Row>

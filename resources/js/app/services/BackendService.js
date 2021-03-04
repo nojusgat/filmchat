@@ -13,9 +13,19 @@ axios.interceptors.request.use( config => {
 });
 
 class BackendService {
-  /*async getUserBoard() {
-    return await axios.get("/api/test/user");
-  }*/
+  getInfoById = async(id) => {
+    return axios.post("/api/auth/movie/show", {
+      by: "id",
+      param: id
+    });
+  }
+
+  getInfoByTitle = async(title) => {
+    return axios.post("/api/auth/movie/show", {
+      by: "title",
+      param: title
+    });
+  }
 }
 
 export default new BackendService();

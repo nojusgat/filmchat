@@ -133,7 +133,7 @@ class Login extends Component {
                   onFailure={responseGoogle}
                   isSignedIn={true}
                   cookiePolicy={'single_host_origin'}
-                />,
+                />
               </div>
             </Form>
             </Col>

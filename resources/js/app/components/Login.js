@@ -2,13 +2,18 @@ import React, { Component } from 'react';
 import AppNavbar from './AppNavbar';
 import { Container, Form, Alert, FormGroup, Input, Row, Col, InputGroup, InputGroupAddon, InputGroupText, Button } from "reactstrap";
 import AuthenticationService from "../services/AuthenticationService";
-//import CheckBox from './checkbox'
 
 import '../../App.css';
 import { Link } from 'react-router-dom';
 
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { HiOutlineMail } from 'react-icons/hi';
+
+import GoogleLogin from 'react-google-login';
+
+const responseGoogle = (response) => {
+  console.log(response);
+}
 
 class Login extends Component {
 
@@ -120,6 +125,15 @@ class Login extends Component {
                     </Link>
                   </Col>
                 </Row>
+
+                <GoogleLogin
+                  clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+                  buttonText="Login using Google"
+                  onSuccess={responseGoogle}
+                  onFailure={responseGoogle}
+                  isSignedIn={true}
+                  cookiePolicy={'single_host_origin'}
+                />,
               </div>
             </Form>
             </Col>

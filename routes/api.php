@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MoviesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,7 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
+    Route::post('/movie/show', [MoviesController::class, 'getMovie']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/request/lostpassword', [AuthController::class, 'lostPasswordRequest']);

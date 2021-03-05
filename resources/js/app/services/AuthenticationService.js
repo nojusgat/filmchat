@@ -59,6 +59,20 @@ class AuthenticationService {
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));
   }
+
+  logInGoogle(token){
+    return axios.post("/api/auth/login", {token}).
+    then(response => {
+      if (response.data.access_token != err) {
+        localStorage.setItem("user", JSON.stringify(response.data));
+      }
+      return response.data;
+    })
+    .catch(err => {
+      console.log(err);
+      throw err;
+    });
+  }
 }
 
 export default new AuthenticationService();

@@ -19,7 +19,7 @@ class AuthController extends Controller
      * @return void
      */
     public function __construct() {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'verify', 'lostPasswordRequest', 'resetPassword']]);
+        $this->middleware('auth:api', ['except' => ['login', 'loginGoogle', 'register', 'verify', 'lostPasswordRequest', 'resetPassword']]);
     }
 
     /**
@@ -34,15 +34,56 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json($validator->errors(), 400);
+        }
+
+        if($request->remember == true) {
+            auth()->factory()->setTTL(7*24*60);
         }
 
         if (!$token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Wrong email or password. Please try again.'], 401);
         }
 
         if (auth()->user()->is_verified == 0) {
             return response()->json(['error' => 'Please verify your email address before logging in.'], 401);
+        }
+
+        return $this->createNewToken($token);
+    }
+
+    public function loginGoogle(Request $request){
+    	$validator = Validator::make($request->all(), [
+            'token' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $googleInfo = @file_get_contents("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=".$request->token);
+        $googleInfo = json_decode($googleInfo);
+        if(!$googleInfo || !isset($googleInfo->aud)) {
+            return response()->json(['error' => "Invalid token"], 401);
+        }
+
+        if($googleInfo->aud != "309423572945-fteqc77rsn47h579ng6e2dcahi0vusis.apps.googleusercontent.com") {
+            return response()->json(['error' => 'Token error'], 401);
+        }
+
+        $email = $googleInfo->email;
+        $name = $googleInfo->given_name;
+        $surname = $googleInfo->family_name;
+
+        $user = User::where('email', $email)->first();
+        if(is_null($user)) {
+            return response()->json(['error' => 'Need to implement a register method, email not found in database'], 401);
+        }
+
+        $token = auth()->login($user);
+
+        if (!$token = auth()->login($user)) {
+            return response()->json(['error' => 'Can not login. Please try again.'], 401);
         }
 
         return $this->createNewToken($token);

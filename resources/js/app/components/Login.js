@@ -38,8 +38,8 @@ class Login extends Component {
   responseGoogle = (response) => {
     if(response.error) {
       this.setState({error: response.details != null ? response.details : response.error});
-    } else if (resposne.tokenId) {
-      AuthenticationService.logInGoogle(resposne.tokenId).then(
+    } else if (response.tokenId) {
+      AuthenticationService.logInGoogle(response.tokenId).then(
           () => {
             this.props.history.push('/home');
           },

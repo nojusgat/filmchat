@@ -3543,10 +3543,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var responseGoogle = function responseGoogle(response) {
-  console.log(response);
-};
-
 var Login = /*#__PURE__*/function (_Component) {
   _inherits(Login, _Component);
 
@@ -3572,6 +3568,30 @@ var Login = /*#__PURE__*/function (_Component) {
       _this.setState({
         remember: value
       });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "responseGoogle", function (response) {
+      if (response.error) {
+        _this.setState({
+          error: response.details != null ? response.details : response.error
+        });
+      } else if (resposne.tokenId) {
+        _services_AuthenticationService__WEBPACK_IMPORTED_MODULE_3__.default.logInGoogle(resposne.tokenId).then(function () {
+          _this.props.history.push('/home');
+        }, function (error) {
+          if (error.response.data && error.response.data.error) {
+            _this.setState({
+              error: error.response.data.error
+            });
+          } else {
+            _this.setState({
+              error: "Can not signin successfully! Please check email/password again"
+            });
+          }
+        });
+      }
+
+      console.log(response);
     });
 
     _defineProperty(_assertThisInitialized(_this), "doLogin", /*#__PURE__*/function () {
@@ -3715,9 +3735,8 @@ var Login = /*#__PURE__*/function (_Component) {
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)((react_google_login__WEBPACK_IMPORTED_MODULE_5___default()), {
                     clientId: "309423572945-fteqc77rsn47h579ng6e2dcahi0vusis.apps.googleusercontent.com",
                     buttonText: "Login using Google",
-                    onSuccess: responseGoogle,
-                    onFailure: responseGoogle,
-                    isSignedIn: true,
+                    onSuccess: this.responseGoogle,
+                    onFailure: this.responseGoogle,
                     cookiePolicy: 'single_host_origin'
                   })]
                 })]
@@ -4412,7 +4431,6 @@ var AuthenticationService = /*#__PURE__*/function () {
 
         return response.data;
       })["catch"](function (err) {
-        console.log(err);
         throw err;
       });
     });
@@ -4564,16 +4582,18 @@ var AuthenticationService = /*#__PURE__*/function () {
   }, {
     key: "logInGoogle",
     value: function logInGoogle(token) {
-      return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/auth/login", {
+      return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/auth/google/login", {
         token: token
       }).then(function (response) {
-        if (response.data.access_token != err) {
+        if (response.data.access_token) {
           localStorage.setItem("user", JSON.stringify(response.data));
+          var tokenexpiration = new Date();
+          tokenexpiration.setSeconds(new Date().getSeconds() + parseInt(response.data.expires_in));
+          localStorage.setItem('token_expiration_date', tokenexpiration);
         }
 
         return response.data;
       })["catch"](function (err) {
-        console.log(err);
         throw err;
       });
     }

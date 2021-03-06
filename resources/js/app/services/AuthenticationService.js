@@ -13,7 +13,6 @@ class AuthenticationService {
           return response.data;
         })
         .catch(err => {
-          console.log(err);
           throw err;
         });
   }
@@ -73,15 +72,17 @@ class AuthenticationService {
   }
 
   logInGoogle(token){
-    return axios.post("/api/auth/login", {token}).
+    return axios.post("/api/auth/google/login", {token}).
     then(response => {
-      if (response.data.access_token != err) {
+      if (response.data.access_token) {
         localStorage.setItem("user", JSON.stringify(response.data));
+        var tokenexpiration = new Date();
+        tokenexpiration.setSeconds(new Date().getSeconds() + parseInt(response.data.expires_in));
+        localStorage.setItem('token_expiration_date', tokenexpiration);
       }
       return response.data;
     })
     .catch(err => {
-      console.log(err);
       throw err;
     });
   }

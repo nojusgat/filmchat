@@ -3709,7 +3709,7 @@ var Login = /*#__PURE__*/function (_Component) {
                     onFailure: responseGoogle,
                     isSignedIn: true,
                     cookiePolicy: 'single_host_origin'
-                  }), ","]
+                  })]
                 })]
               })
             })

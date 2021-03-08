@@ -52,8 +52,6 @@ class Home extends Component {
   render() {
     const user = AuthenticationService.getCurrentUser();
 
-    console.log(this.state.items);
-
     // login
     if (user && user.access_token) {
       return (

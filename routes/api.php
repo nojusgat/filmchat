@@ -23,6 +23,7 @@ Route::group([
 ], function ($router) {
     Route::post('/movie/show', [MoviesController::class, 'getMovie']);
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/google/login', [AuthController::class, 'loginGoogle']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/request/lostpassword', [AuthController::class, 'lostPasswordRequest']);
     Route::post('/complete/emailverify', [AuthController::class, 'verify']);

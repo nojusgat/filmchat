@@ -3421,8 +3421,7 @@ var Home = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var user = _services_AuthenticationService__WEBPACK_IMPORTED_MODULE_2__.default.getCurrentUser();
-      console.log(this.state.items); // login
+      var user = _services_AuthenticationService__WEBPACK_IMPORTED_MODULE_2__.default.getCurrentUser(); // login
 
       if (user && user.access_token) {
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
@@ -3544,10 +3543,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var responseGoogle = function responseGoogle(response) {
-  console.log(response);
-};
-
 var Login = /*#__PURE__*/function (_Component) {
   _inherits(Login, _Component);
 
@@ -3567,6 +3562,38 @@ var Login = /*#__PURE__*/function (_Component) {
       _this.setState(_defineProperty({}, nam, val));
     });
 
+    _defineProperty(_assertThisInitialized(_this), "toggleRememberValue", function () {
+      var value = !_this.state.remember;
+
+      _this.setState({
+        remember: value
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "responseGoogle", function (response) {
+      if (response.error) {
+        _this.setState({
+          error: response.details != null ? response.details : response.error
+        });
+      } else if (response.tokenId) {
+        _services_AuthenticationService__WEBPACK_IMPORTED_MODULE_3__.default.logInGoogle(response.tokenId).then(function () {
+          _this.props.history.push('/home');
+        }, function (error) {
+          if (error.response.data && error.response.data.error) {
+            _this.setState({
+              error: error.response.data.error
+            });
+          } else {
+            _this.setState({
+              error: "Can not signin successfully! Please check email/password again"
+            });
+          }
+        });
+      }
+
+      console.log(response);
+    });
+
     _defineProperty(_assertThisInitialized(_this), "doLogin", /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(event) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -3574,7 +3601,7 @@ var Login = /*#__PURE__*/function (_Component) {
             switch (_context.prev = _context.next) {
               case 0:
                 event.preventDefault();
-                _services_AuthenticationService__WEBPACK_IMPORTED_MODULE_3__.default.signin(_this.state.email, _this.state.password).then(function () {
+                _services_AuthenticationService__WEBPACK_IMPORTED_MODULE_3__.default.signin(_this.state.email, _this.state.password, _this.state.remember).then(function () {
                   _this.props.history.push('/home');
                 }, function (error) {
                   if (error.response.data && error.response.data.error) {
@@ -3604,6 +3631,7 @@ var Login = /*#__PURE__*/function (_Component) {
     _this.state = {
       email: "",
       password: "",
+      remember: false,
       error: ""
     };
     return _this;
@@ -3673,7 +3701,9 @@ var Login = /*#__PURE__*/function (_Component) {
                     className: "mb-3",
                     children: ["Remember passsword? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
                       type: "checkbox",
-                      name: "rememberPassword"
+                      name: "rememberPassword",
+                      value: this.state.remember,
+                      onChange: this.toggleRememberValue
                     })]
                   })
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_19__.default, {
@@ -3703,11 +3733,10 @@ var Login = /*#__PURE__*/function (_Component) {
                       })
                     })]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)((react_google_login__WEBPACK_IMPORTED_MODULE_5___default()), {
-                    clientId: "658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com",
+                    clientId: "309423572945-fteqc77rsn47h579ng6e2dcahi0vusis.apps.googleusercontent.com",
                     buttonText: "Login using Google",
-                    onSuccess: responseGoogle,
-                    onFailure: responseGoogle,
-                    isSignedIn: true,
+                    onSuccess: this.responseGoogle,
+                    onFailure: this.responseGoogle,
                     cookiePolicy: 'single_host_origin'
                   })]
                 })]
@@ -4387,18 +4416,21 @@ var AuthenticationService = /*#__PURE__*/function () {
   function AuthenticationService() {
     _classCallCheck(this, AuthenticationService);
 
-    _defineProperty(this, "signin", function (email, password) {
+    _defineProperty(this, "signin", function (email, password, remember) {
       return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/auth/login", {
         email: email,
-        password: password
+        password: password,
+        remember: remember
       }).then(function (response) {
         if (response.data.access_token) {
           localStorage.setItem("user", JSON.stringify(response.data));
+          var tokenexpiration = new Date();
+          tokenexpiration.setSeconds(new Date().getSeconds() + parseInt(response.data.expires_in));
+          localStorage.setItem('token_expiration_date', tokenexpiration);
         }
 
         return response.data;
       })["catch"](function (err) {
-        console.log(err);
         throw err;
       });
     });
@@ -4529,26 +4561,39 @@ var AuthenticationService = /*#__PURE__*/function () {
   _createClass(AuthenticationService, [{
     key: "signOut",
     value: function signOut() {
+      localStorage.removeItem("token_expiration_date");
       localStorage.removeItem("user");
     }
   }, {
     key: "getCurrentUser",
     value: function getCurrentUser() {
+      if (localStorage.getItem('token_expiration_date')) {
+        var expire = new Date(localStorage.getItem('token_expiration_date'));
+        var now = new Date();
+
+        if (now.getTime() >= expire.getTime()) {
+          this.signOut();
+          return null;
+        }
+      }
+
       return JSON.parse(localStorage.getItem('user'));
     }
   }, {
     key: "logInGoogle",
     value: function logInGoogle(token) {
-      return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/auth/login", {
+      return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/auth/google/login", {
         token: token
       }).then(function (response) {
-        if (response.data.access_token != err) {
+        if (response.data.access_token) {
           localStorage.setItem("user", JSON.stringify(response.data));
+          var tokenexpiration = new Date();
+          tokenexpiration.setSeconds(new Date().getSeconds() + parseInt(response.data.expires_in));
+          localStorage.setItem('token_expiration_date', tokenexpiration);
         }
 
         return response.data;
       })["catch"](function (err) {
-        console.log(err);
         throw err;
       });
     }
@@ -4757,7 +4802,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".center {\r\n  display: block;\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  width: 50%;\r\n}\r\n\r\n.App {\r\n  text-align: center;\r\n}\r\n\r\n.App-logo {\r\n  height: 40vmin;\r\n  pointer-events: none;\r\n}\r\n\r\n@media (prefers-reduced-motion: no-preference) {\r\n  .App-logo {\r\n    -webkit-animation: App-logo-spin infinite 20s linear;\r\n            animation: App-logo-spin infinite 20s linear;\r\n  }\r\n}\r\n\r\n.App-header {\r\n  background-color: #282c34;\r\n  min-height: 100vh;\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n  font-size: calc(10px + 2vmin);\r\n  color: white;\r\n}\r\n\r\n.App-link {\r\n  color: #61dafb;\r\n}\r\n\r\n@-webkit-keyframes App-logo-spin {\r\n  from {\r\n    transform: rotate(0deg);\r\n  }\r\n  to {\r\n    transform: rotate(360deg);\r\n  }\r\n}\r\n\r\n@keyframes App-logo-spin {\r\n  from {\r\n    transform: rotate(0deg);\r\n  }\r\n  to {\r\n    transform: rotate(360deg);\r\n  }\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".center {\n  display: block;\n  margin-left: auto;\n  margin-right: auto;\n  width: 50%;\n}\n\n.App {\n  text-align: center;\n}\n\n.App-logo {\n  height: 40vmin;\n  pointer-events: none;\n}\n\n@media (prefers-reduced-motion: no-preference) {\n  .App-logo {\n    -webkit-animation: App-logo-spin infinite 20s linear;\n            animation: App-logo-spin infinite 20s linear;\n  }\n}\n\n.App-header {\n  background-color: #282c34;\n  min-height: 100vh;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  font-size: calc(10px + 2vmin);\n  color: white;\n}\n\n.App-link {\n  color: #61dafb;\n}\n\n@-webkit-keyframes App-logo-spin {\n  from {\n    transform: rotate(0deg);\n  }\n  to {\n    transform: rotate(360deg);\n  }\n}\n\n@keyframes App-logo-spin {\n  from {\n    transform: rotate(0deg);\n  }\n  to {\n    transform: rotate(360deg);\n  }\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -4781,7 +4826,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "body {\r\n  margin: 0;\r\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',\r\n    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\ncode {\r\n  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',\r\n    monospace;\r\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "body {\n  margin: 0;\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',\n    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',\n    sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n\ncode {\n  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',\n    monospace;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

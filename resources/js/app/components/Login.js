@@ -11,10 +11,6 @@ import { HiOutlineMail } from 'react-icons/hi';
 
 import GoogleLogin from 'react-google-login';
 
-const responseGoogle = (response) => {
-  console.log(response);
-}
-
 class Login extends Component {
 
   constructor(props) {
@@ -23,6 +19,7 @@ class Login extends Component {
     this.state = {
       email: "",
       password: "",
+      remember: false,
       error: ""
     };
   }
@@ -33,12 +30,38 @@ class Login extends Component {
     this.setState({[nam]: val});
   }
 
+  toggleRememberValue = () => {
+    const value = !this.state.remember;
+    this.setState({remember: value});
+  }
+
+  responseGoogle = (response) => {
+    if(response.error) {
+      this.setState({error: response.details != null ? response.details : response.error});
+    } else if (response.tokenId) {
+      AuthenticationService.logInGoogle(response.tokenId).then(
+          () => {
+            this.props.history.push('/home');
+          },
+          error => {
+            if(error.response.data && error.response.data.error) {
+              this.setState({error: error.response.data.error});
+            } else {
+              this.setState({error: "Can not signin successfully! Please check email/password again"});
+            }
+          }
+      );
+    }
+    console.log(response);
+  }
+
   doLogin = async (event) => {
     event.preventDefault();
 
     AuthenticationService
         .signin(this.state.email, 
-                  this.state.password)
+                this.state.password,
+                this.state.remember)
       .then(
         () => {
           this.props.history.push('/home');
@@ -100,7 +123,7 @@ class Login extends Component {
 
               <React.StrictMode>
                 <div className="mb-3">
-                  Remember passsword? <input type="checkbox" name="rememberPassword" />
+                  Remember passsword? <input type="checkbox" name="rememberPassword" value={this.state.remember} onChange={this.toggleRememberValue} />
                 </div>
               </React.StrictMode>
 
@@ -127,11 +150,10 @@ class Login extends Component {
                 </Row>
 
                 <GoogleLogin
-                  clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+                  clientId="309423572945-fteqc77rsn47h579ng6e2dcahi0vusis.apps.googleusercontent.com"
                   buttonText="Login using Google"
-                  onSuccess={responseGoogle}
-                  onFailure={responseGoogle}
-                  isSignedIn={true}
+                  onSuccess={this.responseGoogle}
+                  onFailure={this.responseGoogle}
                   cookiePolicy={'single_host_origin'}
                 />
               </div>

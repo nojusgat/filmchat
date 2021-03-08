@@ -1,21 +1,24 @@
 import axios from "axios";
 
 class AuthenticationService {
-  signin = (email, password) => {
-      return axios.post("/api/auth/login", {email, password})
+  signin = (email, password, remember) => {
+      return axios.post("/api/auth/login", {email, password, remember})
         .then(response => {
           if (response.data.access_token) {
             localStorage.setItem("user", JSON.stringify(response.data));
+            var tokenexpiration = new Date();
+            tokenexpiration.setSeconds(new Date().getSeconds() + parseInt(response.data.expires_in));
+            localStorage.setItem('token_expiration_date', tokenexpiration);
           }
           return response.data;
         })
         .catch(err => {
-          console.log(err);
           throw err;
         });
   }
 
   signOut() {
+    localStorage.removeItem("token_expiration_date");
     localStorage.removeItem("user");
   }
 
@@ -57,19 +60,29 @@ class AuthenticationService {
   }
 
   getCurrentUser() {
+    if(localStorage.getItem('token_expiration_date')) {
+      const expire = new Date(localStorage.getItem('token_expiration_date'));
+      const now = new Date();
+      if(now.getTime() >= expire.getTime()) {
+        this.signOut();
+        return null;
+      }
+    }
     return JSON.parse(localStorage.getItem('user'));
   }
 
   logInGoogle(token){
-    return axios.post("/api/auth/login", {token}).
+    return axios.post("/api/auth/google/login", {token}).
     then(response => {
-      if (response.data.access_token != err) {
+      if (response.data.access_token) {
         localStorage.setItem("user", JSON.stringify(response.data));
+        var tokenexpiration = new Date();
+        tokenexpiration.setSeconds(new Date().getSeconds() + parseInt(response.data.expires_in));
+        localStorage.setItem('token_expiration_date', tokenexpiration);
       }
       return response.data;
     })
     .catch(err => {
-      console.log(err);
       throw err;
     });
   }

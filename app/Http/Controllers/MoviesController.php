@@ -7,10 +7,12 @@ use VfacTmdb\Factory;
 use VfacTmdb\Search;
 use VfacTmdb\Item;
 use VfacTmdb\Media;
+use VfacTmdb\Catalog;
 
 class MoviesController extends Controller
 {
-    /// https://vfac.fr/public/docs/tmdb/source-class-VfacTmdb.Item.html#56-62
+    // https://github.com/vfalies/tmdb
+    // https://vfac.fr/public/docs/tmdb/source-class-VfacTmdb.Item.html#56-62
     private $tmdb;
     private $media;
     public function __construct() {
@@ -18,6 +20,19 @@ class MoviesController extends Controller
 
         $this->tmdb = Factory::create()->getTmdb('189e83538ad961d6e5b7f95f273234c3');
         $this->media = new Media($this->tmdb);
+    }
+
+    public function getMovieGenres()
+    {
+        $cat = new Catalog($this->tmdb);
+        $genres = $cat->getMovieGenres();
+
+        $results = array();
+        foreach($genres as $genre) {
+            $results[] = array("id" => $genre->id, "name" => $genre->name);
+        }
+
+        return $results;
     }
 
     public function getMovie(Request $request)

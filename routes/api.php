@@ -22,6 +22,7 @@ Route::group([
 
 ], function ($router) {
     Route::post('/movie/show', [MoviesController::class, 'getMovie']);
+    Route::get('/movie/genres', [MoviesController::class, 'getMovieGenres']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/google/login', [AuthController::class, 'loginGoogle']);
     Route::post('/register', [AuthController::class, 'register']);

@@ -26,6 +26,10 @@ class BackendService {
       param: title
     });
   }
+
+  getCategories = async() => {
+    return axios.get("/api/auth/movie/genres");
+  }
 }
 
 export default new BackendService();

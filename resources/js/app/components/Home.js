@@ -21,7 +21,7 @@ function MovieCard(props) {
   const listItems = data.map((data) =>
     <Col md="6" xl="3" sm="12" className="mb-3" key={data.id.toString()}>
       <Card>
-        <CardImg top src={data.poster} alt="poster" />
+        <CardImg top src={data.poster} height="450" alt="{data.title} Poster" />
         <CardBody>
           <CardTitle tag="h5">{data.title}</CardTitle>
           <Button>View details</Button>

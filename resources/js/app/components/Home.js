@@ -179,24 +179,24 @@ class Home extends Component {
     if(currentPage == totalPages)
       var lastPageDisabled = true;
 
-    var startPage = 0, endPage = 0, showPages = 8;
-    if (totalPages <= showPages) { 
+    var startPage = 0, endPage = 0, showPages = 7;
+    if (Number(totalPages) <= Number(showPages)) {
       // less than 10 total pages so show all
-      startPage = 1; 
-      endPage = totalPages; 
-    } else { 
-      // more than 10 total pages so calculate start and end pages 
-      if (currentPage <= ((showPages / 2) + 1)) {
-        startPage = 1; 
-        endPage = showPages; 
-      } else if (currentPage + ((showPages / 2) - 1) >= totalPages) {
-        startPage = totalPages - (showPages - 1); 
-        endPage = totalPages; 
-      } else { 
-        startPage = currentPage - (showPages / 2); 
-        endPage = currentPage + ((showPages / 2) - 1); 
-      } 
-    } 
+      startPage = 1;
+      endPage = Number(totalPages);
+    } else {
+      // more than 10 total pages so calculate start and end pages
+      if (Number(currentPage) <= (Math.floor(showPages / 2) + 1)) {
+        startPage = 1;
+        endPage = Number(showPages);
+      } else if (Number(currentPage) + (Math.floor(showPages / 2) - 1) >= totalPages) {
+        startPage = Number(totalPages) - (showPages - 1);
+        endPage = Number(totalPages);
+      } else {
+        startPage = Number(currentPage) - Math.floor(showPages / 2);
+        endPage = Number(currentPage) + Math.floor(showPages / 2);
+      }
+    }
 
     for (var i = startPage; i <= endPage; i++) {
       var active_status = false;

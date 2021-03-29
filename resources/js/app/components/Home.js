@@ -46,6 +46,7 @@ class Home extends Component {
       catItems: [],
       isOpenDrop: false,
       search: "",
+      additional: null,
       method: "popular",
       blockName: "Popular movies"
     };
@@ -110,7 +111,7 @@ class Home extends Component {
   categoryClickHandler = (event) => {
     let id = event.target.id;
     let name = event.target.name;
-    this.setState({search: id, method: "category", blockName: name+" Category"});
+    this.setState({additional: id, method: "category", blockName: name+" Category"});
     BackendService.getInfoByGenre(id, 1).then(
       response => {
         this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages});
@@ -128,7 +129,7 @@ class Home extends Component {
 
     switch(this.state.method) {
       case "category":
-        BackendService.getInfoByGenre(this.state.search, val).then(
+        BackendService.getInfoByGenre(this.state.additional, val).then(
           response => {
             this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages});
           },
@@ -178,22 +179,22 @@ class Home extends Component {
     if(currentPage == totalPages)
       var lastPageDisabled = true;
 
-    var startPage = 0, endPage = 0;
-    if (totalPages <= 10) { 
-      // less than 10 total pages so show all 
+    var startPage = 0, endPage = 0, showPages = 8;
+    if (totalPages <= showPages) { 
+      // less than 10 total pages so show all
       startPage = 1; 
       endPage = totalPages; 
     } else { 
       // more than 10 total pages so calculate start and end pages 
-      if (currentPage <= 6) { 
+      if (currentPage <= ((showPages / 2) + 1)) {
         startPage = 1; 
-        endPage = 10; 
-      } else if (currentPage + 4 >= totalPages) { 
-        startPage = totalPages - 9; 
+        endPage = showPages; 
+      } else if (currentPage + ((showPages / 2) - 1) >= totalPages) {
+        startPage = totalPages - (showPages - 1); 
         endPage = totalPages; 
       } else { 
-        startPage = currentPage - 5; 
-        endPage = currentPage + 4; 
+        startPage = currentPage - (showPages / 2); 
+        endPage = currentPage + ((showPages / 2) - 1); 
       } 
     } 
 

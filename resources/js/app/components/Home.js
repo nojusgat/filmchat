@@ -6,6 +6,8 @@ import {
   CardTitle, CardSubtitle, Button, InputGroup, Input, InputGroupAddon
 } from 'reactstrap';
 
+import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge } from 'reactstrap';
 
 import {AiOutlineSearch} from 'react-icons/ai';
@@ -19,7 +21,7 @@ function MovieCard(props) {
   const listItems = data.map((data) =>
     <Col md="6" xl="3" sm="12" className="mb-3" key={data.id.toString()}>
       <Card>
-        <CardImg top src={data.poster} alt="poster" />
+        <CardImg top src={data.poster} alt={data.title+" Poster"} />
         <CardBody>
           <CardTitle tag="h5">{data.title}</CardTitle>
           <Button>View details</Button>
@@ -32,14 +34,6 @@ function MovieCard(props) {
   );
 }
 
-function CategoryItem(props) {
-  const data = props.data;
-  const listItems = data.map((data) =>
-    <DropdownItem id={data.id} key={data.id.toString()}>{data.name}</DropdownItem>
-  );
-  return listItems;
-}
-
 class Home extends Component {
 
   constructor(props) {
@@ -47,13 +41,21 @@ class Home extends Component {
 
     this.state = {
       items: [],
+      page: 0,
+      total_pages: 0,
       catItems: [],
       isOpenDrop: false,
       search: "",
-      blockName: "Random movies"
+      additional: null,
+      method: "popular",
+      blockName: "Popular movies"
     };
 
     this.toggleDropDown = this.toggleDropDown.bind(this);
+  }
+
+  testFunction() {
+    console.log("test");
   }
 
   toggleDropDown() {
@@ -62,15 +64,21 @@ class Home extends Component {
     });
   }
 
-  componentDidMount() {
-    BackendService.getInfoByTitle("mummy").then(
+  showPopularMovies = () => {
+    console.log("test?");
+    this.setState({search: "", method: "popular", blockName: "Popular movies"});
+    BackendService.getInfoByPopular(1).then(
       response => {
-        this.setState({items: response.data});
+        this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages});
       },
       error => {
         console.log("Error in getInfoByTitle: " + error.toString());
       }
     );
+  }
+
+  componentDidMount() {
+    this.showPopularMovies();
 
     BackendService.getCategories().then(
       response => {
@@ -89,10 +97,10 @@ class Home extends Component {
   }
 
   searchClickHandler = () => {
-    BackendService.getInfoByTitle(this.state.search).then(
+    BackendService.getInfoByTitle(this.state.search, 1).then(
       response => {
         this.setState({blockName: "Search '"+this.state.search+"':"});
-        this.setState({items: response.data});
+        this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages, method: "search"});
       },
       error => {
         console.log("Error in getInfoByTitle: " + error.toString());
@@ -100,8 +108,113 @@ class Home extends Component {
     );
   }
 
+  categoryClickHandler = (event) => {
+    let id = event.target.id;
+    let name = event.target.name;
+    this.setState({additional: id, method: "category", blockName: name+" Category"});
+    BackendService.getInfoByGenre(id, 1).then(
+      response => {
+        this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages});
+      },
+      error => {
+        console.log("Error in getInfoByGenrePage: " + error.toString());
+      }
+    );
+  }
+
+  pageHandler = (event) => {
+    let nam = event.target.name;
+    let val = event.target.value;
+    this.setState({[nam]: val});
+
+    switch(this.state.method) {
+      case "category":
+        BackendService.getInfoByGenre(this.state.additional, val).then(
+          response => {
+            this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages});
+          },
+          error => {
+            console.log("Error in getInfoByGenrePage: " + error.toString());
+          }
+        );
+        break;
+      case "search":
+        BackendService.getInfoByTitle(this.state.search, val).then(
+          response => {
+            this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages});
+          },
+          error => {
+            console.log("Error in getInfoByTitle: " + error.toString());
+          }
+        );
+        break;
+      case "popular":
+        BackendService.getInfoByPopular(val).then(
+          response => {
+            this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages});
+          },
+          error => {
+            console.log("Error in getInfoByGenrePage: " + error.toString());
+          }
+        );
+        break;
+      default:
+        console.log("error");
+        break;
+    }
+  }
+
   render() {
     const user = AuthenticationService.getCurrentUser();
+
+    var page_items = [];
+    var currentPage = this.state.page;
+    var totalPages = this.state.total_pages;
+    var firstPageDisabled = false;
+    var lastPageDisabled = false;
+
+    if(currentPage == 1)
+      var firstPageDisabled = true;
+
+    if(currentPage == totalPages)
+      var lastPageDisabled = true;
+
+    var startPage = 0, endPage = 0, showPages = 7;
+    if (Number(totalPages) <= Number(showPages)) {
+      // less than 10 total pages so show all
+      startPage = 1;
+      endPage = Number(totalPages);
+    } else {
+      // more than 10 total pages so calculate start and end pages
+      if (Number(currentPage) <= (Math.floor(showPages / 2) + 1)) {
+        startPage = 1;
+        endPage = Number(showPages);
+      } else if (Number(currentPage) + (Math.floor(showPages / 2) - 1) >= totalPages) {
+        startPage = Number(totalPages) - (showPages - 1);
+        endPage = Number(totalPages);
+      } else {
+        startPage = Number(currentPage) - Math.floor(showPages / 2);
+        endPage = Number(currentPage) + Math.floor(showPages / 2);
+      }
+    }
+
+    for (var i = startPage; i <= endPage; i++) {
+      var active_status = false;
+      if(i == this.state.page) {
+        active_status = true;
+      }
+      page_items.push(
+      <PaginationItem active={active_status}>
+        <PaginationLink name="page" value={i} onClick={this.pageHandler}>
+          {i}
+        </PaginationLink>
+      </PaginationItem>
+      );
+    }
+
+    const cat_items = this.state.catItems.map((data) =>
+      <DropdownItem id={data.id} key={data.id.toString()} name={data.name} onClick={this.categoryClickHandler}>{data.name}</DropdownItem>
+    );
 
     // login
     if (user && user.access_token) {
@@ -124,12 +237,12 @@ class Home extends Component {
                   Categories
                 </DropdownToggle>
                 <DropdownMenu>
-                  <CategoryItem data={this.state.catItems} />
+                  {cat_items}
                 </DropdownMenu>
               </Dropdown>
             </Col>
             <Col style={{marginTop:"20px"}} md={{ size: 2, offset: 0 }}>
-              <Button outline color="info" block>All Movies</Button>
+              <Button outline color="info" block onClick={this.showPopularMovies}>Popular movies</Button>
             </Col>
           </Row>
           <Row style={{marginTop:"10px"}}>
@@ -137,6 +250,15 @@ class Home extends Component {
               <h1 style={{marginTop:"20px"}}>{this.state.blockName}</h1>
               <div style={{marginTop:"20px"}}>
                 <MovieCard data={this.state.items} />
+                <Pagination aria-label="Page navigation example">
+                  <PaginationItem disabled={firstPageDisabled}>
+                    <PaginationLink name="page" value="1" onClick={this.pageHandler} first />
+                  </PaginationItem>
+                  {page_items}
+                  <PaginationItem disabled={lastPageDisabled}>
+                    <PaginationLink name="page" value={totalPages} onClick={this.pageHandler} last />
+                  </PaginationItem>
+                </Pagination>
               </div>
             </Col>
           </Row>

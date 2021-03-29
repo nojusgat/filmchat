@@ -42,14 +42,33 @@ class MoviesController extends Controller
                 return $this->getInfoById($request->param);
                 break;
             case "title":
-                $search = new Search($this->tmdb);
-                $responses = $search->movie($request->param);
+                $options = array();
+                if(isset($request->param))
+                    $options['query'] = $request->param;
+                if(isset($request->page))
+                    $options['page'] = $request->page;
 
+                $search = $this->tmdb->getRequest("search/movie", $options);
                 $results = array();
-                foreach($responses as $response) {
-                    $results[] = array("id" => $response->getId(), "title" => $response->getTitle(), "poster" => $this->media->getPosterUrl($response->getPosterPath()));
+                foreach($search->results as $response) {
+                    $results[] = array("id" => $response->id, "title" => $response->title, "poster" => $response->poster_path != null ? $this->media->getPosterUrl($response->poster_path) : "/images/not_found.png");
                 }
-                return $results;
+                return array("results" => $results, "this_page" => $search->page, "total_pages" => $search->total_pages);
+                break;
+            case "category":
+                $options = array();
+                if(isset($request->param))
+                    $options['with_genres'] = $request->param;
+                if(isset($request->page))
+                    $options['page'] = $request->page;
+
+                $search = $this->tmdb->getRequest("discover/movie", $options);
+                $results = array();
+                foreach($search->results as $response) {
+                    $results[] = array("id" => $response->id, "title" => $response->title, "poster" => $response->poster_path != null ? $this->media->getPosterUrl($response->poster_path) : "/images/not_found.png");
+                }
+
+                return array("results" => $results, "this_page" => $search->page, "total_pages" => $search->total_pages);
                 break;
             default:
                 return null;

@@ -58,6 +58,8 @@ class AppNavbar extends Component {
       <Collapse isOpen={this.state.isOpen} navbar>
         <Nav className="mr-auto" navbar>
           <NavLink tag={RRNavLink} to="/home" activeClassName="active">Home</NavLink>
+          <NavLink tag={RRNavLink} to="/profile" activeClassName="active">Profile</NavLink>
+          <NavLink tag={RRNavLink} to="/about" activeClassName="active">About us</NavLink>
         </Nav>
         {
           this.state.login ? (

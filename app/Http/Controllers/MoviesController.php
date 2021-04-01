@@ -77,47 +77,67 @@ class MoviesController extends Controller
 
     private function getInfoById($id)
     {
-        // Get movie information
-        $item  = new Item($this->tmdb);
-        $infos = $item->getMovie($id);
+        $options = array("append_to_response" => "videos,credits,similar");
+        $info = $this->tmdb->getRequest("movie/".$id, $options);
 
-        $similar = $infos->getSimilar();
-        $similarMovies = array();
-        foreach($similar as $sim) {
-            $similarMovies[] = array("id" => $sim->getId(), "title" => $sim->getTitle(), "poster" => $this->media->getPosterUrl($sim->getPosterPath()));
-        }
+        $backdrop = $info->backdrop_path != null ? $this->media->getBackdropUrl($info->backdrop_path) : "/images/not_found.png";
+        $collection = $info->belongs_to_collection != null ? array("id" => $info->belongs_to_collection->id, "name" => $info->belongs_to_collection->name, "poster" => ($info->belongs_to_collection->poster_path != null ? $this->media->getPosterUrl($info->belongs_to_collection->poster_path) : "/images/not_found.png")) : null;
+        $budget = $info->budget;
+        $genres = $info->genres;
+        $homepage = $info->homepage;
+        $imdb_id = $info->imdb_id;
+        $original_language = $info->original_language;
+        $original_title = $info->original_title;
+        $description = $info->overview;
+        $popularity = $info->popularity;
+        $poster = $info->poster_path != null ? $this->media->getPosterUrl($info->poster_path) : "/images/not_found.png";
+        $production_companies = $info->production_companies;
+        $production_countries = $info->production_countries;
+        $release_date = $info->release_date;
+        $revenue = $info->revenue;
+        $runtime = $info->runtime;
+        $status = $info->status;
+        $tagline = $info->tagline;
+        $title = $info->title;
 
-        $crew = $infos->getCrew();
-        $movieCrew = array();
-        foreach($crew as $cre) {
-            $movieCrew[] = array("id" => $cre->getId(), "name" => $cre->getName(), "job" => $cre->getJob());
-        }
+        $vote_average = $info->vote_average;
+        $vote_count = $info->vote_count;
+        $spoken_languages = $info->spoken_languages;
 
-        $cast = $infos->getCast();
-        $movieCast = array();
-        foreach($cast as $ca) {
-            $movieCast[] = array("id" => $ca->getId(), "name" => $ca->getName(), "character" => $ca->getCharacter(), "image" => !is_null($ca->getProfilePath()) ? $this->media->getProfileUrl($ca->getProfilePath()) : null);
-        }
+        $youtube_trailer = isset($info->videos->results[0]->key) ? $info->videos->results[0]->key : null;
+
+        $cast = $info->credits->cast;
+        $crew = $info->credits->crew;
+
+        $similar = $info->similar->results;
 
         return json_encode(
             array(
-                "genres" => $infos->getGenres(),
-                "title" => $infos->getTitle(),
-                "overview" => $infos->getOverview(),
-                "release" => $infos->getReleaseDate(),
-                "original_title" => $infos->getOriginalTitle(),
-                "note" => $infos->getNote(),
-                "id" => $infos->getId(),
-                "imdb" => $infos->getIMDBId(),
-                "tagline" => $infos->getTagLine(),
-                "collections" => $infos->getCollectionId(),
-                "crew" => $movieCrew,
-                "cast" => $movieCast,
-                //"prod_company" => $infos->getProductionCompanies(),
-                //"prod_country" => $infos->getProductionCountries(),
-                "backdrop" => $this->media->getBackdropUrl($infos->getBackdropPath()),
-                "poster" => $this->media->getPosterUrl($infos->getPosterPath()),
-                "similar" => $similarMovies
+                "backdrop" => $backdrop,
+                "collection" => $collection,
+                "budget" => $budget,
+                "genres" => $genres,
+                "homepage" => $homepage,
+                "imdb_id" => $imdb_id,
+                "original_language" => $original_language,
+                "original_title" => $original_title,
+                "description" => $description,
+                "popularity" => $popularity,
+                "production_companies" => $production_companies,
+                "production_countries" => $production_countries,
+                "release_date" => $release_date,
+                "revenue" => $revenue,
+                "runtime" => $runtime,
+                "status" => $status,
+                "tagline" => $tagline,
+                "title" => $title,
+                "vote_average" => $vote_average,
+                "vote_count" => $vote_count,
+                "spoken_languages" => $spoken_languages,
+                "youtube_trailer" => $youtube_trailer,
+                "cast" => $cast,
+                "crew" => $crew,
+                "similar" => $similar
             )
         );
     }

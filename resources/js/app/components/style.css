@@ -9,11 +9,12 @@
 .nav-link:hover{
     color: #343c44;
     cursor: pointer;
-    
+
 }
 .nav-tabs {
     color: #343c44;
     height: 50px;
-    padding-top: 4px; 
+    padding-top: 4px;
     padding-bottom: 4px;
 }
+

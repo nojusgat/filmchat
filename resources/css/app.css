@@ -1,0 +1,37 @@
+.movie-main {
+    background-size: cover;
+    border-bottom: solid gray 3px;
+}
+
+.movie-container {
+    width: 60%;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: rgba(50, 50, 50, 0.6);
+    color: white;
+    border-radius: 12px;
+    border: rgba(50, 50, 50, 0.3) solid 2px;
+    overflow: hidden;
+}
+
+.movie-poster {
+    border-radius: 10px;
+    height: auto;
+    width: 100%;
+    max-width: 500px;
+    min-width: 200px;
+}
+
+.movie-info {
+    margin-top: 10px;
+    margin-right: 10px;
+    padding: 10px;
+}
+
+.spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 75vh;
+}

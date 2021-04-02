@@ -90,7 +90,7 @@ class MoviesController extends Controller
         $original_title = $info->original_title;
         $description = $info->overview;
         $popularity = $info->popularity;
-        $poster = $info->poster_path != null ? $this->media->getPosterUrl($info->poster_path, 'w500') : "/images/not_found.png";
+        $poster = $info->poster_path != null ? $this->media->getPosterUrl($info->poster_path, 'original') : "/images/not_found.png";
         $production_companies = $info->production_companies;
         $production_countries = $info->production_countries;
         $release_date = $info->release_date;

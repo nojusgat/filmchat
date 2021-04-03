@@ -18,6 +18,7 @@ class AppNavbar extends Component {
 
     this.state = {
       username: undefined,
+      avatar: undefined,
       login: false
     };
   }
@@ -28,7 +29,8 @@ class AppNavbar extends Component {
     if (user) {
       this.setState({
         login: true,
-        username: user.user.firstname + " " + user.user.lastname
+        username: user.user.firstname + " " + user.user.lastname,
+        avatar: user.user.avatar
       });
     }
   }
@@ -65,7 +67,7 @@ class AppNavbar extends Component {
             <Nav className="ml-auto" navbar>
               <Dropdown nav isOpen={this.state.isOpenDrop} toggle={this.toggleDropDown}>
                 <DropdownToggle nav caret>
-                  <img src={noAvatar} width="40" height="40" className="rounded-circle" style={{ position: "absolute", marginTop: "-8px" }} />
+                  <img src={this.state.avatar} width="40" height="40" className="rounded-circle" style={{ position: "absolute", marginTop: "-8px" }} />
                   <span className="ml-5">{this.state.username}</span>
                 </DropdownToggle>
                 <DropdownMenu>

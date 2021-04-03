@@ -37,6 +37,7 @@
         "react-router-native": "^5.2.0",
         "reactstrap": "^8.9.0",
         "rxjs": "^6.6.6",
+        "styled-content-loader": "^1.2.2",
         "web-vitals": "^1.1.0",
         "yup": "^0.32.9"
     },

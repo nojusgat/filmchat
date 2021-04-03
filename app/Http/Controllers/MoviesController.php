@@ -51,7 +51,7 @@ class MoviesController extends Controller
                 $search = $this->tmdb->getRequest("search/movie", $options);
                 $results = array();
                 foreach($search->results as $response) {
-                    $results[] = array("id" => $response->id, "title" => $response->title, "poster" => $response->poster_path != null ? $this->media->getPosterUrl($response->poster_path) : "/images/not_found.png");
+                    $results[] = array("id" => $response->id, "title" => $response->title, "poster" => $response->poster_path != null ? $this->media->getPosterUrl($response->poster_path, 'w500') : "/images/not_found.png");
                 }
                 return array("results" => $results, "this_page" => $search->page, "total_pages" => $search->total_pages);
                 break;
@@ -65,7 +65,7 @@ class MoviesController extends Controller
                 $search = $this->tmdb->getRequest("discover/movie", $options);
                 $results = array();
                 foreach($search->results as $response) {
-                    $results[] = array("id" => $response->id, "title" => $response->title, "poster" => $response->poster_path != null ? $this->media->getPosterUrl($response->poster_path) : "/images/not_found.png");
+                    $results[] = array("id" => $response->id, "title" => $response->title, "poster" => $response->poster_path != null ? $this->media->getPosterUrl($response->poster_path, 'w500') : "/images/not_found.png");
                 }
 
                 return array("results" => $results, "this_page" => $search->page, "total_pages" => $search->total_pages);
@@ -80,8 +80,8 @@ class MoviesController extends Controller
         $options = array("append_to_response" => "videos,credits,similar");
         $info = $this->tmdb->getRequest("movie/".$id, $options);
 
-        $backdrop = $info->backdrop_path != null ? $this->media->getBackdropUrl($info->backdrop_path) : "/images/not_found.png";
-        $collection = $info->belongs_to_collection != null ? array("id" => $info->belongs_to_collection->id, "name" => $info->belongs_to_collection->name, "poster" => ($info->belongs_to_collection->poster_path != null ? $this->media->getPosterUrl($info->belongs_to_collection->poster_path) : "/images/not_found.png")) : null;
+        $backdrop = $info->backdrop_path != null ? $this->media->getBackdropUrl($info->backdrop_path, 'original') : "/images/not_found.png";
+        $collection = $info->belongs_to_collection != null ? array("id" => $info->belongs_to_collection->id, "name" => $info->belongs_to_collection->name, "poster" => ($info->belongs_to_collection->poster_path != null ? $this->media->getPosterUrl($info->belongs_to_collection->poster_path, 'w500') : "/images/not_found.png")) : null;
         $budget = $info->budget;
         $genres = $info->genres;
         $homepage = $info->homepage;
@@ -90,7 +90,7 @@ class MoviesController extends Controller
         $original_title = $info->original_title;
         $description = $info->overview;
         $popularity = $info->popularity;
-        $poster = $info->poster_path != null ? $this->media->getPosterUrl($info->poster_path) : "/images/not_found.png";
+        $poster = $info->poster_path != null ? $this->media->getPosterUrl($info->poster_path, 'original') : "/images/not_found.png";
         $production_companies = $info->production_companies;
         $production_countries = $info->production_countries;
         $release_date = $info->release_date;
@@ -114,6 +114,7 @@ class MoviesController extends Controller
         return json_encode(
             array(
                 "backdrop" => $backdrop,
+                "poster" => $poster,
                 "collection" => $collection,
                 "budget" => $budget,
                 "genres" => $genres,

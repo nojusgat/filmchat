@@ -3,9 +3,7 @@ import AppNavbar from "./AppNavbar";
 import { Link, useParams, withRouter } from "react-router-dom";
 import BackendService from "../services/BackendService";
 import { Button, Container, Row, Col, Spinner } from "reactstrap";
-import StyledContentLoader from "styled-content-loader";
 import "../../../css/app.css";
-import { Suspense } from "react";
 
 class MovieDetails extends Component {
     constructor(props) {

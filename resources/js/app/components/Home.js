@@ -6,6 +6,8 @@ import {
   CardTitle, CardSubtitle, Button, InputGroup, Input, InputGroupAddon
 } from 'reactstrap';
 
+import { Link, withRouter } from 'react-router-dom'
+
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge } from 'reactstrap';
@@ -24,7 +26,9 @@ function MovieCard(props) {
         <CardImg top src={data.poster} alt={data.title+" Poster"} />
         <CardBody>
           <CardTitle tag="h5">{data.title}</CardTitle>
-          <Button>View details</Button>
+          <Link to={'/movie/' + data.id.toString()}>
+            <Button>View details</Button>
+          </Link>
         </CardBody>
       </Card>
     </Col>

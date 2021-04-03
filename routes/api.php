@@ -29,5 +29,8 @@ Route::group([
     Route::post('/request/lostpassword', [AuthController::class, 'lostPasswordRequest']);
     Route::post('/complete/emailverify', [AuthController::class, 'verify']);
     Route::post('/complete/lostpassword', [AuthController::class, 'resetPassword']);
+
+    Route::post('/change/details', [AuthController::class, 'changeDetails']);
+
     Route::post('/logout', [AuthController::class, 'logout']);
 });

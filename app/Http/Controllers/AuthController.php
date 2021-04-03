@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 use App\Models\User;
 use Validator;
 use Carbon\Carbon;
@@ -256,6 +257,68 @@ class AuthController extends Controller
             ]);
         }
         return response()->json(['success'=> false, 'error'=> "Invalid password reset token."]);
+    }
+
+    public function changeDetails(Request $request) {
+        $user_id = auth()->user()->id;
+
+        if(!is_null($user_id)) {
+            $validator = Validator::make($request->all(), [
+                'firstname' => 'string',
+                'lastname' => 'string',
+                'gender' => Rule::in(['Male', 'Female', 'Other']),
+                'password_current' => 'password',
+                'password_new' => 'string|confirmed|min:8'
+            ]);
+
+            if($validator->fails()){
+                return response()->json($validator->errors()->toJson(), 400);
+            }
+
+            $user = User::find($user_id);
+            $message = array();
+
+            if(isset($request->firstname) && $request->firstname != $user->firstname) {
+                $user->update([
+                    'firstname' => $request->firstname
+                ]);
+                $message['firstname'] = array("success" => true, "message" => "Your first name has been successfully changed.");
+            }
+
+            if(isset($request->lastname) && $request->lastname != $user->lastname) {
+                $user->update([
+                    'lastname' => $request->lastname
+                ]);
+                $message['lastname'] = array("success" => true, "message" => "Your last name has been successfully changed.");
+            }
+
+            if(isset($request->gender) && $request->gender != $user->gender) {
+                $user->update([
+                    'gender' => $request->gender
+                ]);
+                $message['gender'] = array("success" => true, "message" => "Your gender has been successfully changed.");
+            }
+
+            if(isset($request->password_new)) {
+                if(!isset($request->password_current)) {
+                    $message['password'] = array("success" => false, "error" => "You need to type your current password in order to change it.");
+                } else {
+                    $user->update([
+                        'password' => bcrypt($request->password_new)
+                    ]);
+                    $message['password'] = array("success" => true, "message" => "Your password has been successfully changed.");
+                }
+            }
+            $user->save();
+
+            if(empty($message))
+                $message['error'] = array("success" => false, "error" => "No changes have been made.");
+
+            $message['updated_info'] = $user;
+            return response()->json($message);
+        }
+
+        return response()->json(['success'=> false, 'error'=> "In order to do this you need to be logged in."]);
     }
 
     /**

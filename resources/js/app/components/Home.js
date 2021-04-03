@@ -1,21 +1,15 @@
 import React, { Component } from 'react';
 import AppNavbar from './AppNavbar';
-import { Container, Alert, Row, Col } from 'reactstrap';
+import { Container, Row, Col, Spinner } from 'reactstrap';
 import {
-  Card, CardImg, CardText, CardBody,
-  CardTitle, CardSubtitle, Button, InputGroup, Input, InputGroupAddon
+  Card, CardImg, CardBody,
+  CardTitle, Button, InputGroup, Input, InputGroupAddon
 } from 'reactstrap';
 
-import { Link, withRouter } from 'react-router-dom'
-
+import { Link } from 'react-router-dom'
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
-
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge } from 'reactstrap';
-
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import {AiOutlineSearch} from 'react-icons/ai';
-
-import AuthenticationService from '../services/AuthenticationService';
-
 import BackendService from '../services/BackendService';
 
 function MovieCard(props) {
@@ -43,7 +37,7 @@ class Home extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.state = this.props.location.state || {
       items: [],
       page: 0,
       total_pages: 0,
@@ -52,14 +46,11 @@ class Home extends Component {
       search: "",
       additional: null,
       method: "popular",
-      blockName: "Popular movies"
+      blockName: "Popular movies",
+      isLoading: true
     };
 
     this.toggleDropDown = this.toggleDropDown.bind(this);
-  }
-
-  testFunction() {
-    console.log("test");
   }
 
   toggleDropDown() {
@@ -69,11 +60,11 @@ class Home extends Component {
   }
 
   showPopularMovies = () => {
-    console.log("test?");
-    this.setState({search: "", method: "popular", blockName: "Popular movies"});
+    this.setState({search: "", method: "popular", blockName: "Popular movies", isLoading: true});
     BackendService.getInfoByPopular(1).then(
       response => {
-        this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages});
+        this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages, isLoading: false});
+        this.props.history.push({state: this.state});
       },
       error => {
         console.log("Error in getInfoByTitle: " + error.toString());
@@ -82,16 +73,18 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.showPopularMovies();
+    if(this.state.items.length == 0) {
+      this.showPopularMovies();
 
-    BackendService.getCategories().then(
-      response => {
-        this.setState({catItems: response.data});
-      },
-      error => {
-        console.log("Error in getCategories: " + error.toString());
-      }
-    );
+      BackendService.getCategories().then(
+        response => {
+          this.setState({catItems: response.data});
+        },
+        error => {
+          console.log("Error in getCategories: " + error.toString());
+        }
+      );
+    }
   }
 
   changeHandler = (event) => {
@@ -101,10 +94,16 @@ class Home extends Component {
   }
 
   searchClickHandler = () => {
+    this.setState({method: "search", blockName: "Search '" + this.state.search + "':", isLoading: true});
     BackendService.getInfoByTitle(this.state.search, 1).then(
       response => {
-        this.setState({blockName: "Search '"+this.state.search+"':"});
-        this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages, method: "search"});
+        this.setState({
+          items: response.data.results,
+          page: response.data.this_page,
+          total_pages: response.data.total_pages,
+          isLoading: false
+        });
+        this.props.history.push({state: this.state});
       },
       error => {
         console.log("Error in getInfoByTitle: " + error.toString());
@@ -115,10 +114,11 @@ class Home extends Component {
   categoryClickHandler = (event) => {
     let id = event.target.id;
     let name = event.target.name;
-    this.setState({additional: id, method: "category", blockName: name+" Category"});
+    this.setState({additional: id, method: "category", blockName: name+" Category", isLoading: true});
     BackendService.getInfoByGenre(id, 1).then(
       response => {
-        this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages});
+        this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages, isLoading: false});
+        this.props.history.push({state: this.state});
       },
       error => {
         console.log("Error in getInfoByGenrePage: " + error.toString());
@@ -129,13 +129,16 @@ class Home extends Component {
   pageHandler = (event) => {
     let nam = event.target.name;
     let val = event.target.value;
-    this.setState({[nam]: val});
+    this.setState({[nam]: val, isLoading: true});
+
+    window.scrollTo(0, 0);
 
     switch(this.state.method) {
       case "category":
         BackendService.getInfoByGenre(this.state.additional, val).then(
           response => {
-            this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages});
+            this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages, isLoading: false});
+            this.props.history.push({state: this.state});
           },
           error => {
             console.log("Error in getInfoByGenrePage: " + error.toString());
@@ -145,7 +148,8 @@ class Home extends Component {
       case "search":
         BackendService.getInfoByTitle(this.state.search, val).then(
           response => {
-            this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages});
+            this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages, isLoading: false});
+            this.props.history.push({state: this.state});
           },
           error => {
             console.log("Error in getInfoByTitle: " + error.toString());
@@ -155,7 +159,8 @@ class Home extends Component {
       case "popular":
         BackendService.getInfoByPopular(val).then(
           response => {
-            this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages});
+            this.setState({items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages, isLoading: false});
+            this.props.history.push({state: this.state});
           },
           error => {
             console.log("Error in getInfoByGenrePage: " + error.toString());
@@ -169,8 +174,6 @@ class Home extends Component {
   }
 
   render() {
-    const user = AuthenticationService.getCurrentUser();
-
     var page_items = [];
     var currentPage = this.state.page;
     var totalPages = this.state.total_pages;
@@ -185,11 +188,9 @@ class Home extends Component {
 
     var startPage = 0, endPage = 0, showPages = 7;
     if (Number(totalPages) <= Number(showPages)) {
-      // less than 10 total pages so show all
       startPage = 1;
       endPage = Number(totalPages);
     } else {
-      // more than 10 total pages so calculate start and end pages
       if (Number(currentPage) <= (Math.floor(showPages / 2) + 1)) {
         startPage = 1;
         endPage = Number(showPages);
@@ -208,7 +209,7 @@ class Home extends Component {
         active_status = true;
       }
       page_items.push(
-      <PaginationItem active={active_status}>
+      <PaginationItem key={i.toString()} active={active_status}>
         <PaginationLink name="page" value={i} onClick={this.pageHandler}>
           {i}
         </PaginationLink>
@@ -220,9 +221,7 @@ class Home extends Component {
       <DropdownItem id={data.id} key={data.id.toString()} name={data.name} onClick={this.categoryClickHandler}>{data.name}</DropdownItem>
     );
 
-    // login
-    if (user && user.access_token) {
-      return (
+    return (
         <div>
           <AppNavbar/>
           <Container fluid>
@@ -252,32 +251,41 @@ class Home extends Component {
           <Row style={{marginTop:"10px"}}>
             <Col sm="12" md={{ size: 8, offset: 2 }}>
               <h1 style={{marginTop:"20px"}}>{this.state.blockName}</h1>
-              <div style={{marginTop:"20px"}}>
-                <MovieCard data={this.state.items} />
-                <Pagination aria-label="Page navigation example">
-                  <PaginationItem disabled={firstPageDisabled}>
-                    <PaginationLink name="page" value="1" onClick={this.pageHandler} first />
-                  </PaginationItem>
-                  {page_items}
-                  <PaginationItem disabled={lastPageDisabled}>
-                    <PaginationLink name="page" value={totalPages} onClick={this.pageHandler} last />
-                  </PaginationItem>
-                </Pagination>
-              </div>
+                {(() => {
+                  if (this.state.isLoading) {
+                    return (
+                      <div style={{marginTop:"20px"}} className="spinner">
+                        <Spinner color="secondary" style={{ width: "100px", height: "100px" }} />
+                      </div>
+                    )
+                  } else {
+                    return (
+                      <div style={{marginTop:"20px"}}>
+                        {this.state.items.length == 0
+                        ? "No items found."
+                        : <MovieCard data={this.state.items} />
+                        }
+                        {totalPages != 0
+                        ? <Pagination aria-label="Page navigation example">
+                            <PaginationItem disabled={firstPageDisabled}>
+                              <PaginationLink name="page" value="1" onClick={this.pageHandler} first />
+                            </PaginationItem>
+                            {page_items}
+                            <PaginationItem disabled={lastPageDisabled}>
+                              <PaginationLink name="page" value={totalPages} onClick={this.pageHandler} last />
+                            </PaginationItem>
+                          </Pagination>
+                        : ""
+                        }
+                      </div>
+                    )
+                  }
+                })()}
             </Col>
           </Row>
           </Container>
         </div>
-      );
-    } else { // not login
-      this.props.history.push('/');
-      window.location.reload();
-      return (
-        <div>
-          <AppNavbar/>
-        </div>
-      );
-    }
+    );
   }
 }
 

@@ -35,3 +35,20 @@
     justify-content: center;
     height: 75vh;
 }
+
+.card:hover .card-img-overlay {
+    opacity: 1;
+}
+
+.card .card-img-overlay {
+    opacity: 0;
+    transition: .5s ease;
+    background-color: rgba(52, 58, 64, 0.8);
+}
+
+.card p.description.card-text {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+}

@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->enum('gender', ['Male', 'Female', 'Other']);
-            $table->string('avatar')->default("images/no-avatar.png");
+            $table->string('avatar')->default("/images/no-avatar.png");
             $table->timestamps();
         });
     }

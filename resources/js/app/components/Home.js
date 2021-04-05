@@ -1,36 +1,26 @@
 import React, { Component } from 'react';
 import AppNavbar from './AppNavbar';
-import { Container, Row, Col, Spinner } from 'reactstrap';
-import {
-  Card, CardImg, CardBody,
-  CardTitle, Button, InputGroup, Input, InputGroupAddon
+import MovieCard from './MovieCard';
+import { 
+  Container,
+  Row, 
+  Col,
+  Spinner,
+  Button,
+  InputGroup,
+  Input,
+  InputGroupAddon,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from 'reactstrap';
 
-import { Link } from 'react-router-dom'
-import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import {AiOutlineSearch} from 'react-icons/ai';
 import BackendService from '../services/BackendService';
-
-function MovieCard(props) {
-  const data = props.data;
-  const listItems = data.map((data) =>
-    <Col md="6" xl="3" sm="12" className="mb-3" key={data.id.toString()}>
-      <Card>
-        <CardImg top src={data.poster} alt={data.title+" Poster"} />
-        <CardBody>
-          <CardTitle tag="h5">{data.title}</CardTitle>
-          <Link to={'/movie/' + data.id.toString()}>
-            <Button>View details</Button>
-          </Link>
-        </CardBody>
-      </Card>
-    </Col>
-  );
-  return (
-    <Row className="mb-2">{listItems}</Row>
-  );
-}
 
 class Home extends Component {
 

@@ -51,7 +51,7 @@ class MoviesController extends Controller
                 $search = $this->tmdb->getRequest("search/movie", $options);
                 $results = array();
                 foreach($search->results as $response) {
-                    $results[] = array("id" => $response->id, "title" => $response->title, "poster" => $response->poster_path != null ? $this->media->getPosterUrl($response->poster_path, 'w500') : "/images/not_found.png");
+                    $results[] = array("id" => $response->id, "title" => $response->title, "poster" => $response->poster_path != null ? $this->media->getPosterUrl($response->poster_path, 'w500') : "/images/not_found.png", "overview" => $response->overview, "release" => $response->release_date != null ? explode("-", $response->release_date)[0] : null);
                 }
                 return array("results" => $results, "this_page" => $search->page, "total_pages" => $search->total_pages);
                 break;
@@ -65,7 +65,7 @@ class MoviesController extends Controller
                 $search = $this->tmdb->getRequest("discover/movie", $options);
                 $results = array();
                 foreach($search->results as $response) {
-                    $results[] = array("id" => $response->id, "title" => $response->title, "poster" => $response->poster_path != null ? $this->media->getPosterUrl($response->poster_path, 'w500') : "/images/not_found.png");
+                    $results[] = array("id" => $response->id, "title" => $response->title, "poster" => $response->poster_path != null ? $this->media->getPosterUrl($response->poster_path, 'w500') : "/images/not_found.png", "overview" => $response->overview, "release" => $response->release_date != null ? explode("-", $response->release_date)[0] : null);
                 }
 
                 return array("results" => $results, "this_page" => $search->page, "total_pages" => $search->total_pages);

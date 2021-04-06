@@ -31,6 +31,7 @@ Route::group([
     Route::post('/complete/lostpassword', [AuthController::class, 'resetPassword']);
 
     Route::post('/change/details', [AuthController::class, 'changeDetails']);
+    Route::post('/change/avatar', [AuthController::class, 'uploadUserAvatar']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });

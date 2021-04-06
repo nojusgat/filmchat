@@ -69,4 +69,11 @@ return [
         public_path('storage') => storage_path('app/public'),
     ],
 
+    'user_avatars' => [
+        'driver' => 'local',
+        'root' => storage_path('app/public/images'),
+        'url' => env('APP_URL').'/images',
+        'visibility' => 'public',
+    ],
+
 ];

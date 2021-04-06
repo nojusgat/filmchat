@@ -67,7 +67,7 @@ class AppNavbar extends Component {
             <Nav className="ml-auto" navbar>
               <Dropdown nav isOpen={this.state.isOpenDrop} toggle={this.toggleDropDown}>
                 <DropdownToggle nav caret>
-                  <img src={this.state.avatar} width="40" height="40" className="rounded-circle" style={{ position: "absolute", marginTop: "-8px" }} />
+                  <img src={"/storage/images/avatars/"+this.state.avatar} width="40" height="40" className="rounded-circle" style={{ position: "absolute", marginTop: "-8px" }} />
                   <span className="ml-5">{this.state.username}</span>
                 </DropdownToggle>
                 <DropdownMenu>

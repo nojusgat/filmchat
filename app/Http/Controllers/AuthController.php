@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\Models\User;
 use Validator;
@@ -325,13 +326,13 @@ class AuthController extends Controller
         // check if image has been received from form
         if($request->file('avatar')){
             // check if user has an existing avatar
-            if(auth()->user()->avatar != "/images/no-avatar.png"){
+            if(auth()->user()->avatar != "no-avatar.png"){
                 // delete existing image file
                 Storage::disk('user_avatars')->delete(auth()->user()->avatar);
             }
     
             // processing the uploaded image
-            $avatar_name = $this->random_char_gen(20).'.'.$request->file('avatar')->getClientOriginalExtension();
+            $avatar_name = $this->generateRandomString(20).'.'.$request->file('avatar')->getClientOriginalExtension();
             $avatar_path = $request->file('avatar')->storeAs('',$avatar_name, 'user_avatars');
     
             // Update user's avatar column on 'users' table
@@ -353,6 +354,16 @@ class AuthController extends Controller
         return response()->json([
             'success'=> false, 'error'=> "Image not uploaded."
         ]);
+    }
+
+    function generateRandomString($length = 25) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 
     /**

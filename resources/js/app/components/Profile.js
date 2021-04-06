@@ -17,7 +17,7 @@ class Profile extends Component {
     this.onEntered = this.onEntered.bind(this);
     this.onExited = this.onExited.bind(this);
     this.toggle = this.toggle.bind(this);
-    this.state = { collapse: false, status: 'closed' };
+    this.state = { collapse: false, status: 'closed', alert: {message: null, type: 0} };
   }
   componentDidMount() {
     const user = AuthenticationService.getCurrentUser();
@@ -44,6 +44,25 @@ class Profile extends Component {
     console.log(this.state.name);
   }
 
+  changeAvatarHandler = (event) => {
+    this.setState({alert: {message: "Uploading avatar...", type: 3}});
+    const photo = event.target.files[0];
+    let formData = new FormData();
+    formData.append('avatar', photo);
+    BackendService.changeAvatar(formData).then(
+      (response) => {
+        console.log(response);
+        var currentStorage = JSON.parse(localStorage.getItem('user'));
+        currentStorage.user = response.data.updated_info;
+        localStorage.setItem("user", JSON.stringify(currentStorage));
+        this.setState({alert: {message: response.data.message, type: response.data.success ? 1 : 2}});
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
   ProfileInfoChange = async (event) => {
     event.preventDefault();
 
@@ -54,30 +73,54 @@ class Profile extends Component {
       .then(
         (response) => {
           console.log(response);
-          var test = JSON.parse(localStorage.getItem('user'));
-          test.user = response.data.updated_info;
-          localStorage.setItem("user", JSON.stringify(test));
+          var currentStorage = JSON.parse(localStorage.getItem('user'));
+          currentStorage.user = response.data.updated_info;
+          localStorage.setItem("user", JSON.stringify(currentStorage));
         },
         error => {
-          if(error.response.data && error.response.data.error) {
-            this.setState({error: error.response.data.error});
-          } else {
-            this.setState({error: "Can not signin successfully! Please check email/password again"});
-          }
+          console.log(error);
         }
     );
   }
 
 
   render() {
+    let alert = "";
+
+    if(this.state.alert.message != null){
+      if(this.state.alert.type == 1){
+        alert = (
+          <Alert color="success" className="mt-3">
+            {this.state.alert.message}
+          </Alert>
+        );
+      } else if (this.state.alert.type == 2) {
+        alert = (
+          <Alert color="danger" className="mt-3">
+            {this.state.alert.message}
+          </Alert>
+        );
+      } else if (this.state.alert.type == 3) {
+        alert = (
+          <Alert color="info" className="mt-3">
+            {this.state.alert.message}
+          </Alert>
+        );
+      }
+    }
+
     return (
       <div>
         <AppNavbar/>
         <Container fluid>
+          {alert}
           <Row style={{marginTop:"30px"}}>
           {/* <img src="https://knowpathology.com.au/app/uploads/2018/07/Happy-Test-Screen-01-825x510.png" alt="Avatar" class="avatar"></img> */}
               <Col style={{marginLeft:"350px"}}>
-
+                <FormGroup>
+                  <Label for="avatar">Upload your avatar</Label>
+                  <CustomInput type="file" id="avatar" name="avatar" accept="image/*" onChange={this.changeAvatarHandler} />
+                </FormGroup>
               </Col>
 
               <Col sm="12" md={{ size: 2, offset: 0 }}>

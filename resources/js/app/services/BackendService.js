@@ -54,6 +54,10 @@ class BackendService {
       gender: gender
     });
   }
+
+  changeAvatar = async(data) => {
+    return axios.post("/api/auth/change/avatar", data);
+  }
 }
 
 export default new BackendService();

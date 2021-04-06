@@ -20,6 +20,14 @@ class BackendService {
     });
   }
 
+  setUserInfo = async(first, last, gender) => {
+    return axios.post("/api/auth/change/details", {
+      firstname: first,
+      lastname: last,
+      gender: gender
+    });
+  }
+
   getInfoByPopular = async(page) => {
     return axios.post("/api/auth/movie/show", {
       by: "category",

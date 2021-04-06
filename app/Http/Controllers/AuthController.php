@@ -321,6 +321,40 @@ class AuthController extends Controller
         return response()->json(['success'=> false, 'error'=> "In order to do this you need to be logged in."]);
     }
 
+    public function uploadUserAvatar(Request $request){
+        // check if image has been received from form
+        if($request->file('avatar')){
+            // check if user has an existing avatar
+            if(auth()->user()->avatar != "/images/no-avatar.png"){
+                // delete existing image file
+                Storage::disk('user_avatars')->delete(auth()->user()->avatar);
+            }
+    
+            // processing the uploaded image
+            $avatar_name = $this->random_char_gen(20).'.'.$request->file('avatar')->getClientOriginalExtension();
+            $avatar_path = $request->file('avatar')->storeAs('',$avatar_name, 'user_avatars');
+    
+            // Update user's avatar column on 'users' table
+            $profile = User::find(auth()->user()->id);
+            $profile->avatar = $avatar_path;
+    
+            if($profile->save()){
+                return response()->json([
+                    "success" => true, "message" => "Avatar uploaded.", "updated_info" => $profile
+                ]);
+            }else{
+                return response()->json([
+                    "success" => false, "message" => "Avatar upload failed. Database error."
+                ]);
+            }
+    
+        }
+    
+        return response()->json([
+            'success'=> false, 'error'=> "Image not uploaded."
+        ]);
+    }
+
     /**
      * Log the user out (Invalidate the token).
      *

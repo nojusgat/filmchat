@@ -17,12 +17,17 @@ class Profile extends Component {
     this.onEntered = this.onEntered.bind(this);
     this.onExited = this.onExited.bind(this);
     this.toggle = this.toggle.bind(this);
-    this.state = { collapse: false, status: 'closed', alert: {message: null, type: 0} };
+    this.state = { collapse: false, status: 'closed', alert: [] };
   }
   componentDidMount() {
     const user = AuthenticationService.getCurrentUser();
-    this.setState({name: user.user.firstname, surname: user.user.lastname, email: user.user.email, gender: user.user.gender,
-    about: "tes tes tes Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson crednesciunt sapiente ea proident."});
+    this.setState({
+      name: user.user.firstname, 
+      surname: user.user.lastname, 
+      email: user.user.email, 
+      gender: user.user.gender,
+      about: "tes tes tes Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson crednesciunt sapiente ea proident."
+    });
   }
 
   onEntered() {
@@ -45,17 +50,16 @@ class Profile extends Component {
   }
 
   changeAvatarHandler = (event) => {
-    this.setState({alert: {message: "Uploading avatar...", type: 3}});
+    this.setState({alert: [...this.state.alert, {message: "Uploading avatar...", type: 3}]}, ()=> {window.setTimeout(()=>{ this.state.alert.shift(); this.setState({alert: this.state.alert})},2000)});
     const photo = event.target.files[0];
     let formData = new FormData();
     formData.append('avatar', photo);
     BackendService.changeAvatar(formData).then(
       (response) => {
-        console.log(response);
         var currentStorage = JSON.parse(localStorage.getItem('user'));
         currentStorage.user = response.data.updated_info;
         localStorage.setItem("user", JSON.stringify(currentStorage));
-        this.setState({alert: {message: response.data.message, type: response.data.success ? 1 : 2}});
+        this.setState({alert: [...this.state.alert, {message: response.data.message, type: response.data.success ? 1 : 2}]}, ()=> {window.setTimeout(()=>{ this.state.alert.shift(); this.setState({alert: this.state.alert})},2000)});
       },
       error => {
         console.log(error);
@@ -72,10 +76,18 @@ class Profile extends Component {
                 this.state.gender)
       .then(
         (response) => {
-          console.log(response);
           var currentStorage = JSON.parse(localStorage.getItem('user'));
           currentStorage.user = response.data.updated_info;
           localStorage.setItem("user", JSON.stringify(currentStorage));
+          if(response.data.error) {
+            this.setState({alert: [...this.state.alert, {message: response.data.error.error, type: 3}]}, ()=> {window.setTimeout(()=>{ this.state.alert.shift(); this.setState({alert: this.state.alert})},2000)});
+          } else {
+            Object.keys(response.data).forEach((key) => {
+              if(key != "updated_info") {
+                this.setState({alert: [...this.state.alert, {message: response.data[key].message, type: response.data[key].success ? 1 : 2}]}, ()=> {window.setTimeout(()=>{ this.state.alert.shift(); this.setState({alert: this.state.alert})},2000)});
+              }
+            });
+          }
         },
         error => {
           console.log(error);
@@ -87,31 +99,30 @@ class Profile extends Component {
   render() {
     let alert = "";
 
-    if(this.state.alert.message != null){
-      if(this.state.alert.type == 1){
-        alert = (
+    Object.keys(this.state.alert).forEach(element => {
+      alert = (
+        <div>
+        {alert}
+        {this.state.alert[element].type == 1 ?
           <Alert color="success" className="mt-3">
-            {this.state.alert.message}
+              {this.state.alert[element].message}
           </Alert>
-        );
-      } else if (this.state.alert.type == 2) {
-        alert = (
+        : this.state.alert[element].type == 2 ?
           <Alert color="danger" className="mt-3">
-            {this.state.alert.message}
+              {this.state.alert[element].message}
           </Alert>
-        );
-      } else if (this.state.alert.type == 3) {
-        alert = (
+        : this.state.alert[element].type == 3 ?
           <Alert color="info" className="mt-3">
-            {this.state.alert.message}
+              {this.state.alert[element].message}
           </Alert>
-        );
-      }
-    }
+        : ""}
+        </div>
+      );
+    });
 
     return (
       <div>
-        <AppNavbar/>
+        <AppNavbar />
         <Container fluid>
           {alert}
           <Row style={{marginTop:"30px"}}>

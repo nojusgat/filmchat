@@ -70,9 +70,6 @@ class Profile extends Component {
 
 
   render() {
-    const user = AuthenticationService.getCurrentUser();
-    const test = "selected";
-
     return (
       <div>
         <AppNavbar/>
@@ -108,10 +105,6 @@ class Profile extends Component {
                     <CustomInput onChange={this.changeHandler} type="radio" value="Other" id="Other" name="gender" label="Other" checked={this.state.gender == "Other"} />
                     </div>
                   </FormGroup>
-
-                  <CustomInput onChange={this.changeHandler} type="radio" value="Male" id="Male" name="gender" label="Male"  checked={this.state.gender == "Male"}/>
-                  <CustomInput onChange={this.changeHandler} type="radio" value="Female" id="Female" name="gender" label="Female" checked={this.state.gender == "Female"} />
-                  <CustomInput onChange={this.changeHandler} type="radio" value="Other" id="Other" name="gender" label="Other" checked={this.state.gender == "Other"} />
                 </Form>
                 </Col>
                 <Col><Button onClick={this.ProfileInfoChange} type="submit" variant="primary" >

@@ -10,23 +10,35 @@ import noAvatar from '../../no-avatar.png';
 class AppNavbar extends Component {
   constructor(props) {
     super(props);
-    this.state = {isOpen: false};
-    this.toggle = this.toggle.bind(this);
-
-    this.state = {isOpenDrop: false};
-    this.toggleDropDown = this.toggleDropDown.bind(this);
 
     this.state = {
+      isOpen: false,
+      isOpenDrop: false,
       username: undefined,
       avatar: undefined,
       login: false
     };
+
+    this.toggle = this.toggle.bind(this);
+    this.toggleDropDown = this.toggleDropDown.bind(this);
   }
 
   componentDidMount() {
     const user = AuthenticationService.getCurrentUser();
 
     if (user) {
+      this.setState({
+        login: true,
+        username: user.user.firstname + " " + user.user.lastname,
+        avatar: user.user.avatar
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const user = AuthenticationService.getCurrentUser();
+
+    if (user && (prevState.avatar != user.user.avatar || prevState.username != (user.user.firstname + " " + user.user.lastname))) {
       this.setState({
         login: true,
         username: user.user.firstname + " " + user.user.lastname,

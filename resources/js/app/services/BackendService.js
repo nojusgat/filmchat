@@ -46,6 +46,14 @@ class BackendService {
   getCategories = async() => {
     return axios.get("/api/auth/movie/genres");
   }
+
+  setUserInfo = async(first, last, gender) => {
+    return axios.post("/api/auth/change/details", {
+      firstname: first,
+      lastname: last,
+      gender: gender
+    });
+  }
 }
 
 export default new BackendService();

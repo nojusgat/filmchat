@@ -55,6 +55,12 @@ class BackendService {
     });
   }
 
+  setUserAbout = async(about) => {
+    return axios.post("/api/auth/change/details", {
+      about: about
+    });
+  }
+
   changeAvatar = async(data) => {
     return axios.post("/api/auth/change/avatar", data);
   }

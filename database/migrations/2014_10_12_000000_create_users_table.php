@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->enum('gender', ['Male', 'Female', 'Other']);
             $table->string('avatar')->default("no-avatar.png");
+            $table->text('about')->nullable()->default(null);
             $table->timestamps();
         });
     }

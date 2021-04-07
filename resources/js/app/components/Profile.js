@@ -26,7 +26,7 @@ class Profile extends Component {
       surname: user.user.lastname, 
       email: user.user.email, 
       gender: user.user.gender,
-      about: "Nothing here. Press to edit..."
+      about: user.user.about == null ? "Nothing here. Press to edit..." : user.user.about
     });
   }
 

@@ -265,10 +265,11 @@ class AuthController extends Controller
 
         if(!is_null($user_id)) {
             $validator = Validator::make($request->all(), [
-                'firstname' => 'string',
-                'lastname' => 'string',
+                'firstname' => 'string|between:5,100',
+                'lastname' => 'string|between:5,100',
                 'gender' => Rule::in(['Male', 'Female', 'Other']),
-                'password_current' => 'password',
+                'about' => 'string',
+                'password_current' => 'password|min:8',
                 'password_new' => 'string|confirmed|min:8'
             ]);
 
@@ -298,6 +299,13 @@ class AuthController extends Controller
                     'gender' => $request->gender
                 ]);
                 $message['gender'] = array("success" => true, "message" => "Your gender has been successfully changed.");
+            }
+
+            if(isset($request->about) && $request->about != $user->about) {
+                $user->update([
+                    'about' => $request->about
+                ]);
+                $message['about'] = array("success" => true, "message" => "Your about me details have been successfully changed.");
             }
 
             if(isset($request->password_new)) {

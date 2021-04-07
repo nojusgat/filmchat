@@ -90,7 +90,16 @@ class Profile extends Component {
           }
         },
         error => {
-          console.log(error);
+          var errors = "Unkown error";
+
+          if(error.response.data) {
+            errors = JSON.parse(error.response.data);
+            Object.keys(errors).forEach((key) => {
+              this.setState({alert: [...this.state.alert, {message: errors[key], type: 2}]}, ()=> {window.setTimeout(()=>{ this.state.alert.shift(); this.setState({alert: this.state.alert})},2000)});
+            });
+          } else {
+            this.setState({alert: [...this.state.alert, {message: errors, type: 2}]}, ()=> {window.setTimeout(()=>{ this.state.alert.shift(); this.setState({alert: this.state.alert})},2000)});
+          }
         }
     );
   }
@@ -209,12 +218,36 @@ class Profile extends Component {
                             this.setState({aboutTextToggle: true});
                             event.preventDefault();
                             event.stopPropagation();
+                            BackendService
+                                .setUserAbout(this.state.about)
+                              .then(
+                                (response) => {
+                                  var currentStorage = JSON.parse(localStorage.getItem('user'));
+                                  currentStorage.user = response.data.updated_info;
+                                  localStorage.setItem("user", JSON.stringify(currentStorage));
+                                },
+                                error => {
+                                  console.log(error);
+                                }
+                            );
                           }
                         }}
                         onBlur={(event) => {
                           this.setState({aboutTextToggle: true});
                           event.preventDefault();
                           event.stopPropagation();
+                          BackendService
+                              .setUserAbout(this.state.about)
+                            .then(
+                              (response) => {
+                                var currentStorage = JSON.parse(localStorage.getItem('user'));
+                                currentStorage.user = response.data.updated_info;
+                                localStorage.setItem("user", JSON.stringify(currentStorage));
+                              },
+                              error => {
+                                console.log(error);
+                              }
+                          );
                         }}
                       />
                     )}

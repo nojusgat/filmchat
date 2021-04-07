@@ -131,7 +131,7 @@ class Profile extends Component {
           {alert}
           <Row style={{marginTop:"30px"}}>
           {/* <img src="https://knowpathology.com.au/app/uploads/2018/07/Happy-Test-Screen-01-825x510.png" alt="Avatar" class="avatar"></img> */}
-              <Col style={{marginLeft:"350px"}}>
+              <Col md={{ offset: 2 }}>
                 <FormGroup>
                   <Label for="avatar">Upload your avatar</Label>
                   <CustomInput type="file" id="avatar" name="avatar" accept="image/*" onChange={this.changeAvatarHandler} />

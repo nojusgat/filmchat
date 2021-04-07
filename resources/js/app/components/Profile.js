@@ -9,7 +9,6 @@ import { Collapse, CardBody, Card } from 'reactstrap';
 import AuthenticationService from '../services/AuthenticationService';
 import BackendService from '../services/BackendService';
 
-
 class Profile extends Component {
   
   constructor(props) {
@@ -17,7 +16,8 @@ class Profile extends Component {
     this.onEntered = this.onEntered.bind(this);
     this.onExited = this.onExited.bind(this);
     this.toggle = this.toggle.bind(this);
-    this.state = { collapse: false, status: 'closed', alert: [] };
+
+    this.state = { aboutTextToggle: true, collapse: false, status: 'closed', alert: [] };
   }
   componentDidMount() {
     const user = AuthenticationService.getCurrentUser();
@@ -26,7 +26,7 @@ class Profile extends Component {
       surname: user.user.lastname, 
       email: user.user.email, 
       gender: user.user.gender,
-      about: "tes tes tes Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson crednesciunt sapiente ea proident."
+      about: "Nothing here. Press to edit..."
     });
   }
 
@@ -95,6 +95,10 @@ class Profile extends Component {
     );
   }
 
+  handleInputHeightChange(e) {
+    e.target.style.height = 'inherit';
+    e.target.style.height = `${e.target.scrollHeight}px`;
+  }
 
   render() {
     let alert = "";
@@ -167,18 +171,57 @@ class Profile extends Component {
               </Row>
               
               <Row style={{marginTop:"30px"}}>
-              <Col sm="12" md={{ size: 7, offset: 0 }}><center><Button className='title' onClick={this.toggle} color="primary" style={{ marginBottom: '1rem' }}>About me</Button></center>
-              </Col>
-              <Row style={{marginTop:"30px"}}>
-              <Col style={{marginLeft:"500px", marginRight:"600px"}}>
-                <Collapse isOpen={this.state.collapse} onExited={this.onExited} onEntered={this.onEntered}>
+              <Col sm="12" md={{ size: 8, offset: 2 }}><Button className='title' onClick={this.toggle} color="primary" style={{ marginBottom: '1rem' }}>About me</Button>
+              <Collapse isOpen={this.state.collapse} onExited={this.onExited} onEntered={this.onEntered}>
                 <Card>
                   <CardBody>
-                  {this.state.about}
+                    {this.state.aboutTextToggle ? (
+                      <div>
+                      <p onClick={() => {
+                          this.setState({aboutTextToggle: false});
+                      }}>
+                        {(this.state.about+"").split("\n").map(function(item) {
+                          return (
+                            <span>
+                              {item}
+                              <br/>
+                            </span>
+                          )
+                        })}
+                      </p>
+                      </div>
+                    ) : (
+                      <Input
+                        id="aboutInput"
+                        type="textarea"
+                        style={{border: "none", padding: "0", height: "500px"}}
+                        value={this.state.about != "Nothing here. Press to edit..." ? this.state.about : ""}
+                        autoFocus
+                        onChange={(event) => {
+                          this.handleInputHeightChange(event);
+                          this.setState({about: event.target.value});
+                        }}
+                        onFocus={(event) => {
+                          this.handleInputHeightChange(event);
+                        }}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter' && !event.shiftKey || event.key === 'Escape') {
+                            this.setState({aboutTextToggle: true});
+                            event.preventDefault();
+                            event.stopPropagation();
+                          }
+                        }}
+                        onBlur={(event) => {
+                          this.setState({aboutTextToggle: true});
+                          event.preventDefault();
+                          event.stopPropagation();
+                        }}
+                      />
+                    )}
                   </CardBody>
                 </Card>
-              </Collapse></Col>
-              </Row>
+              </Collapse>
+              </Col>
               </Row>
               <div style={{marginLeft:"500px",marginRight:"200px"}}>
               <Row style={{marginTop:"30px"}}>

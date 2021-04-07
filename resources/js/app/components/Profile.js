@@ -223,20 +223,22 @@ class Profile extends Component {
               </Collapse>
               </Col>
               </Row>
-              <div style={{marginLeft:"500px",marginRight:"200px"}}>
-              <Row style={{marginTop:"30px"}}>
-              <Col></Col>
-              </Row>
-              <Row style={{marginTop:"30px"}}> 
-              <Col>Hello world</Col>
-              <Col>Hello world</Col>
-              <Col>Hello world</Col>
-              </Row>
-              
-              <Row style={{marginTop:"30px"}}>
-              <Col></Col>
-              </Row>
-              </div>
+
+              <Col sm="12" md={{ size: 8, offset: 2 }}>
+                <Row style={{marginTop:"30px"}}>
+                  <Col></Col>
+                </Row>
+
+                <Row style={{marginTop:"30px"}}> 
+                  <Col>Hello world</Col>
+                  <Col>Hello world</Col>
+                  <Col>Hello world</Col>
+                </Row>
+                
+                <Row style={{marginTop:"30px"}}>
+                  <Col></Col>
+                </Row>
+              </Col>
         </Container>
       </div>
     );

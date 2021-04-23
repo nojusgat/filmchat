@@ -51,7 +51,13 @@ class MoviesController extends Controller
                 $search = $this->tmdb->getRequest("search/movie", $options);
                 $results = array();
                 foreach($search->results as $response) {
-                    $results[] = array("id" => $response->id, "title" => $response->title, "poster" => $response->poster_path != null ? $this->media->getPosterUrl($response->poster_path, 'w500') : "/images/not_found.png", "overview" => $response->overview, "release" => $response->release_date != null ? explode("-", $response->release_date)[0] : null);
+                    $results[] = array(
+                        "id"        => !isset($response->id) ? null : $response->id,
+                        "title"     => !isset($response->title) ? null : $response->title,
+                        "poster"    => isset($response->poster_path) ? $this->media->getPosterUrl($response->poster_path, 'w500') : "/images/not_found.png",
+                        "overview"  => !isset($response->overview) ? null : $response->overview,
+                        "release"   => !isset($response->release_date) ? null : explode("-", $response->release_date)[0]
+                    );
                 }
                 return array("results" => $results, "this_page" => $search->page, "total_pages" => $search->total_pages);
                 break;
@@ -65,7 +71,13 @@ class MoviesController extends Controller
                 $search = $this->tmdb->getRequest("discover/movie", $options);
                 $results = array();
                 foreach($search->results as $response) {
-                    $results[] = array("id" => $response->id, "title" => $response->title, "poster" => $response->poster_path != null ? $this->media->getPosterUrl($response->poster_path, 'w500') : "/images/not_found.png", "overview" => $response->overview, "release" => $response->release_date != null ? explode("-", $response->release_date)[0] : null);
+                    $results[] = array(
+                        "id"        => !isset($response->id) ? null : $response->id,
+                        "title"     => !isset($response->title) ? null : $response->title,
+                        "poster"    => isset($response->poster_path) ? $this->media->getPosterUrl($response->poster_path, 'w500') : "/images/not_found.png",
+                        "overview"  => !isset($response->overview) ? null : $response->overview,
+                        "release"   => !isset($response->release_date) ? null : explode("-", $response->release_date)[0]
+                    );
                 }
 
                 return array("results" => $results, "this_page" => $search->page, "total_pages" => $search->total_pages);
@@ -77,39 +89,40 @@ class MoviesController extends Controller
 
     private function getInfoById($id)
     {
-        $options = array("append_to_response" => "videos,credits,similar");
-        $info = $this->tmdb->getRequest("movie/".$id, $options);
+        $options    = array("append_to_response" => "videos,credits,similar");
+        $info       = $this->tmdb->getRequest("movie/".$id, $options);
 
-        $backdrop = $info->backdrop_path != null ? $this->media->getBackdropUrl($info->backdrop_path, 'original') : "/images/not_found.png";
-        $collection = $info->belongs_to_collection != null ? array("id" => $info->belongs_to_collection->id, "name" => $info->belongs_to_collection->name, "poster" => ($info->belongs_to_collection->poster_path != null ? $this->media->getPosterUrl($info->belongs_to_collection->poster_path, 'w500') : "/images/not_found.png")) : null;
-        $budget = $info->budget;
-        $genres = $info->genres;
-        $homepage = $info->homepage;
-        $imdb_id = $info->imdb_id;
-        $original_language = $info->original_language;
-        $original_title = $info->original_title;
-        $description = $info->overview;
-        $popularity = $info->popularity;
-        $poster = $info->poster_path != null ? $this->media->getPosterUrl($info->poster_path, 'original') : "/images/not_found.png";
-        $production_companies = $info->production_companies;
-        $production_countries = $info->production_countries;
-        $release_date = $info->release_date;
-        $revenue = $info->revenue;
-        $runtime = $info->runtime;
-        $status = $info->status;
-        $tagline = $info->tagline;
-        $title = $info->title;
+        $poster     = isset($info->poster_path) ? $this->media->getPosterUrl($info->poster_path, 'original') : "/images/not_found.png";
+        $backdrop   = isset($info->backdrop_path) ? $this->media->getBackdropUrl($info->backdrop_path, 'original') : "/images/not_found.png";
+        $collection = isset($info->belongs_to_collection) ? array("id" => $info->belongs_to_collection->id, "name" => $info->belongs_to_collection->name, "poster" => (isset($info->belongs_to_collection->poster_path) ? $this->media->getPosterUrl($info->belongs_to_collection->poster_path, 'w500') : "/images/not_found.png")) : null;
+        
+        $budget     = !isset($info->budget) ? null : $info->budget;
+        $genres     = !isset($info->genres) ? null : $info->genres;
+        $homepage   = !isset($info->homepage) ? null : $info->homepage;
+        $imdb_id    = !isset($info->imdb_id) ? null : $info->imdb_id;
+        $org_lang   = !isset($info->original_language) ? null : $info->original_language;
+        $org_title  = !isset($info->original_title) ? null : $info->original_title;
+        $desc       = !isset($info->overview) ? null : $info->overview;
+        $popularity = !isset($info->popularity) ? null : $info->popularity;
+        $prod_comp  = !isset($info->production_companies) ? null : $info->production_companies;
+        $prod_cntr  = !isset($info->production_countries) ? null : $info->production_countries;
+        $rel_date   = !isset($info->release_date) ? null : $info->release_date;
+        $revenue    = !isset($info->revenue) ? null : $info->revenue;
+        $runtime    = !isset($info->runtime) ? null : $info->runtime;
+        $status     = !isset($info->status) ? null : $info->status;
+        $tagline    = !isset($info->tagline) ? null : $info->tagline;
+        $title      = !isset($info->title) ? null : $info->title;
 
-        $vote_average = $info->vote_average;
-        $vote_count = $info->vote_count;
-        $spoken_languages = $info->spoken_languages;
+        $vote_avg   = !isset($info->vote_average) ? null : $info->vote_average;
+        $vote_cnt   = !isset($info->vote_count) ? null : $info->vote_count;
+        $s_lang     = !isset($info->spoken_languages) ? null : $info->spoken_languages;
 
-        $youtube_trailer = isset($info->videos->results[0]->key) ? $info->videos->results[0]->key : null;
+        $yt_trailer = isset($info->videos->results[0]->key) ? $info->videos->results[0]->key : null;
 
-        $cast = $info->credits->cast;
-        $crew = $info->credits->crew;
+        $cast       = !isset($info->credits->cast) ? null : $info->credits->cast;
+        $crew       = !isset($info->credits->crew) ? null : $info->credits->crew;
 
-        $similar = $info->similar->results;
+        $similar    = !isset($info->similar->results) ? null : $info->similar->results;
 
         return json_encode(
             array(
@@ -120,22 +133,22 @@ class MoviesController extends Controller
                 "genres" => $genres,
                 "homepage" => $homepage,
                 "imdb_id" => $imdb_id,
-                "original_language" => $original_language,
-                "original_title" => $original_title,
-                "description" => $description,
+                "original_language" => $org_lang,
+                "original_title" => $org_title,
+                "description" => $desc,
                 "popularity" => $popularity,
-                "production_companies" => $production_companies,
-                "production_countries" => $production_countries,
-                "release_date" => $release_date,
+                "production_companies" => $prod_comp,
+                "production_countries" => $prod_cntr,
+                "release_date" => $rel_date,
                 "revenue" => $revenue,
                 "runtime" => $runtime,
                 "status" => $status,
                 "tagline" => $tagline,
                 "title" => $title,
-                "vote_average" => $vote_average,
-                "vote_count" => $vote_count,
-                "spoken_languages" => $spoken_languages,
-                "youtube_trailer" => $youtube_trailer,
+                "vote_average" => $vote_avg,
+                "vote_count" => $vote_cnt,
+                "spoken_languages" => $s_lang,
+                "youtube_trailer" => $yt_trailer,
                 "cast" => $cast,
                 "crew" => $crew,
                 "similar" => $similar

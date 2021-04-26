@@ -98,8 +98,8 @@ class AuthController extends Controller
      */
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
-            'firstname' => 'required|string|between:5,100',
-            'lastname' => 'required|string|between:5,100',
+            'firstname' => 'required|string|between:3,100',
+            'lastname' => 'required|string|between:3,100',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|min:8',
             'gender' => 'required|in:Male,Female,Other',
@@ -120,7 +120,7 @@ class AuthController extends Controller
 
         $verification_code = Str::random(30);
         DB::table('user_verifications')->insert(['user_id' => $user->id, 'token' => $verification_code]);
-        
+
         $subject = "Please verify your email address.";
         Mail::send('email.verify', ['username' => $name, 'verification_code' => $verification_code],
             function($mail) use ($email, $name, $subject){
@@ -201,7 +201,7 @@ class AuthController extends Controller
                 $recover_token = Str::random(80);
                 DB::table('password_resets')->insert(['email' => $email, 'token' => $recover_token, 'created_at' => Carbon::now()]);
             }
-            
+
             $subject = "Password reset request";
             Mail::send('email.lostpasssword', ['username' => $check->firstname." ".$check->lastname, 'recover_token' => $recover_token, 'email' => $email],
                 function($mail) use ($email, $check, $subject){
@@ -338,15 +338,15 @@ class AuthController extends Controller
                 // delete existing image file
                 Storage::disk('user_avatars')->delete(auth()->user()->avatar);
             }
-    
+
             // processing the uploaded image
             $avatar_name = $this->generateRandomString(20).'.'.$request->file('avatar')->getClientOriginalExtension();
             $avatar_path = $request->file('avatar')->storeAs('',$avatar_name, 'user_avatars');
-    
+
             // Update user's avatar column on 'users' table
             $profile = User::find(auth()->user()->id);
             $profile->avatar = $avatar_path;
-    
+
             if($profile->save()){
                 return response()->json([
                     "success" => true, "message" => "Avatar uploaded.", "updated_info" => $profile
@@ -356,9 +356,9 @@ class AuthController extends Controller
                     "success" => false, "message" => "Avatar upload failed. Database error."
                 ]);
             }
-    
+
         }
-    
+
         return response()->json([
             'success'=> false, 'error'=> "Image not uploaded."
         ]);

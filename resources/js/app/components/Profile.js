@@ -8,6 +8,8 @@ import { Collapse, CardBody, Card } from 'reactstrap';
 
 import AuthenticationService from '../services/AuthenticationService';
 import BackendService from '../services/BackendService';
+import { cssNumber } from 'jquery';
+import MovieCard from './MovieCard';
 
 class Profile extends Component {
   
@@ -26,7 +28,19 @@ class Profile extends Component {
       surname: user.user.lastname, 
       email: user.user.email, 
       gender: user.user.gender,
-      about: user.user.about == null ? "Nothing here. Press to edit..." : user.user.about
+      about: user.user.about == null ? "Nothing here. Press to edit..." : user.user.about,
+      favorites: []
+    });
+
+    user.user.favorites.forEach(data => {
+      BackendService.getInfoById(data.movie_id).then(
+          (response) => {
+            this.setState({ favorites: [ ...this.state.favorites, response.data ] })
+          },
+          (error) => {
+              console.log("Error getting movie info: " + error.toString());
+          }
+      );
     });
   }
 
@@ -261,12 +275,9 @@ class Profile extends Component {
                 <Row style={{marginTop:"30px"}}>
                   <Col></Col>
                 </Row>
-
-                <Row style={{marginTop:"30px"}}> 
-                  <Col>Hello world</Col>
-                  <Col>Hello world</Col>
-                  <Col>Hello world</Col>
-                </Row>
+                {this.state.favorites != null && this.state.favorites.length > 0 ?
+                <MovieCard data={this.state.favorites} />
+                : ""}
                 
                 <Row style={{marginTop:"30px"}}>
                   <Col></Col>

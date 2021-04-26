@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use VfacTmdb\Factory;
 use VfacTmdb\Search;
 use VfacTmdb\Item;
 use VfacTmdb\Media;
 use VfacTmdb\Catalog;
+use Validator;
+
+use App\Models\User;
+use App\Models\FavoriteMovie;
 
 class MoviesController extends Controller
 {
@@ -124,8 +129,10 @@ class MoviesController extends Controller
 
         $similar    = !isset($info->similar->results) ? null : $info->similar->results;
 
+        $checkFavorite = DB::table('movie_favorites')->where(['user_id' => auth()->user()->id, 'movie_id' => $id])->first();
         return json_encode(
             array(
+                "id" => $id,
                 "backdrop" => $backdrop,
                 "poster" => $poster,
                 "collection" => $collection,
@@ -135,11 +142,11 @@ class MoviesController extends Controller
                 "imdb_id" => $imdb_id,
                 "original_language" => $org_lang,
                 "original_title" => $org_title,
-                "description" => $desc,
+                "overview" => $desc,
                 "popularity" => $popularity,
                 "production_companies" => $prod_comp,
                 "production_countries" => $prod_cntr,
-                "release_date" => $rel_date,
+                "release" => $rel_date,
                 "revenue" => $revenue,
                 "runtime" => $runtime,
                 "status" => $status,
@@ -151,8 +158,67 @@ class MoviesController extends Controller
                 "youtube_trailer" => $yt_trailer,
                 "cast" => $cast,
                 "crew" => $crew,
-                "similar" => $similar
+                "similar" => $similar,
+                "added_to_favorites" => !is_null($checkFavorite)
             )
         );
+    }
+
+    public function movieFavoriteAction(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'action' => 'required|string',
+            'id' => 'required|int'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user_id = auth()->user()->id;
+        switch($request->action) {
+            case "add":
+                $check = DB::table('movie_favorites')->where(['user_id' => $user_id, 'movie_id' => $request->id])->first();
+                if(is_null($check)) {
+                    DB::table('movie_favorites')->insert([
+                        'user_id' => $user_id,
+                        'movie_id' => $request->id
+                    ]);
+                    auth()->user()->favorites;
+                    return response()->json([
+                        'success'=> true,
+                        'message'=> 'Movie was added to your favorite list.',
+                        'updated_info' => auth()->user()
+                    ]);
+                } else {
+                    return response()->json([
+                        'success'=> false,
+                        'message'=> 'This movie is already in your favorite list.'
+                    ]);
+                }
+                break;
+            case "remove":
+                $check = DB::table('movie_favorites')->where(['user_id' => $user_id, 'movie_id' => $request->id])->first();
+                if(!is_null($check)) {
+                    DB::table('movie_favorites')->where(['user_id' => $user_id, 'movie_id' => $request->id])->delete();
+                    auth()->user()->favorites;
+                    return response()->json([
+                        'success'=> true,
+                        'message'=> 'Movie was removed from your favorite list.',
+                        'updated_info' => auth()->user()
+                    ]);
+                } else {
+                    return response()->json([
+                        'success'=> false,
+                        'message'=> 'This movie is not in your favorite list and could not be removed.'
+                    ]);
+                }
+                break;
+            default:
+                return response()->json([
+                    'success'=> false,
+                    'message'=> 'Invalid data'
+                ], 400);
+        }
     }
 }

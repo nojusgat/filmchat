@@ -277,7 +277,8 @@ class AuthController extends Controller
                 return response()->json($validator->errors()->toJson(), 400);
             }
 
-            $user = User::find($user_id);
+            auth()->user()->favorites;
+            $user = auth()->user();
             $message = array();
 
             if(isset($request->firstname) && $request->firstname != $user->firstname) {
@@ -344,7 +345,8 @@ class AuthController extends Controller
             $avatar_path = $request->file('avatar')->storeAs('',$avatar_name, 'user_avatars');
     
             // Update user's avatar column on 'users' table
-            $profile = User::find(auth()->user()->id);
+            auth()->user()->favorites;
+            $profile = auth()->user();
             $profile->avatar = $avatar_path;
     
             if($profile->save()){
@@ -400,6 +402,7 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function userProfile() {
+        auth()->user()->favorites;
         return response()->json(auth()->user());
     }
 
@@ -411,6 +414,7 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     protected function createNewToken($token){
+        auth()->user()->favorites;
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',

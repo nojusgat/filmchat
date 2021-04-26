@@ -43,6 +43,13 @@ class BackendService {
     });
   }
 
+  markUserFavorite = async(action, movie_id) => {
+    return axios.post("/api/auth/movie/favorite", {
+      action: action,
+      id: movie_id
+    });
+  }
+
   getCategories = async() => {
     return axios.get("/api/auth/movie/genres");
   }

@@ -66,12 +66,13 @@ class AppNavbar extends Component {
 
   render() {
     return <Navbar color="dark" dark expand="md" className="sticky-top">
-      <Container className="py-4"> 
+      <Container className="py-4">
       <NavbarBrand tag={Link} to="/home"><img src={logoFilmchat} /></NavbarBrand>
       <NavbarToggler onClick={this.toggle}/>
       <Collapse isOpen={this.state.isOpen} navbar>
         <Nav className="mr-auto" navbar>
           <NavLink tag={RRNavLink} to="/home" activeClassName="active">Home</NavLink>
+          <NavLink tag={RRNavLink} to="/users" activeClassName="active">Find friends</NavLink>
           <NavLink tag={RRNavLink} to="/about" activeClassName="active">About us</NavLink>
         </Nav>
         {
@@ -89,7 +90,7 @@ class AppNavbar extends Component {
                   <DropdownItem href="#" onClick={this.signOut}>Log Out</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
-            </Nav>                 
+            </Nav>
           ) : (
             <Nav className="ml-auto" navbar>
               <NavItem>

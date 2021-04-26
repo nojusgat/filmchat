@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import AppNavbar from './AppNavbar';
 import MovieCard from './MovieCard';
-import { 
+import {
   Container,
-  Row, 
+  Row,
   Col,
   Spinner,
   Button,

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MoviesController;
+use App\Http\Controllers\FriendsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,4 +37,7 @@ Route::group([
     Route::post('/change/avatar', [AuthController::class, 'uploadUserAvatar']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/users', [FriendsController::class, 'getUsers']);
+    Route::post('/users/friend', [FriendsController::class, 'friendAction']);
 });

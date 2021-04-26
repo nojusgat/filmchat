@@ -15,8 +15,20 @@ class MovieCard extends Component {
         super(props);
 
         this.state = {
-            data: props.data
+            data: []
         }
+    }
+
+    componentWillMount() {
+        this.setState({
+            data: this.props.data
+        });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            data: nextProps.data
+        });
     }
 
     render() {

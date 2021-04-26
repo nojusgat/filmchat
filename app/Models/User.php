@@ -63,4 +63,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims() {
         return [];
     }
+
+
+    public function favorites()
+    {
+        return $this->hasMany(FavoriteMovie::class, 'user_id');
+    }
 }

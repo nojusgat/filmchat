@@ -22,6 +22,8 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
+    Route::post('/movie/favorite', [MoviesController::class, 'movieFavoriteAction']);
+    
     Route::post('/movie/show', [MoviesController::class, 'getMovie']);
     Route::get('/movie/genres', [MoviesController::class, 'getMovieGenres']);
     Route::post('/login', [AuthController::class, 'login']);

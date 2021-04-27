@@ -72,7 +72,7 @@ class MovieDetails extends Component {
                                 </Col>
                                 <Col md="7">
                                     <div className="movie-info">
-                                        <h1>{this.state.info.title}</h1>
+                                        <h1>{this.state.info.title}</h1> <FavoriteButton movie_id={this.state.info.id} favorited={this.state.info.added_to_favorites} />
                                         <h4 style={{ color: "lightgray" }}>
                                             {this.state.info.tagline}
                                         </h4>
@@ -131,7 +131,6 @@ class MovieDetails extends Component {
                                                 .map((x) => x.name)
                                                 .join(", ") + "."}
                                         </p>
-                                        <FavoriteButton movie_id={this.state.info.id} favorited={this.state.info.added_to_favorites} />
                                     </div>
                                 </Col>
                             </Row>

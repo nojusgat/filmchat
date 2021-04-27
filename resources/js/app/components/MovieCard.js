@@ -10,6 +10,8 @@ import "../../../css/app.css";
 
 import {AiFillEye} from 'react-icons/ai';
 
+import FavoriteButton from './FavoriteButton';
+
 class MovieCard extends Component {
     constructor(props) {
         super(props);
@@ -44,6 +46,7 @@ class MovieCard extends Component {
                             <Link to={'/movie/' + data.id.toString()}>
                                 <Button><AiFillEye /> View details</Button>
                             </Link>
+                            <FavoriteButton movie_id={data.id} favorited={data.added_to_favorites} />
                         </CardText>
                     </div>
                 </CardImgOverlay>

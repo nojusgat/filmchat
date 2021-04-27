@@ -65,7 +65,9 @@ class Home extends Component {
   componentDidMount() {
     if(this.state.items.length == 0) {
       this.showPopularMovies();
-
+    }
+    
+    if(this.state.catItems.length == 0) {
       BackendService.getCategories().then(
         response => {
           this.setState({catItems: response.data});

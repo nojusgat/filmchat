@@ -11,13 +11,13 @@ class About extends Component{
 
     constructor(props) {
         super(props);
-    
+
         this.toggle = this.toggle.bind(this);
         this.state = {
           activeTab: '1'
         };
       }
-    
+
       toggle(tab) {
         if (this.state.activeTab !== tab) {
           this.setState({ activeTab: tab });
@@ -60,14 +60,14 @@ class About extends Component{
                                     <Col sm="12" md={{ size: 5}}>
                                         <h3>A website to find people</h3>
                                         <p>
-                                            Filmchat is a website created by 5 students 
+                                            Filmchat is a website created by 5 students
                                             from <a href="https://en.ktu.edu/" style={{color: 'inherit'}}>Kaunas University of technology</a>.
                                             Filmchat website will let you find other people with similar
                                             movie taste, add them as friends and chat about you favourite movies or TV series.
                                             You can like movies and by that you will find people that
                                             also liked those movies or TV series.
                                             Moreover, here you can create and edit your profile, choose your picture, edit your dicription.
-                                            This website is only for learning purposes, no money will be made out of it.  
+                                            This website is only for learning purposes, no money will be made out of it.
                                         </p>
                                     </Col>
                                 </Row>
@@ -85,7 +85,7 @@ class About extends Component{
                                         <b>Adomas Grauželis</b>
                                         <p>Text here</p>
                                         <b>Domantas Stakionis</b>
-                                        <p>Text here</p>
+                                        <p>Full-stack development</p>
                                         <b>Jokubas Kvederaitis</b>
                                         <p>Text here</p>
                                     </Col>

@@ -23,7 +23,7 @@ Route::group([
 
 ], function ($router) {
     Route::post('/movie/favorite', [MoviesController::class, 'movieFavoriteAction']);
-    
+
     Route::post('/movie/show', [MoviesController::class, 'getMovie']);
     Route::get('/movie/genres', [MoviesController::class, 'getMovieGenres']);
     Route::post('/login', [AuthController::class, 'login']);
@@ -40,4 +40,6 @@ Route::group([
 
     Route::get('/users', [FriendsController::class, 'getUsers']);
     Route::post('/users/friend', [FriendsController::class, 'friendAction']);
+    Route::get('/users/requests', [FriendsController::class, 'getFriendRequests']);
+    Route::get('/users/sentrequests', [FriendsController::class, 'getSentRequests']);
 });

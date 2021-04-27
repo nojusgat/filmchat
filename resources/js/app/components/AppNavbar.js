@@ -86,6 +86,7 @@ class AppNavbar extends Component {
                 <DropdownMenu>
                   <DropdownItem header>Actions</DropdownItem>
                   <DropdownItem tag={Link} to="/profile">My Profile</DropdownItem>
+                  <DropdownItem tag={Link} to="/requests">Friend Requests</DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem href="#" onClick={this.signOut}>Log Out</DropdownItem>
                 </DropdownMenu>

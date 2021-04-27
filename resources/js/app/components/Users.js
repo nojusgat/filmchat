@@ -20,7 +20,6 @@ class Users extends Component {
         super(props);
 
         this.state = {
-            currentUser: AuthenticationService.getCurrentUser().user,
             usersList: [],
             page: 0,
             total_pages: 0,
@@ -80,10 +79,7 @@ class Users extends Component {
                                     );
                                 } else {
                                     return (
-                                        <UserCard
-                                            data={this.state.usersList}
-                                            id={this.state.currentUser.id}
-                                        />
+                                        <UserCard data={this.state.usersList} />
                                     );
                                 }
                             })()}

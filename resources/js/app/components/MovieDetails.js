@@ -5,6 +5,8 @@ import BackendService from "../services/BackendService";
 import { Button, Container, Row, Col, Spinner } from "reactstrap";
 import "../../../css/app.css";
 
+import FavoriteButton from './FavoriteButton';
+
 class MovieDetails extends Component {
     constructor(props) {
         super(props);
@@ -13,57 +15,9 @@ class MovieDetails extends Component {
             id: this.props.match.params.id,
             info: [],
             isLoading: true,
-            favoriteButton: {name: null, text: null}
         };
 
         this.getMovieInfo(this.state.id);
-    }
-
-    favoriteHandler = (event) => {
-        let nam = event.target.name;
-        if(nam == "addFavorite") {
-            console.log("add");
-            BackendService.markUserFavorite("add", this.state.id).then(
-                (response) => {
-                    console.log(response.data);
-                    if(response.data.success == true) {
-                        var currentStorage = JSON.parse(localStorage.getItem('user'));
-                        currentStorage.user = response.data.updated_info;
-                        localStorage.setItem("user", JSON.stringify(currentStorage));
-                        this.setState({
-                            favoriteButton: {name: "removeFavorite", text: "Remove from favorites"}
-                        });
-                        alert(response.data.message);
-                    } else {
-                        alert(response.data.message);
-                    }
-                },
-                (error) => {
-                    console.log("Error getting movie info: " + error.toString());
-                }
-            );
-        } else if (nam == "removeFavorite") {
-            console.log("remove");
-            BackendService.markUserFavorite("remove", this.state.id).then(
-                (response) => {
-                    console.log(response.data);
-                    if(response.data.success == true) {
-                        var currentStorage = JSON.parse(localStorage.getItem('user'));
-                        currentStorage.user = response.data.updated_info;
-                        localStorage.setItem("user", JSON.stringify(currentStorage));
-                        this.setState({
-                            favoriteButton: {name: "addFavorite", text: "Add to favorites"}
-                        });
-                        alert(response.data.message);
-                    } else {
-                        alert(response.data.message);
-                    }
-                },
-                (error) => {
-                    console.log("Error getting movie info: " + error.toString());
-                }
-            );
-        }
     }
 
     getMovieInfo(id) {
@@ -71,18 +25,9 @@ class MovieDetails extends Component {
         BackendService.getInfoById(this.props.match.params.id).then(
             (response) => {
                 console.log(response.data);
-                var favoriteButton = this.state.favoriteButton;
-                if (response.data.added_to_favorites == true) {
-                    favoriteButton.name = "removeFavorite";
-                    favoriteButton.text = "Remove from favorites";
-                } else if (response.data.added_to_favorites == false) {
-                    favoriteButton.name = "addFavorite";
-                    favoriteButton.text = "Add to favorites";
-                }
                 this.setState({
                     isLoading: false,
-                    info: response.data,
-                    favoriteButton: favoriteButton
+                    info: response.data
                 });
             },
             (error) => {
@@ -186,10 +131,7 @@ class MovieDetails extends Component {
                                                 .map((x) => x.name)
                                                 .join(", ") + "."}
                                         </p>
-                                        {this.state.favoriteButton.name != null && this.state.favoriteButton.text != null
-                                        ? <Button color={this.state.favoriteButton.name == "addFavorite" ? "success" : "danger"} name={this.state.favoriteButton.name} onClick={this.favoriteHandler}>{this.state.favoriteButton.text}</Button>
-                                        : ""
-                                        }
+                                        <FavoriteButton movie_id={this.state.info.id} favorited={this.state.info.added_to_favorites} />
                                     </div>
                                 </Col>
                             </Row>

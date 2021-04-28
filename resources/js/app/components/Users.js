@@ -12,7 +12,6 @@ import {
     InputGroup,
 } from "reactstrap";
 import FriendsService from "../services/FriendsService";
-import AuthenticationService from "../services/AuthenticationService";
 import UserCard from "./UserCard";
 
 class Users extends Component {

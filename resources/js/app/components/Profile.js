@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AppNavbar from './AppNavbar';
+import AppNavbar from '../child-components/AppNavbar';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'reactstrap';
 import { Form, Alert,CustomInput, FormGroup, Input, Label, Row, Col } from "reactstrap";
@@ -9,7 +9,7 @@ import { Collapse, CardBody, Card } from 'reactstrap';
 import AuthenticationService from '../services/AuthenticationService';
 import BackendService from '../services/BackendService';
 import { cssNumber } from 'jquery';
-import MovieCard from './MovieCard';
+import MovieCard from '../child-components/MovieCard';
 
 class Profile extends Component {
   

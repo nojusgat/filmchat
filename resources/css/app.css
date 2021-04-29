@@ -52,3 +52,42 @@
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
 }
+
+.aboutUs .nav-link{
+    color:  #343c44;
+}
+.aboutUs .nav-link:hover{
+    color: #343c44;
+    cursor: pointer;
+
+}
+.aboutUs .nav-tabs {
+    color: #343c44;
+    height: 50px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+.aboutUs .tmdbLogo img{
+    padding: 5px;
+    width: 200px;
+}
+.aboutUs a:link{
+    text-decoration: none; 
+    color: black;
+}
+.aboutUs a:visited{
+    text-decoration: none;
+    color: black;
+}
+.aboutUs h1{
+    text-align: center;
+    padding: 5px;
+}
+.aboutUs h3{
+    text-align: center;
+    padding: 5px;
+}
+.aboutUs p{
+    line-height: 1.5;
+}
+

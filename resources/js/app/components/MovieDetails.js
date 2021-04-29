@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import AppNavbar from "./AppNavbar";
+import AppNavbar from "../child-components/AppNavbar";
 import { Link, useParams, withRouter } from "react-router-dom";
 import BackendService from "../services/BackendService";
 import { Button, Container, Row, Col, Spinner } from "reactstrap";
 import "../../../css/app.css";
 
-import FavoriteButton from './FavoriteButton';
+import FavoriteButton from '../child-components/FavoriteButton';
 
 class MovieDetails extends Component {
     constructor(props) {

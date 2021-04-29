@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import AppNavbar from './AppNavbar';
-import MovieCard from './MovieCard';
+import AppNavbar from '../child-components/AppNavbar';
+import MovieCard from '../child-components/MovieCard';
 import {
   Container,
   Row,

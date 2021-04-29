@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import AppNavbar from './AppNavbar';
+import AppNavbar from '../child-components/AppNavbar';
 import {Container, Form, Alert, FormGroup, Input, Row, Col, NavLink, InputGroup, InputGroupAddon, InputGroupText, Button, Nav, NavItem, TabContent, TabPane } from "reactstrap";
 import { TabContainer } from 'react-bootstrap';
 import classnames from 'classnames';
 import { Link, withRouter, NavLink as RRNavLink } from 'react-router-dom';
-import './style.css';
 import logoFilmchat from '../../logo_l.png';
 
 class About extends Component{
@@ -28,7 +27,7 @@ class About extends Component{
         return(
             <div>
                 <AppNavbar/>
-                    <Container>
+                    <Container className="aboutUs">
                         <h1>About us</h1>
                     <Nav tabs style={{}}>
                         <NavItem>
@@ -127,7 +126,7 @@ class About extends Component{
                                         <h3>Credits</h3>
                                         <h5>TheMovieDB</h5>
                                         <p>As per TheMovieDB terms of use, every application that uses TheMovieDB data or images is required to properly attribute TMDb as the source. More information about TheMovieDB <a href="https://www.themoviedb.org/">here</a></p>
-                                        <img class="tmdbLogo" src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" alt = "TheMovieDB logo"></img>
+                                        <img className="tmdbLogo" src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" alt = "TheMovieDB logo"></img>
                                     </Col>
                                 </Row>
                                 </div> : null }

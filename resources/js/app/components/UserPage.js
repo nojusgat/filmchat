@@ -1,4 +1,4 @@
-import AppNavbar from './AppNavbar';
+import AppNavbar from '../child-components/AppNavbar';
 import React, { Component } from 'react';
 import { Container } from 'reactstrap';
 import BackendService from '../services/BackendService';

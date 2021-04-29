@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AppNavbar from './AppNavbar';
+import AppNavbar from '../child-components/AppNavbar';
 import { Container, Button, Form, FormGroup, Input, Label, Row, Col, CustomInput, FormFeedback, Alert, InputGroup, InputGroupAddon, InputGroupText } from "reactstrap";
 
 import Authentication from '../services/AuthenticationService'

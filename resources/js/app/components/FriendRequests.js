@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import AppNavbar from "./AppNavbar";
+import AppNavbar from "../child-components/AppNavbar";
 import "../../../css/app.css";
 import {
     Container,

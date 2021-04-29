@@ -23,6 +23,7 @@ window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+import { getJSON } from 'jquery';
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
@@ -33,12 +34,23 @@ import Echo from 'laravel-echo';
 
 window.Pusher = require('pusher-js');
 
+const user = JSON.parse(localStorage.getItem('user'));
+const token = user ? user.access_token : null;
+
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     wsHost: window.location.hostname,
     wsPort: 6001,
+    wssHost: window.location.hostname,
+    wssPort: 6001,
+    enabledTransports: ['ws', 'wss'],
     forceTLS: false,
-    disableStats: true
+    disableStats: true,
+    auth: {
+        headers: {
+            Authorization: "bearer " + token
+          }
+        }
 });

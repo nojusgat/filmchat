@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use app\Models\User;
 use Hootlex\Friendships\Models\Friendship;
+use App\Events\FriendRequestCountChanged;
 
 class FriendsController extends Controller {
 
@@ -16,21 +17,8 @@ class FriendsController extends Controller {
         return User::where('id', $id)->get()[0];
     }
 
-    public function getUsers() {
-        $users = array();
-        foreach(User::all() as $user) {
-            if($user->id != auth()->user()->id){
-                $users[] = array("id" => $user->id,
-                                 "firstname" => $user->firstname,
-                                 "lastname" => $user->lastname,
-                                 "avatar" => $user->avatar);
-            }
-        }
-        return $users;
-    }
-
     public function friendAction(Request $request) {
-        $user = $this->getUserByID(auth()->user()->id);
+        $user = $request->user();
         $other = $this->getUserByID($request->otherId);
         switch ($request->by) {
             case "befriend":
@@ -55,6 +43,21 @@ class FriendsController extends Controller {
             default:
                 return null;
         }
+
+        broadcast(new FriendRequestCountChanged($other->id))->toOthers();
+    }
+
+    public function getUsers() {
+        $users = array();
+        foreach(User::all() as $user) {
+            if($user->id != auth()->user()->id){
+                $users[] = array("id" => $user->id,
+                                 "firstname" => $user->firstname,
+                                 "lastname" => $user->lastname,
+                                 "avatar" => $user->avatar);
+            }
+        }
+        return $users;
     }
 
     public function getFriendRequests() {
@@ -77,5 +80,10 @@ class FriendsController extends Controller {
             $sent[] = $this->getUserByID($request['recipient_id']);
         }
         return $sent;
+    }
+
+    public function getFriendRequestsCount() {
+        $userId = auth()->user()->id;
+        return Friendship::where('recipient_id', $userId)->where('status', 0)->count();
     }
 }

@@ -38,8 +38,11 @@ Route::group([
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::get('/users', [FriendsController::class, 'getUsers']);
+    // Friends system routes
     Route::post('/users/friend', [FriendsController::class, 'friendAction']);
+    Route::get('/users', [FriendsController::class, 'getUsers']);
     Route::get('/users/requests', [FriendsController::class, 'getFriendRequests']);
     Route::get('/users/sentrequests', [FriendsController::class, 'getSentRequests']);
+    Route::get('/users/requestscount', [FriendsController::class, 'getFriendRequestsCount']);
+
 });

@@ -125,6 +125,7 @@ class FriendRequests extends Component {
                                 />
                             )}
                         </Row>
+                        <hr/>
                         <Row>
                             <h1 style={{ marginTop: "20px" }}>
                                 Sent friend requests

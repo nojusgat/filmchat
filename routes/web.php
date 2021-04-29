@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\TestEvent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+// Route::view('/{path?}', 'welcome')
+//     ->where('path', '.*')->name('login');
+
 Route::view('/{path?}', 'welcome')
     ->where('path', '.*');
-

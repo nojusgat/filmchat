@@ -37,6 +37,10 @@ class FriendsService {
         return axios.get("/api/auth/users/requests");
     };
 
+    getIncomingRequestsCount = async() => {
+        return axios.get("/api/auth/users/requestscount");
+    }
+
     getSentRequests = async () => {
         return axios.get("/api/auth/users/sentrequests");
     };

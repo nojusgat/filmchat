@@ -39,14 +39,14 @@ const token = user ? user.access_token : null;
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: process.env.MIX_PUSHER_APP_KEY,
-    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    key: process.env.PUSHER_APP_KEY,
+    cluster: process.env.PUSHER_APP_CLUSTER,
     wsHost: window.location.hostname,
-    wsPort: 6001,
+    wsPort: process.env.PUSHER_APP_PORT,
     wssHost: window.location.hostname,
-    wssPort: 6001,
+    wssPort: process.env.PUSHER_APP_PORT,
     enabledTransports: ['ws', 'wss'],
-    forceTLS: false,
+    forceTLS: process.env.PUSHER_APP_TLS,
     disableStats: true,
     auth: {
         headers: {

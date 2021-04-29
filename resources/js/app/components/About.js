@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import AppNavbar from './AppNavbar';
+import AppNavbar from '../child-components/AppNavbar';
 import {Container, Form, Alert, FormGroup, Input, Row, Col, NavLink, InputGroup, InputGroupAddon, InputGroupText, Button, Nav, NavItem, TabContent, TabPane } from "reactstrap";
 import { TabContainer } from 'react-bootstrap';
 import classnames from 'classnames';
 import { Link, withRouter, NavLink as RRNavLink } from 'react-router-dom';
-import './style.css';
 import logoFilmchat from '../../logo_l.png';
 
 class About extends Component{

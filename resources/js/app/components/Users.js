@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import AppNavbar from "./AppNavbar";
+import AppNavbar from "../child-components/AppNavbar";
 import {
     Button,
     Container,
@@ -12,7 +12,7 @@ import {
     InputGroup,
 } from "reactstrap";
 import FriendsService from "../services/FriendsService";
-import UserCard from "./UserCard";
+import UserCard from "../child-components/UserCard";
 
 class Users extends Component {
     constructor(props) {

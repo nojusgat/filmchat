@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AppNavbar from './AppNavbar';
+import AppNavbar from '../child-components/AppNavbar';
 import {  } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Alert } from 'reactstrap';
 

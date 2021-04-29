@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import AppNavbar from './AppNavbar';
+import AppNavbar from '../child-components/AppNavbar';
 import { Container, Form, Alert, FormGroup, Input, Row, Col, InputGroup, InputGroupAddon, InputGroupText, Button } from "reactstrap";
 import AuthenticationService from "../services/AuthenticationService";
 
-import '../../App.css';
 import { Link } from 'react-router-dom';
 
 import { RiLockPasswordLine } from 'react-icons/ri';

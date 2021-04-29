@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavbarText, NavItem, Container, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavbarText, NavItem, Container, NavLink, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge } from 'reactstrap';
 import { Link, withRouter, NavLink as RRNavLink } from 'react-router-dom';
 
 import AuthenticationService from '../services/AuthenticationService';
+import FriendsService from "../services/FriendsService";
 
 import logoFilmchat from '../../logo_l.png';
 import noAvatar from '../../no-avatar.png';
+
 
 class AppNavbar extends Component {
   constructor(props) {
@@ -16,14 +18,15 @@ class AppNavbar extends Component {
       isOpenDrop: false,
       username: undefined,
       avatar: undefined,
-      login: false
+      login: false,
+      friendReqCount: 0
     };
 
     this.toggle = this.toggle.bind(this);
     this.toggleDropDown = this.toggleDropDown.bind(this);
-  }
+}
 
-  componentDidMount() {
+componentDidMount() {
     const user = AuthenticationService.getCurrentUser();
 
     if (user) {
@@ -32,7 +35,11 @@ class AppNavbar extends Component {
         username: user.user.firstname + " " + user.user.lastname,
         avatar: user.user.avatar
       });
+
+      this.getFriendRequestCount();
+      this.listen(user.user.id);
     }
+
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -64,6 +71,24 @@ class AppNavbar extends Component {
     });
   }
 
+  getFriendRequestCount() {
+      FriendsService.getIncomingRequestsCount().then(
+          response => {
+            this.setState({friendReqCount: response.data});
+          },
+          error => {
+              console.log("Error in getIncomingRequestsCount: " + error.toString());
+          }
+      );
+  }
+
+  listen(userId) {
+    //   console.log("listening to " + 'friend-request-channel.' + userId);
+      window.Echo.private('friend-request-channel.' + userId).listen('FriendRequestCountChanged', () => {
+        this.getFriendRequestCount();
+      });
+  }
+
   render() {
     return <Navbar color="dark" dark expand="md" className="sticky-top">
       <Container className="py-4">
@@ -81,11 +106,12 @@ class AppNavbar extends Component {
               <Dropdown nav isOpen={this.state.isOpenDrop} toggle={this.toggleDropDown}>
                 <DropdownToggle nav caret>
                   <img src={"/storage/images/avatars/"+this.state.avatar} width="40" height="40" className="rounded-circle" style={{ position: "absolute", marginTop: "-8px" }} />
-                  <span className="ml-5">{this.state.username}</span>
+                  <span className="ml-5">{this.state.username} {this.state.friendReqCount === 0 ? "" : <Badge color="info" pill>{this.state.friendReqCount}</Badge>}</span>
                 </DropdownToggle>
                 <DropdownMenu>
                   <DropdownItem header>Actions</DropdownItem>
                   <DropdownItem tag={Link} to="/profile">My Profile</DropdownItem>
+                  <DropdownItem tag={Link} to="/requests">Friend Requests</DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem href="#" onClick={this.signOut}>Log Out</DropdownItem>
                 </DropdownMenu>

@@ -104,7 +104,7 @@ class MoviesController extends Controller
         $poster     = isset($info->poster_path) ? $this->media->getPosterUrl($info->poster_path, 'original') : "/images/not_found.png";
         $backdrop   = isset($info->backdrop_path) ? $this->media->getBackdropUrl($info->backdrop_path, 'original') : "/images/not_found.png";
         $collection = isset($info->belongs_to_collection) ? array("id" => $info->belongs_to_collection->id, "name" => $info->belongs_to_collection->name, "poster" => (isset($info->belongs_to_collection->poster_path) ? $this->media->getPosterUrl($info->belongs_to_collection->poster_path, 'w500') : "/images/not_found.png")) : null;
-        
+
         $budget     = !isset($info->budget) ? null : $info->budget;
         $genres     = !isset($info->genres) ? null : $info->genres;
         $homepage   = !isset($info->homepage) ? null : $info->homepage;

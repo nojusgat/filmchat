@@ -12,6 +12,7 @@ import ForgotPasswordComplete from './app/components/ForgotPasswordComplete';
 import About from './app/components/About';
 import MovieDetails from './app/components/MovieDetails';
 import Users from './app/components/Users';
+import FriendRequests from './app/components/FriendRequests';
 
 const LoggedInRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={(props) => (
@@ -45,6 +46,7 @@ class MainApp extends Component {
           <LoggedInRoute path='/about' exact={true} component={About}/>
           <LoggedInRoute path='/movie/:id' exact={true} component={MovieDetails}/>
           <LoggedInRoute path='/users' exact={true} component={Users}/>
+          <LoggedInRoute path='/requests' exact={true} component={FriendRequests}/>
         </Switch>
       </Router>
     )

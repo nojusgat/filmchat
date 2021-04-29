@@ -56,12 +56,14 @@ class MoviesController extends Controller
                 $search = $this->tmdb->getRequest("search/movie", $options);
                 $results = array();
                 foreach($search->results as $response) {
+                    $checkFavorite = DB::table('movie_favorites')->where(['user_id' => auth()->user()->id, 'movie_id' => $response->id])->first();
                     $results[] = array(
                         "id"        => !isset($response->id) ? null : $response->id,
                         "title"     => !isset($response->title) ? null : $response->title,
                         "poster"    => isset($response->poster_path) ? $this->media->getPosterUrl($response->poster_path, 'w500') : "/images/not_found.png",
                         "overview"  => !isset($response->overview) ? null : $response->overview,
-                        "release"   => !isset($response->release_date) ? null : explode("-", $response->release_date)[0]
+                        "release"   => !isset($response->release_date) ? null : explode("-", $response->release_date)[0],
+                        "added_to_favorites" => !is_null($checkFavorite)
                     );
                 }
                 return array("results" => $results, "this_page" => $search->page, "total_pages" => $search->total_pages);
@@ -76,12 +78,14 @@ class MoviesController extends Controller
                 $search = $this->tmdb->getRequest("discover/movie", $options);
                 $results = array();
                 foreach($search->results as $response) {
+                    $checkFavorite = DB::table('movie_favorites')->where(['user_id' => auth()->user()->id, 'movie_id' => $response->id])->first();
                     $results[] = array(
                         "id"        => !isset($response->id) ? null : $response->id,
                         "title"     => !isset($response->title) ? null : $response->title,
                         "poster"    => isset($response->poster_path) ? $this->media->getPosterUrl($response->poster_path, 'w500') : "/images/not_found.png",
                         "overview"  => !isset($response->overview) ? null : $response->overview,
-                        "release"   => !isset($response->release_date) ? null : explode("-", $response->release_date)[0]
+                        "release"   => !isset($response->release_date) ? null : explode("-", $response->release_date)[0],
+                        "added_to_favorites" => !is_null($checkFavorite)
                     );
                 }
 

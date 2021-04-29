@@ -17,4 +17,27 @@
     padding-top: 4px;
     padding-bottom: 4px;
 }
+img{
+    padding: 5px;
+    width: 200px;
+}
+a:link{
+    text-decoration: none;
+    color: black;
+}
+a:visited{
+    text-decoration: none;
+    color: black;
+}
+h1{
+    text-align: center;
+    padding: 5px;
+}
+h3{
+    text-align: center;
+    padding: 5px;
+}
+p{
+    line-height: 1.5;
+}
 

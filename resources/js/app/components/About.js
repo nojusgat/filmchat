@@ -52,6 +52,13 @@ class About extends Component{
                             FAQ
                             </NavLink>
                         </NavItem>
+                        <NavItem>
+                            <NavLink
+                            className={classnames({ active: this.state.activeTab === '4' })}
+                            onClick={() => { this.toggle('4'); }}>
+                            Credits
+                            </NavLink>
+                        </NavItem>
                         </Nav>
                         <TabContent activeTab={this.state.activeTab}>
                         <TabPane tabId="1">
@@ -83,11 +90,11 @@ class About extends Component{
                                         <b>Nojus Gataveckas</b>
                                         <p>Back-end development</p>
                                         <b>Adomas Grauželis</b>
-                                        <p>Text here</p>
+                                        <p>Front-end development</p>
                                         <b>Domantas Stakionis</b>
                                         <p>Full-stack development</p>
                                         <b>Jokubas Kvederaitis</b>
-                                        <p>Text here</p>
+                                        <p>Front-end development</p>
                                     </Col>
                                 </Row>
                                 </div> : null }
@@ -102,13 +109,25 @@ class About extends Component{
                                         <h5>How to change my password?</h5>
                                         <p>Log out and click "forgot password" and an email should arrive shortly</p>
                                         <h5>How can we ask more questions?</h5>
-                                        <p>Email us at filmchat@gmail.com</p>
+                                        <p>Email us at staff@filmchat.com</p>
                                         <h5>What framework was used to create this website?</h5>
                                         <p>We used <a href="https://reactjs.org/" style={{color: 'inherit'}}>ReactJS</a> for front-end development and <a href="https://laravel.com/" style={{color: 'inherit'}}>Laravel</a> for back-end development</p>
                                         <h5>What programming languages were used?</h5>
                                         <p>We used JavaScript for front-end development and PhP for back-end development</p>
                                         <h5>Where can we find all the documentation?</h5>
-                                        <p>You can find all documentation by pressing <a href="https://github.com/nojusgat/filmchat" style={{color: 'inherit'}}>this</a></p>
+                                        <p>You can find all documentation <a href="https://github.com/nojusgat/filmchat" style={{color: 'inherit'}}>here</a></p>
+                                    </Col>
+                                </Row>
+                                </div> : null }
+                        </TabPane>
+                        <TabPane tabId="4">
+                            { this.state.activeTab == 4 ? <div>
+                                <Row style={{marginTop:"20px"}}>
+                                    <Col sm="12" md={{ size: 5}}>
+                                        <h3>Credits</h3>
+                                        <h5>TheMovieDB</h5>
+                                        <p>As per TheMovieDB terms of use, every application that uses TheMovieDB data or images is required to properly attribute TMDb as the source. More information about TheMovieDB <a href="https://www.themoviedb.org/">here</a></p>
+                                        <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" alt = "TheMovieDB logo"></img>
                                     </Col>
                                 </Row>
                                 </div> : null }

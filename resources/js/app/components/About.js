@@ -127,7 +127,7 @@ class About extends Component{
                                         <h3>Credits</h3>
                                         <h5>TheMovieDB</h5>
                                         <p>As per TheMovieDB terms of use, every application that uses TheMovieDB data or images is required to properly attribute TMDb as the source. More information about TheMovieDB <a href="https://www.themoviedb.org/">here</a></p>
-                                        <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" alt = "TheMovieDB logo"></img>
+                                        <img class="tmdbLogo" src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" alt = "TheMovieDB logo"></img>
                                     </Col>
                                 </Row>
                                 </div> : null }

@@ -17,27 +17,27 @@
     padding-top: 4px;
     padding-bottom: 4px;
 }
-.tmdbLogo img{
+.aboutUs .tmdbLogo img{
     padding: 5px;
     width: 200px;
 }
-a:link{
+.aboutUs a:link{
+    text-decoration: none; 
+    color: black;
+}
+.aboutUs a:visited{
     text-decoration: none;
     color: black;
 }
-a:visited{
-    text-decoration: none;
-    color: black;
-}
-h1{
+.aboutUs h1{
     text-align: center;
     padding: 5px;
 }
-h3{
+.aboutUs h3{
     text-align: center;
     padding: 5px;
 }
-p{
+.aboutUs p{
     line-height: 1.5;
 }
 

@@ -42,11 +42,11 @@ window.Echo = new Echo({
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     wsHost: window.location.hostname,
-    wsPort: process.env.MIX_PUSHER_APP_PORT,
+    wsPort: process.env.MIX_PUSHER_APP_PORT || 6001,
     wssHost: window.location.hostname,
-    wssPort: process.env.MIX_PUSHER_APP_PORT,
+    wssPort: process.env.MIX_PUSHER_APP_PORT || 6001,
     enabledTransports: ['ws', 'wss'],
-    forceTLS: process.env.MIX_PUSHER_APP_TLS,
+    forceTLS: process.env.MIX_PUSHER_APP_TLS || false,
     disableStats: true,
     auth: {
         headers: {

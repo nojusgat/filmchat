@@ -44,7 +44,9 @@ class FriendsController extends Controller {
                 return null;
         }
 
-        broadcast(new FriendRequestCountChanged($other->id))->toOthers();
+        // broadcast event to self and others.
+        broadcast(new FriendRequestCountChanged($other->id));
+        broadcast(new FriendRequestCountChanged($user->id));
     }
 
     public function getUsers() {

@@ -83,8 +83,8 @@ componentDidMount() {
   }
 
   listen(userId) {
-      console.log("listening to " + 'friend-request-channel.' + userId);
-      window.Echo.private('friend-request-channel.' + userId).listen('FriendRequestCountChanged', (count) => {
+    //   console.log("listening to " + 'friend-request-channel.' + userId);
+      window.Echo.private('friend-request-channel.' + userId).listen('FriendRequestCountChanged', () => {
         this.getFriendRequestCount();
       });
   }

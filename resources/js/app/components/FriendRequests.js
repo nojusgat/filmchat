@@ -17,6 +17,7 @@ import {
 import IncomingRequestsList from "./IncomingRequestsList";
 import SentRequestsList from "./SentRequestsList";
 import FriendsService from "../services/FriendsService";
+import AuthenticationService from '../services/AuthenticationService';
 
 class FriendRequests extends Component {
     constructor(props) {
@@ -37,6 +38,8 @@ class FriendRequests extends Component {
             console.log("getting sent requests");
             this.getSentRequests();
         }
+        const user = AuthenticationService.getCurrentUser().user;
+        this.listen(user.id);
     }
 
     getIncomingRequests() {
@@ -101,6 +104,13 @@ class FriendRequests extends Component {
                 console.log("Error in cancelRequest: " + error.toString());
             }
         );
+    }
+
+    listen(userId) {
+        window.Echo.private('friend-request-channel.' + userId).listen('FriendRequestCountChanged', () => {
+            this.getIncomingRequests();
+            this.getSentRequests();
+          });
     }
 
     render() {

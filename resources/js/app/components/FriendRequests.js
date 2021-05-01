@@ -14,8 +14,8 @@ import {
     PaginationItem,
     PaginationLink,
 } from "reactstrap";
-import IncomingRequestsList from "./IncomingRequestsList";
-import SentRequestsList from "./SentRequestsList";
+import IncomingRequestsList from "../child-components/IncomingRequestsList";
+import SentRequestsList from "../child-components/SentRequestsList";
 import FriendsService from "../services/FriendsService";
 import AuthenticationService from '../services/AuthenticationService';
 
@@ -31,15 +31,20 @@ class FriendRequests extends Component {
 
     componentDidMount() {
         if (this.state.incoming.length == 0) {
-            console.log("getting requests");
             this.getIncomingRequests();
         }
         if (this.state.sent.length == 0) {
-            console.log("getting sent requests");
             this.getSentRequests();
         }
         const user = AuthenticationService.getCurrentUser().user;
         this.listen(user.id);
+    }
+
+    componentWillUnmount() {
+        const user = AuthenticationService.getCurrentUser();
+        if(user){
+            window.Echo.leave('friend-request-channel.' + user.user.id);
+        }
     }
 
     getIncomingRequests() {

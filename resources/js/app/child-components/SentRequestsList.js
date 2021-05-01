@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import "../../../css/app.css";
 import FriendsService from "../services/FriendsService";
 
-class IncomingRequestsList extends Component {
+class SentRequestsList extends Component {
     constructor(props) {
         super(props);
 
@@ -25,7 +25,6 @@ class IncomingRequestsList extends Component {
             this.setState({
                 data: this.props.data,
             });
-            console.log(this.props.data);
         }
     }
 
@@ -34,32 +33,6 @@ class IncomingRequestsList extends Component {
             data: nextProps.data,
         });
     }
-
-    // acceptRequest(otherId) {
-    //     FriendsService.acceptRequest(otherId).then(
-    //         (response) => {
-    //             this.setState({
-    //                 data: this.props.data.filter((item) => item.id !== otherId),
-    //             });
-    //         },
-    //         (error) => {
-    //             console.log("Error in acceptRequest: " + error.toString());
-    //         }
-    //     );
-    // }
-
-    // denyRequest(otherId) {
-    //     FriendsService.denyRequest(otherId).then(
-    //         (response) => {
-    //             this.setState({
-    //                 data: this.props.data.filter((item) => item.id !== otherId),
-    //             });
-    //         },
-    //         (error) => {
-    //             console.log("Error in denyRequest: " + error.toString());
-    //         }
-    //     );
-    // }
 
     render() {
         const listItems = this.state.data.map((data) => (
@@ -71,27 +44,15 @@ class IncomingRequestsList extends Component {
                                 {data.firstname} {data.lastname}
                             </Link>
                         </Col>
-
-                        <Col>
-                            <Button
-                                color="success"
-                                size="sm"
-                                onClick={() => {
-                                    this.props.onAcceptReq(data.id);
-                                }}
-                            >
-                                Accept
-                            </Button>
-                        </Col>
                         <Col>
                             <Button
                                 color="danger"
                                 size="sm"
                                 onClick={() => {
-                                    this.props.onDenyReq(data.id);
+                                    this.props.onDelete(data.id);
                                 }}
                             >
-                                Deny
+                                Cancel
                             </Button>
                         </Col>
                     </Row>
@@ -106,4 +67,4 @@ class IncomingRequestsList extends Component {
     }
 }
 
-export default IncomingRequestsList;
+export default SentRequestsList;

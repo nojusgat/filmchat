@@ -40,9 +40,12 @@ Route::group([
 
     // Friends system routes
     Route::post('/users/friend', [FriendsController::class, 'friendAction']);
-    Route::get('/users', [FriendsController::class, 'getUsers']);
-    Route::get('/users/requests', [FriendsController::class, 'getFriendRequests']);
-    Route::get('/users/sentrequests', [FriendsController::class, 'getSentRequests']);
-    Route::get('/users/requestscount', [FriendsController::class, 'getFriendRequestsCount']);
+    Route::post('/get/users', [FriendsController::class, 'getUsers']);
+    Route::post('/search/users', [FriendsController::class, 'searchUsers']);
+    Route::get('/get/friends', [FriendsController::class, 'getFriends']);
+    Route::get('/get/requests', [FriendsController::class, 'getFriendRequests']);
+    Route::get('/get/sentrequests', [FriendsController::class, 'getSentRequests']);
+    Route::get('/get/requestscount', [FriendsController::class, 'getFriendRequestsCount']);
+    Route::get('/get/userscount', [FriendsController::class, 'getUsersCount']);
 
 });

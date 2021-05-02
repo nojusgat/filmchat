@@ -8,6 +8,13 @@ class FriendsService {
         });
     };
 
+    unfriend = async (otherId) => {
+        return axios.post("/api/auth/users/friend", {
+            by: "unfriend",
+            otherId: otherId,
+        });
+    };
+
     acceptRequest = async (otherId) => {
         return axios.post("/api/auth/users/friend", {
             by: "accept",
@@ -29,21 +36,47 @@ class FriendsService {
         });
     };
 
-    getUsers = async () => {
-        return axios.get("api/auth/users");
+    isFriendsWith = async (otherId) => {
+        return axios.post("/api/auth/users/friend", {
+            by: "isFriend",
+            otherId: otherId
+        });
+    }
+
+    getUsers = async (page, perPage) => {
+        return axios.post("api/auth/get/users", {
+            page: page,
+            perPage: perPage
+        });
+    };
+
+    searchUsers = async (page, perPage, search) => {
+        return axios.post("api/auth/search/users", {
+            page: page,
+            perPage: perPage,
+            search: search
+        });
+    };
+
+    getFriends = async () => {
+        return axios.get("api/auth/get/friends");
     };
 
     getIncomingRequests = async () => {
-        return axios.get("/api/auth/users/requests");
+        return axios.get("/api/auth/get/requests");
     };
 
-    getIncomingRequestsCount = async() => {
-        return axios.get("/api/auth/users/requestscount");
+    getIncomingRequestsCount = async () => {
+        return await axios.get("/api/auth/get/requestscount");
     }
 
     getSentRequests = async () => {
-        return axios.get("/api/auth/users/sentrequests");
+        return axios.get("/api/auth/get/sentrequests");
     };
+
+    getUsersCount = async () => {
+        return axios.get("/api/auth/get/userscount");
+    }
 }
 
 export default new FriendsService();

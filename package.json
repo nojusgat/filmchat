@@ -28,6 +28,7 @@
         "sass-loader": "^8.0.0"
     },
     "dependencies": {
+        "animate.css": "^4.1.1",
         "config": "^3.3.4",
         "formik": "^2.2.6",
         "history": "^5.0.0",
@@ -35,6 +36,7 @@
         "react-google-login": "^5.2.2",
         "react-icons": "^4.2.0",
         "react-native": "^0.63.4",
+        "react-notifications-component": "^3.1.0",
         "react-router-dom": "^5.2.0",
         "react-router-native": "^5.2.0",
         "reactstrap": "^8.9.0",

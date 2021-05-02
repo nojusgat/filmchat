@@ -12,44 +12,46 @@ import About from './app/components/About';
 import MovieDetails from './app/components/MovieDetails';
 import Users from './app/components/Users';
 import FriendRequests from './app/components/FriendRequests';
+import Friends from './app/components/Friends';
 
 const LoggedInRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={(props) => (
-    AuthenticationService.getCurrentUser()
-      ? <Component {...props} />
-      : <Redirect to='/signin' />
-  )} />
+    <Route {...rest} render={(props) => (
+        AuthenticationService.getCurrentUser()
+            ? <Component {...props} />
+            : <Redirect to='/signin' />
+    )} />
 );
 
 const LoggedOutRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={(props) => (
-    AuthenticationService.getCurrentUser()
-      ? <Redirect to='/home' />
-      : <Component {...props} />
-  )} />
+    <Route {...rest} render={(props) => (
+        AuthenticationService.getCurrentUser()
+            ? <Redirect to='/home' />
+            : <Component {...props} />
+    )} />
 );
 
 class MainApp extends Component {
-  render() {
-    return (
-      <Router>
-        <Switch>
-          <LoggedOutRoute path='/' exact={true} component={Login}/>
-          <LoggedInRoute path='/home' exact={true} component={Home}/>
-          <LoggedInRoute path='/profile' exact={true} component={Profile}/>
-          <LoggedOutRoute path='/signin' exact={true} component={Login}/>
-          <LoggedOutRoute path='/signup' exact={true} component={SignUp}/>
-          <LoggedOutRoute path='/email/verify/:verify_id' exact={true} component={EmailVerify}/>
-          <LoggedOutRoute path='/email/reset/:reset_id' exact={true} component={ForgotPasswordComplete}/>
-          <LoggedOutRoute path='/forgotpassword' exact={true} component={ForgotPassword}/>
-          <LoggedInRoute path='/about' exact={true} component={About}/>
-          <LoggedInRoute path='/movie/:id' exact={true} component={MovieDetails}/>
-          <LoggedInRoute path='/users' exact={true} component={Users}/>
-          <LoggedInRoute path='/requests' exact={true} component={FriendRequests}/>
-        </Switch>
-      </Router>
-    )
-  }
+    render() {
+        return (
+            <Router>
+                <Switch>
+                    <LoggedOutRoute path='/' exact={true} component={Login} />
+                    <LoggedInRoute path='/home' exact={true} component={Home} />
+                    <LoggedInRoute path='/profile' exact={true} component={Profile} />
+                    <LoggedOutRoute path='/signin' exact={true} component={Login} />
+                    <LoggedOutRoute path='/signup' exact={true} component={SignUp} />
+                    <LoggedOutRoute path='/email/verify/:verify_id' exact={true} component={EmailVerify} />
+                    <LoggedOutRoute path='/email/reset/:reset_id' exact={true} component={ForgotPasswordComplete} />
+                    <LoggedOutRoute path='/forgotpassword' exact={true} component={ForgotPassword} />
+                    <LoggedInRoute path='/about' exact={true} component={About} />
+                    <LoggedInRoute path='/movie/:id' exact={true} component={MovieDetails} />
+                    <LoggedInRoute path='/users' exact={true} component={Users} />
+                    <LoggedInRoute path='/requests' exact={true} component={FriendRequests} />
+                    <LoggedInRoute path='/friends' exact={true} component={Friends} />
+                </Switch>
+            </Router>
+        )
+    }
 }
 
 export default MainApp;

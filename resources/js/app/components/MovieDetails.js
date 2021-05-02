@@ -21,10 +21,8 @@ class MovieDetails extends Component {
     }
 
     getMovieInfo(id) {
-        console.log("getting movie info of id: " + id);
         BackendService.getInfoById(this.props.match.params.id).then(
             (response) => {
-                console.log(response.data);
                 this.setState({
                     isLoading: false,
                     info: response.data

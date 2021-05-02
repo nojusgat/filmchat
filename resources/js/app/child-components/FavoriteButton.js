@@ -6,6 +6,7 @@ import {
 
 import {IoHeartSharp, IoHeartDislikeSharp} from 'react-icons/io5';
 
+import { store } from 'react-notifications-component';
 
 import BackendService from "../services/BackendService";
 
@@ -53,10 +54,8 @@ class FavoriteButton extends Component {
 
     favoriteHandler (name = null) {
         if(name == "addFavorite") {
-            console.log("add");
             BackendService.markUserFavorite("add", this.state.movie_id).then(
                 (response) => {
-                    console.log(response.data);
                     if(response.data.success == true) {
                         var currentStorage = JSON.parse(localStorage.getItem('user'));
                         currentStorage.user = response.data.updated_info;
@@ -74,10 +73,8 @@ class FavoriteButton extends Component {
                 }
             );
         } else if (name == "removeFavorite") {
-            console.log("remove");
             BackendService.markUserFavorite("remove", this.state.movie_id).then(
                 (response) => {
-                    console.log(response.data);
                     if(response.data.success == true) {
                         var currentStorage = JSON.parse(localStorage.getItem('user'));
                         currentStorage.user = response.data.updated_info;

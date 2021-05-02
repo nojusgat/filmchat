@@ -2,30 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use app\Models\User;
-use Hootlex\Friendships\Models\Friendship;
+use Illuminate\Http\Request;
+use App\Events\FriendRequestSent;
 use App\Events\FriendRequestCountChanged;
+use App\Events\Unfriended;
+use Hootlex\Friendships\Models\Friendship;
+use Illuminate\Support\Facades\DB;
 
-class FriendsController extends Controller {
+class FriendsController extends Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:api');
     }
 
-    private function getUserByID($id) {
+    private function getUserByID($id)
+    {
         return User::where('id', $id)->get()[0];
     }
 
-    public function friendAction(Request $request) {
+    public function friendAction(Request $request)
+    {
         $user = $request->user();
         $other = $this->getUserByID($request->otherId);
         switch ($request->by) {
             case "befriend":
-                if($user->hasFriendRequestFrom($other)){
+                if ($user->hasFriendRequestFrom($other)) {
                     $user->acceptFriendRequest($other);
-                } else {
+                } elseif (!$user->hasSentFriendRequestTo($other)) {
                     $user->befriend($other);
+                    broadcast(new FriendRequestSent($other, $user));
                 }
                 break;
 
@@ -39,53 +47,97 @@ class FriendsController extends Controller {
                 $user->unfriend($other);
                 break;
             case "unfriend":
+                $user->unfriend($other);
+                broadcast(new Unfriended($user));
+                break;
+            case "isFriend":
+                return $user->isFriendWith($other);
                 break;
             default:
                 return null;
         }
 
         // broadcast event to self and others.
-        broadcast(new FriendRequestCountChanged($other->id));
-        broadcast(new FriendRequestCountChanged($user->id));
+        broadcast(new FriendRequestCountChanged($other));
+        broadcast(new FriendRequestCountChanged($user));
     }
 
-    public function getUsers() {
+    public function getUsers(Request $request)
+    {
+        $userId = auth()->user()->id;
         $users = array();
-        foreach(User::all() as $user) {
-            if($user->id != auth()->user()->id){
-                $users[] = array("id" => $user->id,
-                                 "firstname" => $user->firstname,
-                                 "lastname" => $user->lastname,
-                                 "avatar" => $user->avatar);
-            }
+        $self = $this->getUserByID($userId);
+        $count = User::where("id", "!=", $userId)->orderBy("firstname")->count();
+        foreach (User::where("id", "!=", $userId)->orderBy("firstname")->paginate($request->perPage) as $user) {
+            $users[] = array(
+                "id" => $user->id,
+                "firstname" => $user->firstname,
+                "lastname" => $user->lastname,
+                "avatar" => $user->avatar,
+                "isFriend" => $self->isFriendWith($user) || $self->hasSentFriendRequestTo($user)
+            );
         }
-        return $users;
+        return array("users" => $users, "count" => ceil($count / $request->perPage));
     }
 
-    public function getFriendRequests() {
+    public function searchUsers(Request $request)
+    {
+        $userId = auth()->user()->id;
+        $users = array();
+        $self = $this->getUserByID($userId);
+        $count = User::whereRaw('CONCAT(firstname," ",lastname) LIKE "%' . $request->search . '%"')->where("id", "!=", $userId)->count();
+        foreach (User::whereRaw('CONCAT(firstname," ",lastname) LIKE "%' . $request->search . '%"')->where("id", "!=", $userId)->orderBy("firstname")->paginate($request->perPage) as $user) {
+            $users[] = array(
+                "id" => $user->id,
+                "firstname" => $user->firstname,
+                "lastname" => $user->lastname,
+                "avatar" => $user->avatar,
+                "isFriend" => $self->isFriendWith($user) || $self->hasSentFriendRequestTo($user)
+            );
+        };
+        return array("users" => $users, "count" => ceil($count / $request->perPage));
+    }
+
+    public function getFriends()
+    {
+        $user = $this->getUserByID(auth()->user()->id);
+        return $user->getFriends();
+    }
+
+    public function getFriendRequests()
+    {
         $user = $this->getUserByID(auth()->user()->id);
         $sent = array();
-        foreach($user->getFriendRequests() as $request) {
+        foreach ($user->getFriendRequests() as $request) {
             $sent[] = $this->getUserByID($request['sender_id']);
         }
         return $sent;
     }
 
-    private function getSentRequestsQuery($id) {
+    private function getSentRequestsQuery($id)
+    {
         return Friendship::select('recipient_id')->where('sender_id', $id)->where('status', 0)->get();
     }
 
-    public function getSentRequests() {
-        $ownId = auth()->user()->id;
+    public function getSentRequests()
+    {
+        $userId = auth()->user()->id;
         $sent = array();
-        foreach($this->getSentRequestsQuery($ownId) as $request) {
+        foreach ($this->getSentRequestsQuery($userId) as $request) {
             $sent[] = $this->getUserByID($request['recipient_id']);
         }
         return $sent;
     }
 
-    public function getFriendRequestsCount() {
+    public function getFriendRequestsCount()
+    {
         $userId = auth()->user()->id;
         return Friendship::where('recipient_id', $userId)->where('status', 0)->count();
+    }
+
+    public function getUsersCount()
+    {
+        $userId = auth()->user()->id;
+        return User::where("id", "!=", $userId)->count();
     }
 }

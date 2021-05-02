@@ -16,3 +16,4 @@ public/mix-manifest.json
 public/js/app.js
 supervisord.pid
 supervisord.log
+public/js/app.js

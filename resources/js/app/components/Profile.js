@@ -12,21 +12,31 @@ import { cssNumber } from 'jquery';
 import MovieCard from '../child-components/MovieCard';
 
 class Profile extends Component {
-  
+
   constructor(props) {
     super(props);
     this.onEntered = this.onEntered.bind(this);
     this.onExited = this.onExited.bind(this);
     this.toggle = this.toggle.bind(this);
 
-    this.state = { aboutTextToggle: true, collapse: false, status: 'closed', alert: [] };
+    this.state = {
+        aboutTextToggle: true,
+        collapse: false,
+        status: 'closed',
+        alert: [],
+        name: '',
+        surname: '',
+        email: '',
+        gender: '',
+        about: ''
+    };
   }
   componentDidMount() {
     const user = AuthenticationService.getCurrentUser();
     this.setState({
-      name: user.user.firstname, 
-      surname: user.user.lastname, 
-      email: user.user.email, 
+      name: user.user.firstname,
+      surname: user.user.lastname,
+      email: user.user.email,
       gender: user.user.gender,
       about: user.user.about == null ? "Nothing here. Press to edit..." : user.user.about,
       favorites: []
@@ -85,7 +95,7 @@ class Profile extends Component {
     event.preventDefault();
 
     BackendService
-        .setUserInfo(this.state.name, 
+        .setUserInfo(this.state.name,
                 this.state.surname,
                 this.state.gender)
       .then(
@@ -177,7 +187,7 @@ class Profile extends Component {
                     <Label for="Email"><strong>Email</strong></Label>
                     <Input disabled
                       value={this.state.email}
-                      onChange={this.changeHandler} name="email" 
+                      onChange={this.changeHandler} name="email"
                     />
                     <Label for="gender">Gender</Label>
                     <div>
@@ -192,7 +202,7 @@ class Profile extends Component {
                  Edit profile</Button>
                 </Col>
               </Row>
-              
+
               <Row style={{marginTop:"30px"}}>
               <Col sm="12" md={{ size: 8, offset: 2 }}><Button className='title' onClick={this.toggle} color="primary" style={{ marginBottom: '1rem' }}>About me</Button>
               <Collapse isOpen={this.state.collapse} onExited={this.onExited} onEntered={this.onEntered}>
@@ -203,9 +213,9 @@ class Profile extends Component {
                       <p onClick={() => {
                           this.setState({aboutTextToggle: false});
                       }}>
-                        {(this.state.about+"").split("\n").map(function(item) {
+                        {(this.state.about+"").split("\n").map(function(item, index) {
                           return (
-                            <span>
+                            <span key={index}>
                               {item}
                               <br/>
                             </span>
@@ -278,7 +288,7 @@ class Profile extends Component {
                 {this.state.favorites != null && this.state.favorites.length > 0 ?
                 <MovieCard data={this.state.favorites} />
                 : ""}
-                
+
                 <Row style={{marginTop:"30px"}}>
                   <Col></Col>
                 </Row>

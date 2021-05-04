@@ -32,6 +32,8 @@ class Users extends Component {
         };
 
         this.showUsers.bind(this);
+        this.changeHandler.bind(this);
+        this.searchHandler.bind(this);
     }
 
     componentDidMount() {
@@ -42,7 +44,6 @@ class Users extends Component {
 
     showUsers = (page) => {
         this.setState({ isLoading: true });
-        console.log(this.state.method);
         switch (this.state.method) {
             case "all":
                 FriendsService.getUsers(page, this.state.perPage).then(
@@ -201,7 +202,7 @@ class Users extends Component {
                                             </Row>
                                             <Row className="mb-2">
                                                 {this.state.usersList.length ==
-                                                0
+                                                    0
                                                     ? "Users not found."
                                                     : listUsers}
                                             </Row>

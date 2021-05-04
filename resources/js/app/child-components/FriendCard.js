@@ -21,6 +21,7 @@ import {
     AiFillEye,
     AiOutlineCheck,
     AiOutlineClose,
+    AiOutlineMessage
 } from "react-icons/ai";
 
 import { store } from "react-notifications-component";
@@ -98,6 +99,11 @@ class FriendCard extends Component {
                             <Link to={"/user/" + data.id.toString()}>
                                 <Button>
                                     <AiFillEye /> View profile
+                                </Button>
+                            </Link>
+                            <Link to={"/chat/" + data.id.toString()}>
+                                <Button color="success">
+                                    <AiOutlineMessage /> Chat
                                 </Button>
                             </Link>
                             <Button color="danger" onClick={toggle}>

@@ -42,8 +42,8 @@ class FriendRequests extends Component {
 
     componentWillUnmount() {
         const user = AuthenticationService.getCurrentUser();
-        if(user){
-            window.Echo.leave('friend-request-channel.' + user.user.id);
+        if (user) {
+            window.Echo.leave('user-channel.' + user.user.id);
         }
     }
 
@@ -112,10 +112,10 @@ class FriendRequests extends Component {
     }
 
     listen(userId) {
-        window.Echo.private('friend-request-channel.' + userId).listen('FriendRequestCountChanged', () => {
+        window.Echo.private('user-channel.' + userId).listen('FriendRequestCountChanged', () => {
             this.getIncomingRequests();
             this.getSentRequests();
-          });
+        });
     }
 
     render() {
@@ -140,7 +140,7 @@ class FriendRequests extends Component {
                                 />
                             )}
                         </Row>
-                        <hr/>
+                        <hr />
                         <Row>
                             <h1 style={{ marginTop: "20px" }}>
                                 Sent friend requests

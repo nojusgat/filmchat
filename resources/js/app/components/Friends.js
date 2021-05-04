@@ -39,7 +39,7 @@ class Friends extends Component {
     componentWillUnmount() {
         const user = AuthenticationService.getCurrentUser();
         if (user) {
-            window.Echo.leave('friend-request-channel.' + user.user.id);
+            window.Echo.leave('user-channel.' + user.user.id);
         }
     }
 
@@ -55,7 +55,7 @@ class Friends extends Component {
     }
 
     listen(userId) {
-        window.Echo.private('friend-request-channel.' + userId).listen('Unfriended', () => {
+        window.Echo.private('user-channel.' + userId).listen('Unfriended', () => {
             this.showFriends();
         });
     }

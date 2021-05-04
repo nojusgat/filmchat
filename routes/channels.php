@@ -18,6 +18,6 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('friend-request-channel.{id}', function () {
+Broadcast::channel('user-channel.{id}', function () {
     return Auth::check();
 });

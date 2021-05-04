@@ -59,7 +59,7 @@ class AppNavbar extends Component {
     componentWillUnmount() {
         const user = AuthenticationService.getCurrentUser();
         if (user) {
-            window.Echo.leave('friend-request-channel.' + user.user.id);
+            window.Echo.leave('user-channel.' + user.user.id);
         }
     }
 
@@ -92,7 +92,7 @@ class AppNavbar extends Component {
     }
 
     listen(userId) {
-        window.Echo.private('friend-request-channel.' + userId).listen('FriendRequestCountChanged', () => {
+        window.Echo.private('user-channel.' + userId).listen('FriendRequestCountChanged', () => {
             this.getFriendRequestCount();
         }).listen('FriendRequestSent', (e) => {
             store.addNotification({
@@ -126,8 +126,10 @@ class AppNavbar extends Component {
                             <Nav className="ml-auto" navbar>
                                 <Dropdown nav isOpen={this.state.isOpenDrop} toggle={this.toggleDropDown}>
                                     <DropdownToggle nav caret>
-                                        <img src={"/storage/images/avatars/" + this.state.avatar} width="40" height="40" className="rounded-circle" style={{ position: "absolute", marginTop: "-8px" }} />
-                                        <span className="ml-5">{this.state.username} {this.state.friendReqCount === 0 ? " " : <Badge color="info" pill>{this.state.friendReqCount}</Badge>}</span>
+                                        <div className="rect-img-container nav-avatar">
+                                            <img src={"/storage/images/avatars/" + this.state.avatar} className="rect-img rounded-circle" style={{ borderRadius: "50%" }} />
+                                        </div>
+                                        <span className="ml-1" style={{ marginLeft: "-15px" }}>{this.state.username} {this.state.friendReqCount === 0 ? " " : <Badge color="info" pill>{this.state.friendReqCount}</Badge>}</span>
                                     </DropdownToggle>
                                     <DropdownMenu>
                                         <DropdownItem header>Actions</DropdownItem>

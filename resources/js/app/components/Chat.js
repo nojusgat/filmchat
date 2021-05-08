@@ -39,6 +39,10 @@ class Chat extends Component {
     }
 
     componentDidMount() {
+        this.isFriend();
+    }
+
+    loadChat() {
         this.getFriends();
         this.getMessages();
         this.listen(this.state.user.id);
@@ -57,6 +61,17 @@ class Chat extends Component {
                 }
             );
         }
+    }
+
+    isFriend() {
+        FriendsService.isFriendsWith(this.state.recipientId).then(
+            response => {
+                response.data ? this.loadChat() : console.log("not friend");
+            },
+            error => {
+                console.log("Error in isFriendsWith: " + error.toString());
+            }
+        );
     }
 
     scrollToBottom = () => {
@@ -104,7 +119,7 @@ class Chat extends Component {
             this.state.recipientId,
             this.state.message
         ).then(
-            (response) => {},
+            (response) => { },
             (error) => {
                 console.log("Error in sendMessage: " + error.toString());
             }

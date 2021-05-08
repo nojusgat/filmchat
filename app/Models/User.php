@@ -43,15 +43,15 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array
      */
-    protected $casts = [
-    ];
+    protected $casts = [];
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
      */
-    public function getJWTIdentifier() {
+    public function getJWTIdentifier()
+    {
         return $this->getKey();
     }
 
@@ -60,7 +60,8 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return array
      */
-    public function getJWTCustomClaims() {
+    public function getJWTCustomClaims()
+    {
         return [];
     }
 
@@ -68,5 +69,10 @@ class User extends Authenticatable implements JWTSubject
     public function favorites()
     {
         return $this->hasMany(FavoriteMovie::class, 'user_id');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
     }
 }

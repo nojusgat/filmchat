@@ -13,6 +13,7 @@ import MovieDetails from './app/components/MovieDetails';
 import Users from './app/components/Users';
 import FriendRequests from './app/components/FriendRequests';
 import Friends from './app/components/Friends';
+import Chat from './app/components/Chat';
 
 const LoggedInRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={(props) => (
@@ -48,6 +49,7 @@ class MainApp extends Component {
                     <LoggedInRoute path='/users' exact={true} component={Users} />
                     <LoggedInRoute path='/requests' exact={true} component={FriendRequests} />
                     <LoggedInRoute path='/friends' exact={true} component={Friends} />
+                    <LoggedInRoute path='/chat/:id' exact={true} component={Chat} />
                 </Switch>
             </Router>
         )

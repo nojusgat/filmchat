@@ -8,7 +8,6 @@ use App\Events\FriendRequestSent;
 use App\Events\FriendRequestCountChanged;
 use App\Events\Unfriended;
 use Hootlex\Friendships\Models\Friendship;
-use Illuminate\Support\Facades\DB;
 
 class FriendsController extends Controller
 {

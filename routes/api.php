@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MoviesController;
 use App\Http\Controllers\FriendsController;
 
@@ -48,4 +49,8 @@ Route::group([
     Route::get('/get/requestscount', [FriendsController::class, 'getFriendRequestsCount']);
     Route::get('/get/userscount', [FriendsController::class, 'getUsersCount']);
 
+    // Messages routes
+    Route::post('/messages/send', [ChatController::class, 'sendMessage']);
+    Route::post('/messages/get', [ChatController::class, 'getMessages']);
+    Route::post('/messages/getChats', [ChatController::class, 'getLatestChats']);
 });

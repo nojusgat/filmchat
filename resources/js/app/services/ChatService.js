@@ -13,12 +13,6 @@ class ChatService {
             recipientId: recipientId
         });
     }
-
-    getLatestMessage = async (recipientId) => {
-        return axios.post('/api/auth/messages/getLatest', {
-            recipientId: recipientId
-        });
-    }
 }
 
 export default new ChatService();

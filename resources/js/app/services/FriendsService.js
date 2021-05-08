@@ -59,7 +59,7 @@ class FriendsService {
     };
 
     getFriends = async () => {
-        return axios.get("api/auth/get/friends");
+        return axios.get("/api/auth/get/friends");
     };
 
     getIncomingRequests = async () => {

@@ -52,5 +52,5 @@ Route::group([
     // Messages routes
     Route::post('/messages/send', [ChatController::class, 'sendMessage']);
     Route::post('/messages/get', [ChatController::class, 'getMessages']);
-    Route::post('/messages/getLatest', [ChatController::class, 'getLatestMessage']);
+    Route::post('/messages/getChats', [ChatController::class, 'getLatestChats']);
 });

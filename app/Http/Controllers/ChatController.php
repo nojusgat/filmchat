@@ -42,14 +42,4 @@ class ChatController extends Controller
         ])->orderBy('updated_at')->get();
         return ["messages" => $result, "recipient" => User::where('id', $recipientId)->get()[0]];
     }
-
-    public function getLatestMessage(Request $request)
-    {
-        $senderId = auth()->user()->id;
-        $recipientId = $request->recipientId;
-        return Message::with('sender', 'recipient')->where([
-            ['sender_id', '=', $recipientId],
-            ['recipient_id', '=', $senderId]
-        ])->latest();
-    }
 }

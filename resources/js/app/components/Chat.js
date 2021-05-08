@@ -14,6 +14,9 @@ import {
 import { AiOutlineSend } from "react-icons/ai";
 
 import ChatService from "../services/ChatService";
+import FriendsService from "../services/FriendsService";
+
+import { Link, withRouter } from "react-router-dom";
 
 class Chat extends Component {
     constructor(props) {
@@ -24,8 +27,10 @@ class Chat extends Component {
             recipientId: this.props.match.params.id,
             recipient: [],
             allMessages: [],
+            allFriends: [],
             message: "",
-            isChatLoading: true,
+            isFriendsLoading: true,
+            isMessagesLoading: true,
         };
 
         this.changeHandler.bind(this);
@@ -34,12 +39,30 @@ class Chat extends Component {
     }
 
     componentDidMount() {
+        this.getFriends();
         this.getMessages();
         this.listen(this.state.user.id);
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.match.params.id != prevProps.match.params.id) {
+            window.Echo.leave("user-channel." + this.state.user.id);
+            this.setState(
+                {
+                    recipientId: this.props.match.params.id,
+                },
+                () => {
+                    this.getMessages();
+                    this.listen(this.state.user.id);
+                }
+            );
+        }
+    }
+
     scrollToBottom = () => {
-        this.messagesEnd.scrollIntoView();
+        if (!(this.state.isFriendsLoading && this.state.isMessagesLoading)) {
+            this.messagesEnd.scrollIntoView();
+        }
     };
 
     getMessages() {
@@ -48,7 +71,7 @@ class Chat extends Component {
                 this.setState(
                     {
                         allMessages: response.data.messages,
-                        isChatLoading: false,
+                        isMessagesLoading: false,
                         recipient: response.data.recipient,
                     },
                     () => {
@@ -62,14 +85,16 @@ class Chat extends Component {
         );
     }
 
-    getLatestMessage() {
-        ChatService.getLatestMessage(this.state.recipientId).then(
+    getFriends() {
+        FriendsService.getFriends().then(
             (response) => {
-                // this.setState({});
-                console.log(response.data);
+                this.setState({
+                    allFriends: response.data,
+                    isFriendsLoading: false,
+                });
             },
             (error) => {
-                console.log("Error in getLatestMessage: " + error.toString());
+                console.log("Error in getFriends: " + error.toString());
             }
         );
     }
@@ -98,7 +123,10 @@ class Chat extends Component {
 
     sendHandler = () => {
         this.setState({ message: "" });
-        if (this.state.message) {
+        if (
+            this.state.message &&
+            this.state.message.replace(/\s/g, "").length
+        ) {
             this.sendMessage();
             this.setState(
                 {
@@ -151,29 +179,63 @@ class Chat extends Component {
         window.Echo.private("user-channel." + userId).listen(
             "MessageSent",
             (e) => {
-                this.setState(
-                    {
-                        allMessages: [
-                            ...this.state.allMessages,
-                            ...[
-                                {
-                                    sender: e.other,
-                                    updated_at: e.message.updated_at,
-                                    body: e.message.body,
-                                },
+                if (e.other.id == this.state.recipientId) {
+                    this.setState(
+                        {
+                            allMessages: [
+                                ...this.state.allMessages,
+                                ...[
+                                    {
+                                        sender: e.other,
+                                        updated_at: e.message.updated_at,
+                                        body: e.message.body,
+                                    },
+                                ],
                             ],
-                        ],
-                    },
-                    () => {
-                        this.scrollToBottom();
-                    }
-                );
+                        },
+                        () => {
+                            this.scrollToBottom();
+                        }
+                    );
+                }
             }
         );
     }
 
     render() {
         const id = this.state.user.id;
+
+        const displayFriends = this.state.allFriends.map((data, index) => {
+            return (
+                <Link
+                    to={"/chat/" + data.id}
+                    key={index}
+                    className="friend-link"
+                >
+                    <div
+                        className={
+                            this.state.recipientId == data.id
+                                ? "friends active-friend"
+                                : "friends"
+                        }
+                    >
+                        <div className="friend-avatar rect-img-container">
+                            <img
+                                className="received-image rect-img"
+                                src={"/storage/images/avatars/" + data.avatar}
+                                alt={data.firstname + " " + data.lastname}
+                            />
+                        </div>
+                        <div className="friend-name">
+                            <h5>
+                                {data.firstname} {data.lastname}
+                            </h5>
+                        </div>
+                    </div>
+                </Link>
+            );
+        });
+
         const displayMessages = this.state.allMessages.map((data, index) => {
             const date = new Date(data.updated_at);
             if (data.sender_id === id || data.sender.id === undefined) {
@@ -216,13 +278,17 @@ class Chat extends Component {
                 );
             }
         });
+
         // Main return
         return (
             <div>
                 <AppNavbar />
                 <Container className="message-container">
                     {(() => {
-                        if (this.state.isChatLoading) {
+                        if (
+                            this.state.isMessagesLoading &&
+                            this.state.isFriendsLoading
+                        ) {
                             return (
                                 <div
                                     style={{ marginTop: "20px" }}
@@ -240,21 +306,13 @@ class Chat extends Component {
                         } else {
                             return (
                                 <Row>
-                                    <Col xs="4" className="latest-main">
-                                        <Row>
-                                            <h4>latest chats</h4>
-                                        </Row>
-                                        <Row className="latest-chats">
-                                            <div className="latest-chat">
-                                                <p>asdasd</p>
-                                            </div>
-                                            <div className="latest-chat">
-                                                <p>asdasd</p>
-                                            </div>
-                                            <div className="latest-chat">
-                                                <p>asdasd</p>
-                                            </div>
-                                        </Row>
+                                    <Col xs="4" className="friends-main ">
+                                        <div className="friends-header">
+                                            <p>My friends</p>
+                                        </div>
+                                        <div className="friends-list">
+                                            {displayFriends}
+                                        </div>
                                     </Col>
                                     <Col xs="8" className="messages-main">
                                         <div className="messages-main-header">
@@ -330,4 +388,4 @@ class Chat extends Component {
     }
 }
 
-export default Chat;
+export default withRouter(Chat);

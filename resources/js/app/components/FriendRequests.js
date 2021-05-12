@@ -120,9 +120,9 @@ class FriendRequests extends Component {
 
     render() {
         return (
-            <div>
+            <div className="friendRequests">
                 <AppNavbar />
-                <div style={{ margin: "auto", width: "60%" }}>
+                <div style={{margin: "auto", width: "60%" }}>
                     <Container fluid>
                         <Row>
                             <h1 style={{ marginTop: "20px" }}>

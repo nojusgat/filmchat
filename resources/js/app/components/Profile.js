@@ -158,9 +158,9 @@ class Profile extends Component {
     });
 
     return (
-      <div>
+      <div className="backgroundImage">
         <AppNavbar />
-        <Container fluid>
+        <Container fluid className="profile">
           {alert}
           <Row style={{marginTop:"30px"}}>
           {/* <img src="https://knowpathology.com.au/app/uploads/2018/07/Happy-Test-Screen-01-825x510.png" alt="Avatar" class="avatar"></img> */}
@@ -174,26 +174,26 @@ class Profile extends Component {
               <Col sm="12" md={{ size: 2, offset: 0 }}>
                 <Form  onSubmit={this.doLogin}>
                   <FormGroup>
-                    <Label for="Name"><strong>Name</strong></Label>
+                    <Label for="Name">Name</Label>
                     <Input
                       value={this.state.name}
                       onChange={this.changeHandler} name="name"
                     />
-                    <Label for="Surname"><strong>Surname</strong></Label>
+                    <Label for="Surname">Surname</Label>
                     <Input
                       value={this.state.surname}
                       onChange={this.changeHandler} name="surname"
                     />
-                    <Label for="Email"><strong>Email</strong></Label>
+                    <Label for="Email">Email</Label>
                     <Input disabled
                       value={this.state.email}
                       onChange={this.changeHandler} name="email"
                     />
                     <Label for="gender">Gender</Label>
                     <div>
-                    <CustomInput onChange={this.changeHandler} type="radio" value="Male" id="Male" name="gender" label="Male"  checked={this.state.gender == "Male"}/>
-                    <CustomInput onChange={this.changeHandler} type="radio" value="Female" id="Female" name="gender" label="Female" checked={this.state.gender == "Female"} />
-                    <CustomInput onChange={this.changeHandler} type="radio" value="Other" id="Other" name="gender" label="Other" checked={this.state.gender == "Other"} />
+                    <CustomInput className="profileCheckBox" onChange={this.changeHandler} type="radio" value="Male" id="Male" name="gender" label="Male"  checked={this.state.gender == "Male"}/>
+                    <CustomInput className="profileCheckBox" onChange={this.changeHandler} type="radio" value="Female" id="Female" name="gender" label="Female" checked={this.state.gender == "Female"} />
+                    <CustomInput className="profileCheckBox" onChange={this.changeHandler} type="radio" value="Other" id="Other" name="gender" label="Other" checked={this.state.gender == "Other"} />
                     </div>
                   </FormGroup>
                 </Form>

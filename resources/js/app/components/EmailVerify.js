@@ -41,13 +41,13 @@ class EmailVerify extends Component {
 
   render() {
       return (
-        <div>
+        <div className="startBackgroundImage">
           <AppNavbar/>
           <Container fluid>
           <Form  onSubmit={this.doVerify}>
             <Row style={{marginTop:"20px"}}>
               <Col sm="12" md={{ size: 3, offset: 4 }}>
-                <Button color="primary" block>Verify email</Button>
+                <Button color="success" block>Verify email</Button>
               </Col>
             </Row>
             {

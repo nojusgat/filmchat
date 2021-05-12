@@ -97,7 +97,7 @@ class FavoriteButton extends Component {
     render() {
         if(this.state.favoriteButton.name != null && this.state.favoriteButton.text != null) {
             return (
-                <Button title={this.state.favoriteButton.text} color={this.state.favoriteButton.name == "addFavorite" ? "success" : "danger"} onClick={() => this.favoriteHandler(this.state.favoriteButton.name)}>{this.state.favoriteButton.name == "addFavorite" ? <IoHeartSharp /> : <IoHeartDislikeSharp />}</Button>
+                <Button className="favoriteButton" title={this.state.favoriteButton.text} color={this.state.favoriteButton.name == "addFavorite" ? "success" : "danger"} onClick={() => this.favoriteHandler(this.state.favoriteButton.name)}>{this.state.favoriteButton.name == "addFavorite" ? <IoHeartSharp /> : <IoHeartDislikeSharp />}</Button>
             );
         } else {
             return (

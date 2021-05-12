@@ -120,9 +120,9 @@ class Users extends Component {
 
     render() {
         return (
-            <div>
+            <div className="backgroundImage">
                 <AppNavbar />
-                <Container fluid>
+                <Container className="users" fluid>
                     <Row>
                         <Col
                             style={{ marginTop: "20px" }}

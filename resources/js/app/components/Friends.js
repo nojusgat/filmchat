@@ -62,7 +62,7 @@ class Friends extends Component {
 
     render() {
         return (
-            <div>
+            <div className="myFriends">
                 <AppNavbar />
                 <Container fluid>
                     <Row style={{ marginTop: "10px" }}>

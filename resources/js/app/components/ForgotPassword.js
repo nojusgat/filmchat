@@ -47,14 +47,14 @@ class ForgotPassword extends Component{
 
     render() {
         return ( 
-          <div>
+          <div className="startBackgroundImage">
             <AppNavbar/>
             <Container fluid>
               <Row style={{marginTop:"20px"}}>
               <Col sm="12" md={{ size: 3, offset: 4 }}>
                 <Form  onSubmit={this.doLogin}>
-                  <h3 className="h3 mb-3 font-weight-normal text-center">Password reset</h3>
-                  <p className="mb-4">Provide a valid email address to reset your account's password.</p>
+                  <h3 style={{color:'black'}} className="h3 mb-3 font-weight-normal text-center">Password reset</h3>
+                  <p style={{color:'black'}} className="mb-4">Provide a valid email address to reset your account's password.</p>
                   {
                     this.state.error && (
                       <Alert color="danger" className="mt-3">
@@ -83,7 +83,7 @@ class ForgotPassword extends Component{
                     </InputGroup>
                   </FormGroup>
     
-                  <Button type="submit" color="primary" size="lg" block >
+                  <Button style={{borderRadius:'25px'}} type="submit" color="success" size="lg" block >
                     Reset password
                   </Button>
                 </Form>

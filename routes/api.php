@@ -42,6 +42,7 @@ Route::group([
     // Friends system routes
     Route::post('/users/friend', [FriendsController::class, 'friendAction']);
     Route::post('/get/users', [FriendsController::class, 'getUsers']);
+    Route::post('/get/user', [FriendsController::class, 'getUser']);
     Route::post('/search/users', [FriendsController::class, 'searchUsers']);
     Route::get('/get/friends', [FriendsController::class, 'getFriends']);
     Route::get('/get/requests', [FriendsController::class, 'getFriendRequests']);

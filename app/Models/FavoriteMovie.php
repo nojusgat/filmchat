@@ -19,4 +19,9 @@ class FavoriteMovie extends Model
     protected $hidden = [
         'user_id',
     ];
+
+    public function users()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

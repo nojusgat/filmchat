@@ -11,17 +11,21 @@ import ForgotPasswordComplete from './app/components/ForgotPasswordComplete';
 import About from './app/components/About';
 import MovieDetails from './app/components/MovieDetails';
 import Users from './app/components/Users';
+import UserProfile from './app/components/UserProfile';
 import FriendRequests from './app/components/FriendRequests';
 import Friends from './app/components/Friends';
 import Chat from './app/components/Chat';
 
-const LoggedInRoute = ({ component: Component, ...rest }) => (
-    <Route {...rest} render={(props) => (
-        AuthenticationService.getCurrentUser()
-            ? <Component {...props} />
-            : <Redirect to='/signin' />
-    )} />
-);
+const LoggedInRoute = ({ component: Component, ...rest }) => {
+    const user = AuthenticationService.getCurrentUser();
+    const token = user ? user.access_token : null;
+    window.Echo.connector.pusher.config.auth.headers['Authorization'] = 'bearer ' + token;
+    return (
+        <Route {...rest} render={(props) => (
+            user ? <Component {...props} /> : <Redirect to='/signin' />
+        )} />
+    );
+};
 
 const LoggedOutRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={(props) => (
@@ -47,6 +51,7 @@ class MainApp extends Component {
                     <LoggedInRoute path='/about' exact={true} component={About} />
                     <LoggedInRoute path='/movie/:id' exact={true} component={MovieDetails} />
                     <LoggedInRoute path='/users' exact={true} component={Users} />
+                    <LoggedInRoute path='/user/:id' exact={true} component={UserProfile} />
                     <LoggedInRoute path='/requests' exact={true} component={FriendRequests} />
                     <LoggedInRoute path='/friends' exact={true} component={Friends} />
                     <LoggedInRoute path='/chat/:id' exact={true} component={Chat} />

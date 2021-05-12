@@ -50,6 +50,12 @@ class FriendsService {
         });
     };
 
+    getUser = async (id) => {
+        return axios.post("/api/auth/get/user", {
+            id: id
+        });
+    };
+
     searchUsers = async (page, perPage, search) => {
         return axios.post("api/auth/search/users", {
             page: page,

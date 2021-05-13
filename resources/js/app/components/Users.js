@@ -22,6 +22,7 @@ class Users extends Component {
 
         this.state = this.props.location.state || {
             usersList: [],
+            suggestedUsers: [],
             currentPage: 1,
             totalPages: 0,
             perPage: 20,

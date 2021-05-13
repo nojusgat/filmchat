@@ -177,15 +177,16 @@
     color: var(--color);
 }
 
-.home input {
+/* .home input {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
     border-radius: 25px;
     color: black;
-}
-.home button {
+} */
+
+/* .home-button {
     width: 100%;
     padding: 6px 20px;
     margin: 8px 0;
@@ -194,7 +195,8 @@
     color: white;
     background-color: #343c44;
     font-weight: 450;
-}
+} */
+
 .profileDropdown {
     color: white;
     background-color: #343c44;

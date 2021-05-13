@@ -110,7 +110,7 @@ class UserCard extends Component {
                 <div className="align-self-center mx-auto">
                     <CardText>
                         <Link to={'/user/' + data.id.toString()}>
-                            <Button><AiFillEye /> View profile</Button>
+                            <Button color ="primary"><AiFillEye /> View profile</Button>
                         </Link>
                         {this.state.isFriend ? (
                             <Button color="danger" onClick={toggle}><AiOutlineUserDelete /> Remove from friends</Button>

@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import AppNavbar from '../child-components/AppNavbar';
-import {Container, Form, Alert, FormGroup, Input, Row, Col, NavLink, InputGroup, InputGroupAddon, InputGroupText, Button, Nav, NavItem, TabContent, TabPane } from "reactstrap";
+import {Container, Form, Alert, FormGroup, Input, Row, Col, NavLink, InputGroup, InputGroupAddon, InputGroupText, Button, Nav, NavItem, TabContent, TabPane, Fade } from "reactstrap";
 import { TabContainer } from 'react-bootstrap';
 import classnames from 'classnames';
 import { Link, withRouter, NavLink as RRNavLink } from 'react-router-dom';
 import logoFilmchat from '../../logo_l.png';
+import { AiOutlineZoomIn } from 'react-icons/ai';
+import "../../index.css";
+import "../../../css/app.css"
 
 class About extends Component{
 
@@ -25,11 +28,11 @@ class About extends Component{
 
     render(){
         return(
-            <div>
+            <div className="backgroundImage">
                 <AppNavbar/>
                     <Container className="aboutUs">
                         <h1>About us</h1>
-                    <Nav tabs style={{}}>
+                    <Nav className="AboutNavBar" justified variant="pills" defaultActiveKey="/home" className="aboutNavBar" tabs style={{}}>
                         <NavItem>
                             <NavLink
                             className={classnames({ active: this.state.activeTab === '1' })}

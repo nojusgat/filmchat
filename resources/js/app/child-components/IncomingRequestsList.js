@@ -66,7 +66,7 @@ class IncomingRequestsList extends Component {
                 <Container fluid>
                     <Row>
                         <Col>
-                            <Link to={"/user/" + data.id.toString()}>
+                            <Link style={{color:"black"}} to={"/user/" + data.id.toString()}>
                                 {data.firstname} {data.lastname}
                             </Link>
                         </Col>

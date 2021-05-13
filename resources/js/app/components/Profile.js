@@ -157,52 +157,51 @@ class Profile extends Component {
             );
         });
 
-        return (
-            <div>
-                <AppNavbar />
-                <Container fluid>
-                    {alert}
-                    <Row style={{ marginTop: "30px" }}>
-                        {/* <img src="https://knowpathology.com.au/app/uploads/2018/07/Happy-Test-Screen-01-825x510.png" alt="Avatar" class="avatar"></img> */}
-                        <Col sm md={{ offset: 2 }}>
-                            <FormGroup>
-                                <Label for="avatar">Upload your avatar</Label>
-                                <CustomInput type="file" id="avatar" name="avatar" accept="image/*" onChange={this.changeAvatarHandler} />
-                            </FormGroup>
-                        </Col>
+    return (
+      <div className="backgroundImage">
+        <AppNavbar />
+        <Container fluid className="profile">
+          {alert}
+          <Row style={{marginTop:"30px"}}>
+          {/* <img src="https://knowpathology.com.au/app/uploads/2018/07/Happy-Test-Screen-01-825x510.png" alt="Avatar" class="avatar"></img> */}
+              <Col sm md={{ offset: 2 }}>
+                <FormGroup>
+                  <Label for="avatar">Upload your avatar</Label>
+                  <CustomInput type="file" id="avatar" name="avatar" accept="image/*" onChange={this.changeAvatarHandler} />
+                </FormGroup>
+              </Col>
 
-                        <Col sm="12" md={{ size: 2, offset: 0 }}>
-                            <Form onSubmit={this.doLogin}>
-                                <FormGroup>
-                                    <Label for="Name"><strong>Name</strong></Label>
-                                    <Input
-                                        value={this.state.name}
-                                        onChange={this.changeHandler} name="name"
-                                    />
-                                    <Label for="Surname"><strong>Surname</strong></Label>
-                                    <Input
-                                        value={this.state.surname}
-                                        onChange={this.changeHandler} name="surname"
-                                    />
-                                    <Label for="Email"><strong>Email</strong></Label>
-                                    <Input disabled
-                                        value={this.state.email}
-                                        onChange={this.changeHandler} name="email"
-                                    />
-                                    <Label for="gender">Gender</Label>
-                                    <div>
-                                        <CustomInput onChange={this.changeHandler} type="radio" value="Male" id="Male" name="gender" label="Male" checked={this.state.gender == "Male"} />
-                                        <CustomInput onChange={this.changeHandler} type="radio" value="Female" id="Female" name="gender" label="Female" checked={this.state.gender == "Female"} />
-                                        <CustomInput onChange={this.changeHandler} type="radio" value="Other" id="Other" name="gender" label="Other" checked={this.state.gender == "Other"} />
-                                    </div>
-                                </FormGroup>
-                            </Form>
-                        </Col>
-                        <Col><Button onClick={this.ProfileInfoChange} type="submit" variant="primary" >
-                            Edit profile</Button>
-                        </Col>
-                    </Row>
-
+              <Col sm="12" md={{ size: 2, offset: 0 }}>
+                <Form  onSubmit={this.doLogin}>
+                  <FormGroup>
+                    <Label for="Name">Name</Label>
+                    <Input
+                      value={this.state.name}
+                      onChange={this.changeHandler} name="name"
+                    />
+                    <Label for="Surname">Surname</Label>
+                    <Input
+                      value={this.state.surname}
+                      onChange={this.changeHandler} name="surname"
+                    />
+                    <Label for="Email">Email</Label>
+                    <Input disabled
+                      value={this.state.email}
+                      onChange={this.changeHandler} name="email"
+                    />
+                    <Label for="gender">Gender</Label>
+                    <div>
+                    <CustomInput className="profileCheckBox" onChange={this.changeHandler} type="radio" value="Male" id="Male" name="gender" label="Male"  checked={this.state.gender == "Male"}/>
+                    <CustomInput className="profileCheckBox" onChange={this.changeHandler} type="radio" value="Female" id="Female" name="gender" label="Female" checked={this.state.gender == "Female"} />
+                    <CustomInput className="profileCheckBox" onChange={this.changeHandler} type="radio" value="Other" id="Other" name="gender" label="Other" checked={this.state.gender == "Other"} />
+                    </div>
+                  </FormGroup>
+                </Form>
+                </Col>
+                <Col><Button onClick={this.ProfileInfoChange} type="submit" variant="primary" >
+                 Edit profile</Button>
+                </Col>
+              </Row>
                     <Row style={{ marginTop: "30px" }}>
                         <Col sm="12" md={{ size: 8, offset: 2 }}><Button className='title' onClick={this.toggle} color="primary" style={{ marginBottom: '1rem' }}>About me</Button>
                             <Collapse isOpen={this.state.collapse} onExited={this.onExited} onEntered={this.onEntered}>

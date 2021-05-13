@@ -213,23 +213,24 @@ class Home extends Component {
             <DropdownItem id={data.id} key={data.id.toString()} name={data.name} onClick={this.categoryClickHandler}>{data.name}</DropdownItem>
         );
 
-        return (
-            <div>
-                <AppNavbar />
-                <Container fluid>
-                    <Row>
-                        <Col style={{ marginTop: "20px" }} md={{ size: 4, offset: 2 }}>
-                            <InputGroup>
-                                <Input placeholder="Search something..." name="search" onChange={this.changeHandler} />
-                                <InputGroupAddon addonType="append">
-                                    <Button outline color="info" name="search" onClick={this.searchClickHandler}><AiOutlineSearch name="search" /></Button>
-                                </InputGroupAddon>
-                            </InputGroup>
-                        </Col>
-                        <Col style={{ marginTop: "20px" }} md={{ size: 2, offset: 0 }}>
-                            <Dropdown isOpen={this.state.isOpenDrop} toggle={this.toggleDropDown}>
-                                <DropdownToggle block caret outline color="info">
-                                    Categories
+
+    return (
+        <div className="backgroundImageHome">
+          <AppNavbar/>
+          <Container className="home" fluid>
+          <Row>
+            <Col style={{marginTop:"20px"}} md={{ size: 4, offset: 2 }}>
+              <InputGroup>
+                <Input placeholder="Search something..." name="search" onChange={this.changeHandler} />
+                <InputGroupAddon addonType="append">
+                  <Button outline color="info" name="search" onClick={this.searchClickHandler}><AiOutlineSearch name="search" /></Button>
+                </InputGroupAddon>
+              </InputGroup>
+            </Col>
+            <Col style={{marginTop:"20px"}} md={{ size: 2, offset: 0 }}>
+              <Dropdown isOpen={this.state.isOpenDrop} toggle={this.toggleDropDown}>
+                <DropdownToggle class="profileDropdown" block caret outline color="info">
+                  Categories
                 </DropdownToggle>
                                 <DropdownMenu>
                                     {cat_items}

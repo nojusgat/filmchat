@@ -27,7 +27,7 @@ class UserPage extends Component {
 
   render() {
     return (
-      <div>
+      <div className="backgroundImage">
         <AppNavbar/>
         <Container fluid>
             {

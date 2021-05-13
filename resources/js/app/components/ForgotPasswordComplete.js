@@ -80,7 +80,7 @@ class ForgotPasswordComplete extends Component {
   render() {
     if(this.state.valid && this.state.checked) {
       return ( 
-        <div>
+        <div className="startBackgroundImage">
           <AppNavbar/>
           <Container fluid>
             <Row style={{marginTop:"20px"}}>

@@ -154,14 +154,14 @@ class SignUp extends Component {
     }
 
     return ( 
-      <div>
+      <div className="startBackgroundImage">
         <AppNavbar/>
         <Container fluid>
           <Row style={{marginTop:"20px"}}>
             <Col sm="12" md={{ size: 3, offset: 4 }}>
             <Form onSubmit={this.signUp}>
-              <h3 className="h3 mb-3 font-weight-normal text-center">Register</h3>
-              <p className="mb-4">This site is only for registered users. Please register below to use the site.</p>
+              <h3 style={{color:'black'}} className="h3 mb-3 font-weight-normal text-center">Register</h3>
+              <p style={{color:'black'}} className="mb-4">This site is only for registered users. Please register below to use the site.</p>
               {
                   !this.state.validForm && (
                     <Alert key="validForm" color="danger" className="mt-3">
@@ -282,15 +282,15 @@ class SignUp extends Component {
               </FormGroup>
 
               <FormGroup>
-                <Label for="gender">Gender</Label>
-                <div>
+                <Label style={{color:'black'}} for="gender">Gender</Label>
+                <div style={{color:'black'}}>
                   <CustomInput onChange={this.changeHandler} type="radio" value="Male" id="Male" name="gender" label="Male" />
                   <CustomInput onChange={this.changeHandler} type="radio" value="Female" id="Female" name="gender" label="Female" />
                   <CustomInput onChange={this.changeHandler} type="radio" value="Other" id="Other" name="gender" label="Other" />
                 </div>
               </FormGroup>
 
-              <Button color="primary" type="submit" size="lg" block>
+              <Button style={{borderRadius:'25px'}} color="success" type="submit" size="lg" block>
                 Create account
               </Button>
             </Form>

@@ -77,13 +77,13 @@ class Login extends Component {
 
   render() {
     return ( 
-      <div>
+      <div className="startBackgroundImage">
         <AppNavbar/>
         <Container fluid>
           <Row style={{marginTop:"20px"}}>
           <Col sm="12" md={{ size: 3, offset: 4 }}>
             <Form  onSubmit={this.doLogin}>
-            <h3 className="h3 mb-3 font-weight-normal text-center">Login</h3>
+            <h3 style={{color:'black'}} className="h3 mb-3 font-weight-normal text-center">Login</h3>
               {
                 this.state.error && (
                   <Alert color="danger" className="mt-3">
@@ -121,28 +121,28 @@ class Login extends Component {
               </FormGroup>
 
               <React.StrictMode>
-                <div className="mb-3">
+                <div style={{color:'black'}} className="mb-3">
                   Remember passsword? <input type="checkbox" name="rememberPassword" value={this.state.remember} onChange={this.toggleRememberValue} />
                 </div>
               </React.StrictMode>
 
-              <Button type="submit" color="primary" size="lg" block>
+              <Button style={{borderRadius:'25px'}} type="submit" color="success" size="lg" block>
                 Log in
               </Button>
 
-              <div className="mt-3 text-center">
+              <div style={{color:'black'}} className="mt-3 text-center">
                 <b>No account?</b>
               </div>
 
               <div className="text-center">
                 <Row xs="2">
                   <Col>
-                    <Link to="/signup">
+                    <Link style={{color:'black'}} to="/signup">
                       Sign up
                     </Link>
                   </Col>
                   <Col>                 
-                    <Link to="/forgotpassword">
+                    <Link style={{color:'black'}} to="/forgotpassword">
                       Forgot password?
                     </Link>
                   </Col>

@@ -54,17 +54,20 @@
 }
 
 .aboutUs .nav-link {
-    color: #343c44;
+    color: black;
+    font-weight: 500;
 }
 .aboutUs .nav-link:hover {
-    color: #343c44;
+    color: black;
     cursor: pointer;
+    font-weight: 500;
 }
 .aboutUs .nav-tabs {
-    color: #343c44;
+    color: black;
     height: 50px;
     padding-top: 4px;
     padding-bottom: 4px;
+    font-weight: 500;
 }
 .aboutUs .tmdbLogo img {
     padding: 5px;
@@ -80,14 +83,136 @@
 }
 .aboutUs h1 {
     text-align: center;
-    padding: 5px;
+    padding: 20px;
 }
 .aboutUs h3 {
     text-align: center;
-    padding: 5px;
+    padding: 15px;
 }
 .aboutUs p {
     line-height: 1.5;
+}
+
+.backgroundImageHome{
+    background-image: url("https://cdn.hipwallpaper.com/i/43/21/4JlpQn.jpg");
+    height: 100%; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.backgroundImage{
+    background-image: url("https://docwaltshireinvesting.files.wordpress.com/2018/12/4k-wallpaper-for-blue-gradient-background-with-gradient-background-for-website-website-technical-info-with-free-wallpaper.jpg");
+    height: 100%; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.startBackgroundImage{
+    background-image: url("https://goldwallpapers.com/uploads/posts/website-background-wallpapers/website_background_wallpapers_020.jpg");
+    height: 100%; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.startBackgroundImage link{
+    color: black;
+    font-weight: 500;
+}
+
+
+.friendRequests{
+    background-image: url("https://docwaltshireinvesting.files.wordpress.com/2018/12/4k-wallpaper-for-blue-gradient-background-with-gradient-background-for-website-website-technical-info-with-free-wallpaper.jpg");
+    height: 100%; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.friendRequests button{
+    width: 100%;
+    padding: 6px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius: 25px;
+    color: white;
+    background-color: #343c44;
+    font-weight: 450;
+}
+
+.profile button{
+    padding: 6px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius: 25px;
+    color: white;
+    background-color: #343c44;
+    font-weight: 450;
+}
+.profile input{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius: 25px;
+    color: black;
+}
+.profile label{
+    color: black;
+    font-weight: 450;
+}
+.profileCheckBox{
+    display: grid;
+    grid-template-columns: min-content auto;
+    grid-gap: 0.5em;
+    font-size: 16px;
+    color: var(--color);
+}
+
+.home input{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius: 25px;
+    color: black;
+}
+.home button{
+    width: 100%;
+    padding: 6px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius: 25px;
+    color: white;
+    background-color: #343c44;
+    font-weight: 450;
+}
+.profileDropdown{
+    color: white;
+    background-color: #343c44;
+    padding: 6px 20px;
+    text-decoration: none;
+    display: block;
+}
+
+.users input{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius: 25px;
+    color: black;
+}
+.users button{
+    width: 100%;
+    padding: 6px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius: 25px;
+    color: white;
+    background-color: #343c44;
+    font-weight: 450;
 }
 
 .message-container {
@@ -148,13 +273,30 @@
     border-top: lightgrey 1px solid;
 }
 
-.friends {
+.myFriends button{
+    width: 100%;
+    padding: 6px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius: 25px;
+    color: white;
+    background-color: #343c44;
+    font-weight: 450;
+}
+
+.myFriends {
     border-bottom: 1px solid lightgrey;
-    padding: 18px 16px 10px;
     margin: 0;
     overflow: hidden;
     clear: both;
+    background-image: url("https://docwaltshireinvesting.files.wordpress.com/2018/12/4k-wallpaper-for-blue-gradient-background-with-gradient-background-for-website-website-technical-info-with-free-wallpaper.jpg");
+    height: 100%; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
+
+.friends
 
 .friend-avatar {
     float: left;
@@ -185,6 +327,28 @@
 .friend-link:hover div {
     background-color: rgb(220, 220, 220);
 }
+
+.mb-3 button{
+    width: 100%;
+    padding: 6px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius: 25px;
+    color: white;
+    background-color: #343c44;
+    font-weight: 450;
+}
+.favoriteButton{
+    width: 100%;
+    padding: 6px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius: 25px;
+    color: white;
+    background-color: #343c44;
+    font-weight: 450;
+}
+
 
 .active-friend {
     background-color: rgb(220, 220, 220);

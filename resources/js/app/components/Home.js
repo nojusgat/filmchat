@@ -214,9 +214,9 @@ class Home extends Component {
     );
 
     return (
-        <div>
+        <div className="backgroundImageHome">
           <AppNavbar/>
-          <Container fluid>
+          <Container className="home" fluid>
           <Row>
             <Col style={{marginTop:"20px"}} md={{ size: 4, offset: 2 }}>
               <InputGroup>
@@ -228,7 +228,7 @@ class Home extends Component {
             </Col>
             <Col style={{marginTop:"20px"}} md={{ size: 2, offset: 0 }}>
               <Dropdown isOpen={this.state.isOpenDrop} toggle={this.toggleDropDown}>
-                <DropdownToggle block caret outline color="info">
+                <DropdownToggle class="profileDropdown" block caret outline color="info">
                   Categories
                 </DropdownToggle>
                 <DropdownMenu>

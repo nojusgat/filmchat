@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import {
-    Card, CardTitle, CardText, CardImg, CardImgOverlay,
-    Button, Row, Col
+    Card, CardTitle, CardText, CardImg,
+    Button,
+    Modal,
+    ModalHeader,
+    ModalFooter,
 } from 'reactstrap';
 
 import { Link } from 'react-router-dom'
@@ -11,7 +14,7 @@ import "../../../css/app.css";
 import { AiFillEye, AiOutlineTeam } from 'react-icons/ai';
 import FriendsService from '../services/FriendsService';
 
-import { AiOutlineUserAdd, AiOutlineUserDelete } from 'react-icons/ai';
+import { AiOutlineUserAdd, AiOutlineUserDelete, AiOutlineCheck, AiOutlineClose, } from 'react-icons/ai';
 
 import { store } from 'react-notifications-component';
 
@@ -21,16 +24,14 @@ class UserCard extends Component {
 
         this.state = {
             data: props.data,
-            // btnStatus: "success",
-            isFriend: props.data.isFriend
-            // btnText: "Add to friends"
+            isFriend: props.data.isFriend,
+            modal: false,
         }
     }
 
     sendFriendRequest(otherId) {
         FriendsService.befriend(otherId).then(
             response => {
-                this.setState({ isFriend: true });
                 this.friendNotification();
             },
             error => {
@@ -101,6 +102,7 @@ class UserCard extends Component {
 
     render() {
         const data = this.state.data;
+        const toggle = () => this.setState({ modal: !this.state.modal });
         return (
             <Card>
                 <CardTitle tag="h5">{data.firstname} {data.lastname}</CardTitle>
@@ -111,12 +113,32 @@ class UserCard extends Component {
                             <Button color ="primary"><AiFillEye /> View profile</Button>
                         </Link>
                         {this.state.isFriend ? (
-                            <Button color="danger" onClick={() => this.unfriend(data.id)}><AiOutlineUserDelete /> Remove from friends</Button>
+                            <Button color="danger" onClick={toggle}><AiOutlineUserDelete /> Remove from friends</Button>
                         ) : (
                             <Button color="success" onClick={() => this.sendFriendRequest(data.id)}><AiOutlineUserAdd /> Add to friends</Button>
                         )}
                     </CardText>
                 </div>
+                <Modal isOpen={this.state.modal} toggle={toggle}>
+                    <ModalHeader toggle={toggle}>
+                        Are you sure you want to remove {data.firstname}{" "}
+                        {data.lastname} from your friends?
+                    </ModalHeader>
+                    <ModalFooter>
+                        <Button
+                            color="success"
+                            onClick={() => {
+                                toggle();
+                                this.unfriend(data.id);
+                            }}
+                        >
+                            <AiOutlineCheck /> Remove
+                        </Button>
+                        <Button color="danger" onClick={toggle}>
+                            <AiOutlineClose /> Cancel
+                        </Button>
+                    </ModalFooter>
+                </Modal>
             </Card>
         );
     }

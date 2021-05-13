@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Events\FriendRequestSent;
 use App\Events\FriendRequestCountChanged;
 use App\Events\Unfriended;
+use App\Models\FavoriteMovie;
 use Hootlex\Friendships\Models\Friendship;
 
 class FriendsController extends Controller
@@ -77,6 +78,15 @@ class FriendsController extends Controller
             );
         }
         return array("users" => $users, "count" => ceil($count / $request->perPage));
+    }
+
+    public function getUser(Request $request)
+    {
+        $userId = auth()->user()->id;
+        $self = $this->getUserByID($userId);
+        $other = $this->getUserByID($request->id);
+        $favs = FavoriteMovie::with('users')->where("user_id", $request->id)->get();
+        return array("user" => $other, "isFriend" => $self->isFriendWith($other), "favorites" => $favs);
     }
 
     public function searchUsers(Request $request)

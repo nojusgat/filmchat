@@ -85,14 +85,15 @@ class FriendCard extends Component {
         const toggle = () => this.setState({ modal: !this.state.modal });
         return (
             <div>
-                <Card>
-                    <CardTitle tag="h5">
+                <Card className="user-card">
+                    <CardTitle tag="h5" style={{ marginBottom: "10px" }}>
                         {data.firstname} {data.lastname}
                     </CardTitle>
                     <CardImg
                         width="100%"
                         src={"/storage/images/avatars/" + data.avatar}
                         alt={data.firstname + " " + data.lastname}
+                        className="card-image"
                     />
                     <div className="align-self-center mx-auto">
                         <CardText>

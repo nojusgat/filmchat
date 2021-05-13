@@ -104,13 +104,13 @@ class UserCard extends Component {
         const data = this.state.data;
         const toggle = () => this.setState({ modal: !this.state.modal });
         return (
-            <Card>
+            <Card className="user-card">
                 <CardTitle tag="h5">{data.firstname} {data.lastname}</CardTitle>
-                <CardImg width="100%" src={"/storage/images/avatars/" + data.avatar} alt={data.firstname + " " + data.lastname} />
+                <CardImg className="card-image" src={"/storage/images/avatars/" + data.avatar} alt={data.firstname + " " + data.lastname} />
                 <div className="align-self-center mx-auto">
                     <CardText>
                         <Link to={'/user/' + data.id.toString()}>
-                            <Button color ="primary"><AiFillEye /> View profile</Button>
+                            <Button color="primary"><AiFillEye /> View profile</Button>
                         </Link>
                         {this.state.isFriend ? (
                             <Button color="danger" onClick={toggle}><AiOutlineUserDelete /> Remove from friends</Button>

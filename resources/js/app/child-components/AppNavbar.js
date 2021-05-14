@@ -108,19 +108,21 @@ class AppNavbar extends Component {
                 }
             });
         }).listen('MessageSent', (e) => {
-            store.addNotification({
-                title: `${e.other.firstname} ${e.other.lastname} has sent you a message!`,
-                message: `"${e.message.body}"`,
-                type: "success",
-                insert: "bottom",
-                container: "bottom-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                    duration: 5000,
-                    onScreen: true
-                }
-            });
+            if (this.props.match.params.id != e.message.sender_id) {
+                store.addNotification({
+                    title: `${e.other.firstname} ${e.other.lastname} has sent you a message!`,
+                    message: `"${e.message.body}"`,
+                    type: "success",
+                    insert: "bottom",
+                    container: "bottom-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                });
+            }
         });
     }
 

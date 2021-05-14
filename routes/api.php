@@ -49,6 +49,7 @@ Route::group([
     Route::get('/get/sentrequests', [FriendsController::class, 'getSentRequests']);
     Route::get('/get/requestscount', [FriendsController::class, 'getFriendRequestsCount']);
     Route::get('/get/userscount', [FriendsController::class, 'getUsersCount']);
+    Route::get('/get/suggested', [FriendsController::class, 'getSuggested']);
 
     // Messages routes
     Route::post('/messages/send', [ChatController::class, 'sendMessage']);

@@ -101,6 +101,12 @@ class UserCard extends Component {
     }
 
     render() {
+        const sharedMoviesCount = () => {
+            if ("shared_movies" in this.state.data) {
+                return (<p>Shares {this.state.data.shared_movies} liked movies with you.</p>);
+            }
+        }
+
         const data = this.state.data;
         const toggle = () => this.setState({ modal: !this.state.modal });
         return (
@@ -118,6 +124,7 @@ class UserCard extends Component {
                             <Button color="success" onClick={() => this.sendFriendRequest(data.id)}><AiOutlineUserAdd /> Add to friends</Button>
                         )}
                     </CardText>
+                    {sharedMoviesCount()}
                 </div>
                 <Modal isOpen={this.state.modal} toggle={toggle}>
                     <ModalHeader toggle={toggle}>

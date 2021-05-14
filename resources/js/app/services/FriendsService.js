@@ -83,6 +83,10 @@ class FriendsService {
     getUsersCount = async () => {
         return axios.get("/api/auth/get/userscount");
     }
+
+    getSuggestedUsers = async () => {
+        return axios.get("/api/auth/get/suggested");
+    }
 }
 
 export default new FriendsService();

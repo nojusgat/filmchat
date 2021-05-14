@@ -27,12 +27,14 @@ class Users extends Component {
             totalPages: 0,
             perPage: 20,
             blockName: "Users:",
-            isLoading: true,
+            isUsersLoading: true,
+            isSuggestionsLoading: false,
             search: "",
             method: "all",
         };
 
         this.showUsers.bind(this);
+        this.showSuggested.bind(this);
         this.changeHandler.bind(this);
         this.searchHandler.bind(this);
     }
@@ -41,17 +43,19 @@ class Users extends Component {
         if (this.state.usersList.length == 0) {
             this.showUsers(this.state.currentPage);
         }
+        if (this.state.suggestedUsers.length == 0) {
+            this.showSuggested();
+        }
     }
 
     showUsers = (page) => {
-        this.setState({ isLoading: true });
         switch (this.state.method) {
             case "all":
                 FriendsService.getUsers(page, this.state.perPage).then(
                     (response) => {
                         this.setState({
                             usersList: response.data.users,
-                            isLoading: false,
+                            isUsersLoading: false,
                             currentPage: page,
                             totalPages: response.data.count,
                         });
@@ -71,7 +75,7 @@ class Users extends Component {
                     (response) => {
                         this.setState({
                             usersList: response.data.users,
-                            isLoading: false,
+                            isUsersLoading: false,
                             currentPage: page,
                             totalPages: response.data.count,
                         });
@@ -89,6 +93,21 @@ class Users extends Component {
         }
     };
 
+    showSuggested = () => {
+        FriendsService.getSuggestedUsers().then(
+            (response) => {
+                console.log(response.data);
+                this.setState({
+                    suggestedUsers: response.data,
+                    isSuggestionsLoading: false,
+                });
+            },
+            (error) => {
+                console.log("Error in getSuggestedUsers: " + error.toString());
+            }
+        );
+    };
+
     changeHandler = (e) => {
         this.setState({ search: e.target.value });
     };
@@ -99,7 +118,7 @@ class Users extends Component {
                 {
                     method: "all",
                     blockName: "Users:",
-                    isLoading: true,
+                    isUsersLoading: true,
                 },
                 () => {
                     this.showUsers(1);
@@ -110,7 +129,7 @@ class Users extends Component {
                 {
                     method: "search",
                     blockName: 'Searching "' + this.state.search + '":',
-                    isLoading: true,
+                    isUsersLoading: true,
                 },
                 () => {
                     this.showUsers(1);
@@ -120,114 +139,118 @@ class Users extends Component {
     };
 
     render() {
-        return (
-            <div className="backgroundImage">
-                <AppNavbar />
-                <Container className="users" fluid>
-                    <Row>
-                        <Col
-                            style={{ marginTop: "20px" }}
-                            md={{ size: 4, offset: 2 }}
-                        >
-                            <InputGroup>
-                                <Input
-                                    placeholder="Search users..."
-                                    defaultValue={this.state.search}
-                                    name="search"
-                                    onChange={this.changeHandler}
-                                />
-                                <InputGroupAddon addonType="append">
-                                    <Button
-                                        outline
-                                        color="info"
-                                        name="search"
-                                        onClick={this.searchHandler}
-                                    >
-                                        <AiOutlineSearch name="search" />
-                                    </Button>
-                                </InputGroupAddon>
-                            </InputGroup>
-                        </Col>
-                    </Row>
-                    <Row style={{ marginTop: "10px" }}>
-                        <Col sm="12" md={{ size: 8, offset: 2 }}>
-                            <h1 style={{ marginTop: "20px" }}>
-                                {this.state.blockName}
-                            </h1>
-                            {(() => {
-                                if (this.state.isLoading) {
-                                    return (
-                                        <div
-                                            style={{ marginTop: "20px" }}
-                                            className="spinner"
-                                        >
-                                            <Spinner
-                                                color="secondary"
-                                                style={{
-                                                    width: "100px",
-                                                    height: "100px",
-                                                }}
-                                            />
-                                        </div>
-                                    );
-                                } else {
-                                    const listUsers = this.state.usersList.map(
-                                        function (data) {
-                                            return (
-                                                <Col
-                                                    md="6"
-                                                    xl="3"
-                                                    sm="12"
-                                                    className="mb-3"
-                                                    key={data.id.toString()}
-                                                >
-                                                    <UserCard data={data} />
-                                                </Col>
-                                            );
-                                        }
-                                    );
+        if (this.state.isUsersLoading || this.state.isSuggestionsLoading) {
+            return (
+                <div>
+                    <AppNavbar />
 
-                                    return (
-                                        <div style={{ marginTop: "20px" }}>
-                                            <Row>
-                                                <Paginate
-                                                    setPage={this.showUsers}
-                                                    totalPages={
-                                                        this.state.totalPages
-                                                    }
-                                                    currentPage={
-                                                        this.state.currentPage
-                                                    }
-                                                    perPage={this.state.perPage}
-                                                />
-                                            </Row>
-                                            <Row className="mb-2">
-                                                {this.state.usersList.length ==
-                                                    0
-                                                    ? "Users not found."
-                                                    : listUsers}
-                                            </Row>
-                                            <Row>
-                                                <Paginate
-                                                    setPage={this.showUsers}
-                                                    totalPages={
-                                                        this.state.totalPages
-                                                    }
-                                                    currentPage={
-                                                        this.state.currentPage
-                                                    }
-                                                    perPage={this.state.perPage}
-                                                />
-                                            </Row>
-                                        </div>
-                                    );
-                                }
-                            })()}
+                    <div style={{ marginTop: "20px" }} className="spinner">
+                        <Spinner
+                            color="secondary"
+                            style={{
+                                width: "100px",
+                                height: "100px",
+                            }}
+                        />
+                    </div>
+                </div>
+            );
+        } else {
+            const listUsers = (list) =>
+                list.map(function (data) {
+                    return (
+                        <Col
+                            md="6"
+                            xl="3"
+                            sm="12"
+                            className="mb-3"
+                            key={data.id.toString()}
+                        >
+                            <UserCard data={data} />
                         </Col>
-                    </Row>
-                </Container>
-            </div>
-        );
+                    );
+                });
+
+            return (
+                <div className="backgroundImage">
+                    <AppNavbar />
+                    <Container className="users" fluid>
+                        <Row style={{ marginTop: "10px" }}>
+                            <Col sm="12" md={{ size: 8, offset: 2 }}>
+                                <h1 style={{ marginTop: "20px" }}>
+                                    Suggested users:
+                                </h1>
+                                <div style={{ marginTop: "20px" }}>
+                                    <Row className="mb-2">
+                                        {this.state.suggestedUsers.length == 0
+                                            ? "No suggested users. Favorite some movies first."
+                                            : listUsers(
+                                                  this.state.suggestedUsers
+                                              )}
+                                    </Row>
+                                </div>
+                            </Col>
+                        </Row>
+                    </Container>
+                    <hr style={{ width: "75%" }} />
+                    <Container className="users" fluid>
+                        <Row>
+                            <Col
+                                style={{ marginTop: "20px" }}
+                                md={{ size: 4, offset: 2 }}
+                            >
+                                <InputGroup>
+                                    <Input
+                                        placeholder="Search users..."
+                                        defaultValue={this.state.search}
+                                        name="search"
+                                        onChange={this.changeHandler}
+                                    />
+                                    <InputGroupAddon addonType="append">
+                                        <Button
+                                            outline
+                                            color="info"
+                                            name="search"
+                                            onClick={this.searchHandler}
+                                        >
+                                            <AiOutlineSearch name="search" />
+                                        </Button>
+                                    </InputGroupAddon>
+                                </InputGroup>
+                            </Col>
+                        </Row>
+                        <Row style={{ marginTop: "10px" }}>
+                            <Col sm="12" md={{ size: 8, offset: 2 }}>
+                                <h1>{this.state.blockName}</h1>
+                                <div style={{ marginTop: "20px" }}>
+                                    <Row>
+                                        <Paginate
+                                            setPage={this.showUsers}
+                                            totalPages={this.state.totalPages}
+                                            currentPage={this.state.currentPage}
+                                            perPage={this.state.perPage}
+                                        />
+                                    </Row>
+                                    <Row className="mb-2">
+                                        {this.state.usersList.length == 0
+                                            ? "Users not found."
+                                            : listUsers(this.state.usersList)}
+                                    </Row>
+                                    <Row>
+                                        <Paginate
+                                            setPage={this.showUsers}
+                                            totalPages={this.state.totalPages}
+                                            currentPage={this.state.currentPage}
+                                            perPage={this.state.perPage}
+                                        />
+                                    </Row>
+                                </div>
+                            </Col>
+                        </Row>
+                    </Container>
+                </div>
+            );
+        }
     }
 }
 

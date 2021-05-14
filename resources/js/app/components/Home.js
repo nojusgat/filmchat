@@ -229,7 +229,7 @@ class Home extends Component {
                         </Col>
                         <Col style={{ marginTop: "20px" }} md={{ size: 2, offset: 0 }}>
                             <Dropdown isOpen={this.state.isOpenDrop} toggle={this.toggleDropDown}>
-                                <DropdownToggle class="profileDropdown" block caret outline color="info">
+                                <DropdownToggle className="profileDropdown" block caret outline color="info">
                                     Categories
                 </DropdownToggle>
                                 <DropdownMenu>

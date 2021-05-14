@@ -58,7 +58,6 @@ class MovieDetails extends Component {
                         this.state.carouselCardsPerSlide
                     ),
                 });
-                console.log(this.state);
             },
             (error) => {
                 console.log("Error getting movie info: " + error.toString());
@@ -291,7 +290,7 @@ class MovieDetails extends Component {
                         <div>
                             <h1>Trailer</h1>
                         </div>
-                        <div style={{ margin: "auto", width: "80%" }}>
+                        <div style={{ margin: "auto", width: "80%", paddingBottom: "50px" }}>
                             <YoutubeEmbed
                                 embedId={this.state.info.youtube_trailer}
                             />

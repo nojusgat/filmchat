@@ -51,11 +51,9 @@ class UserProfile extends Component {
     }
 
     getUserInfo(id) {
-        console.log(id);
         FriendsService.getUser(id).then(
             (response) => {
                 const user = response.data.user;
-                console.log(response.data);
                 this.setState(
                     {
                         user: user,

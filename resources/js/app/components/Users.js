@@ -96,7 +96,6 @@ class Users extends Component {
     showSuggested = () => {
         FriendsService.getSuggestedUsers().then(
             (response) => {
-                console.log(response.data);
                 this.setState({
                     suggestedUsers: response.data,
                     isSuggestionsLoading: false,
@@ -183,10 +182,10 @@ class Users extends Component {
                                 <div style={{ marginTop: "20px" }}>
                                     <Row className="mb-2">
                                         {this.state.suggestedUsers.length == 0
-                                            ? "No suggested users. Favorite some movies first."
+                                            ? <p style={{ marginLeft: "20px" }}>No suggested users. Favorite some movies first.</p>
                                             : listUsers(
-                                                  this.state.suggestedUsers
-                                              )}
+                                                this.state.suggestedUsers
+                                            )}
                                     </Row>
                                 </div>
                             </Col>

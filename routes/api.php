@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MoviesController;
 use App\Http\Controllers\FriendsController;
+use App\Http\Controllers\TestsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,13 @@ use App\Http\Controllers\FriendsController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'test'
+
+],function ($router) {
+    Route::get('/generate/user', [TestsController::class, 'GenerateUser']);
+});
 
 Route::group([
     'middleware' => 'api',

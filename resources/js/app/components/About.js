@@ -75,8 +75,8 @@ class About extends Component{
                                             movie taste, add them as friends and chat about you favourite movies or TV series.
                                             You can like movies and by that you will find people that
                                             also liked those movies or TV series.
-                                            Moreover, here you can create and edit your profile, choose your picture, edit your dicription.
-                                            This website is only for learning purposes, no money will be made out of it.
+                                            Moreover, here you can create and edit your profile, choose your picture, edit your description.
+                                            This website is only for educational purposes.
                                         </p>
                                     </Col>
                                 </Row>

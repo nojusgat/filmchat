@@ -87,14 +87,14 @@ class About extends Component{
                                 <Row style={{marginTop:"20px"}}>
                                     <Col sm="12" md={{ size: 5}}>
                                         <h3>Our awesome developer squad:</h3>
-                                        <b>Justinas Runevičius</b>
-                                        <p>Front-end development</p>
                                         <b>Nojus Gataveckas</b>
                                         <p>Back-end development</p>
-                                        <b>Adomas Grauželis</b>
-                                        <p>Front-end development</p>
                                         <b>Domantas Stakionis</b>
                                         <p>Full-stack development</p>
+                                        <b>Justinas Runevičius</b>
+                                        <p>Front-end development</p>
+                                        <b>Adomas Grauželis</b>
+                                        <p>Front-end development</p>
                                         <b>Jokubas Kvederaitis</b>
                                         <p>Front-end development</p>
                                     </Col>

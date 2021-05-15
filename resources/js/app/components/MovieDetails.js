@@ -58,7 +58,6 @@ class MovieDetails extends Component {
                         this.state.carouselCardsPerSlide
                     ),
                 });
-                console.log(this.state);
             },
             (error) => {
                 console.log("Error getting movie info: " + error.toString());
@@ -140,15 +139,7 @@ class MovieDetails extends Component {
                                         <div className="movie-info">
                                             <h1>
                                                 {this.state.info.title}{" "}
-                                                <FavoriteButton
-                                                    movie_id={
-                                                        this.state.info.id
-                                                    }
-                                                    favorited={
-                                                        this.state.info
-                                                            .added_to_favorites
-                                                    }
-                                                />
+
                                             </h1>
                                             <h4 style={{ color: "lightgray" }}>
                                                 {this.state.info.tagline}
@@ -214,6 +205,17 @@ class MovieDetails extends Component {
                                                     .map((x) => x.name)
                                                     .join(", ") + "."}
                                             </p>
+                                            <div style={{ marginLeft: "auto", marginRight: "auto", marginTop: "auto", width: "75%" }}>
+                                                <FavoriteButton
+                                                    movie_id={
+                                                        this.state.info.id
+                                                    }
+                                                    favorited={
+                                                        this.state.info
+                                                            .added_to_favorites
+                                                    }
+                                                />
+                                            </div>
                                         </div>
                                     </Col>
                                 </Row>
@@ -288,7 +290,7 @@ class MovieDetails extends Component {
                         <div>
                             <h1>Trailer</h1>
                         </div>
-                        <div style={{ margin: "auto", width: "80%" }}>
+                        <div style={{ margin: "auto", width: "80%", paddingBottom: "50px" }}>
                             <YoutubeEmbed
                                 embedId={this.state.info.youtube_trailer}
                             />

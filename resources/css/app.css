@@ -26,7 +26,15 @@
 .movie-info {
     margin-top: 10px;
     margin-right: 10px;
-    padding: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.movie-info hr {
+    width: 100%;
 }
 
 .spinner {
@@ -93,44 +101,43 @@
     line-height: 1.5;
 }
 
-.backgroundImageHome{
-    background-image: url("https://cdn.hipwallpaper.com/i/43/21/4JlpQn.jpg");
-    height: 100%; 
-    background-position: center;
+.backgroundImageHome {
+    /* background-image: url("https://cdn.hipwallpaper.com/i/43/21/4JlpQn.jpg"); */
+    height: 100%;
+    /* background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover; */
 }
 
-.backgroundImage{
-    background-image: url("https://docwaltshireinvesting.files.wordpress.com/2018/12/4k-wallpaper-for-blue-gradient-background-with-gradient-background-for-website-website-technical-info-with-free-wallpaper.jpg");
-    height: 100%; 
-    background-position: center;
+.backgroundImage {
+    /* background-image: url("https://docwaltshireinvesting.files.wordpress.com/2018/12/4k-wallpaper-for-blue-gradient-background-with-gradient-background-for-website-website-technical-info-with-free-wallpaper.jpg"); */
+    height: 100%;
+    /* background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover; */
 }
 
-.startBackgroundImage{
-    background-image: url("https://goldwallpapers.com/uploads/posts/website-background-wallpapers/website_background_wallpapers_020.jpg");
-    height: 100%; 
-    background-position: center;
+.startBackgroundImage {
+    /* background-image: url("https://goldwallpapers.com/uploads/posts/website-background-wallpapers/website_background_wallpapers_020.jpg"); */
+    height: 100%;
+    /* background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover; */
 }
-.startBackgroundImage link{
+.startBackgroundImage link {
     color: black;
     font-weight: 500;
 }
 
-
-.friendRequests{
-    background-image: url("https://docwaltshireinvesting.files.wordpress.com/2018/12/4k-wallpaper-for-blue-gradient-background-with-gradient-background-for-website-website-technical-info-with-free-wallpaper.jpg");
-    height: 100%; 
-    background-position: center;
+.friendRequests {
+    /* background-image: url("https://docwaltshireinvesting.files.wordpress.com/2018/12/4k-wallpaper-for-blue-gradient-background-with-gradient-background-for-website-website-technical-info-with-free-wallpaper.jpg"); */
+    height: 100%;
+    /* background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover; */
 }
 
-.friendRequests button{
+.friendRequests button {
     width: 100%;
     padding: 6px 20px;
     margin: 8px 0;
@@ -141,7 +148,7 @@
     font-weight: 450;
 }
 
-.profile button{
+.profile button {
     padding: 6px 20px;
     margin: 8px 0;
     box-sizing: border-box;
@@ -150,7 +157,7 @@
     background-color: #343c44;
     font-weight: 450;
 }
-.profile input{
+.profile input {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -158,11 +165,11 @@
     border-radius: 25px;
     color: black;
 }
-.profile label{
+.profile label {
     color: black;
     font-weight: 450;
 }
-.profileCheckBox{
+.profileCheckBox {
     display: grid;
     grid-template-columns: min-content auto;
     grid-gap: 0.5em;
@@ -170,15 +177,16 @@
     color: var(--color);
 }
 
-.home input{
+/* .home input {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
     border-radius: 25px;
     color: black;
-}
-.home button{
+} */
+
+/* .home-button {
     width: 100%;
     padding: 6px 20px;
     margin: 8px 0;
@@ -187,8 +195,9 @@
     color: white;
     background-color: #343c44;
     font-weight: 450;
-}
-.profileDropdown{
+} */
+
+.profileDropdown {
     color: white;
     background-color: #343c44;
     padding: 6px 20px;
@@ -196,7 +205,7 @@
     display: block;
 }
 
-.users input{
+.users input {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -204,7 +213,7 @@
     border-radius: 25px;
     color: black;
 }
-.users button{
+.users button {
     width: 100%;
     padding: 6px 20px;
     margin: 8px 0;
@@ -273,8 +282,7 @@
     border-top: lightgrey 1px solid;
 }
 
-.myFriends button{
-    width: 100%;
+.myFriends button {
     padding: 6px 20px;
     margin: 8px 0;
     box-sizing: border-box;
@@ -285,18 +293,24 @@
 }
 
 .myFriends {
-    border-bottom: 1px solid lightgrey;
+    /* border-bottom: 1px solid lightgrey; */
     margin: 0;
     overflow: hidden;
     clear: both;
-    background-image: url("https://docwaltshireinvesting.files.wordpress.com/2018/12/4k-wallpaper-for-blue-gradient-background-with-gradient-background-for-website-website-technical-info-with-free-wallpaper.jpg");
-    height: 100%; 
-    background-position: center;
+    /* background-image: url("https://docwaltshireinvesting.files.wordpress.com/2018/12/4k-wallpaper-for-blue-gradient-background-with-gradient-background-for-website-website-technical-info-with-free-wallpaper.jpg"); */
+    height: 100%;
+    /* background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover; */
 }
 
-.friends
+.friends {
+    border-bottom: 1px solid lightgrey;
+    padding: 18px 16px 10px;
+    margin: 0;
+    overflow: hidden;
+    clear: both;
+}
 
 .friend-avatar {
     float: left;
@@ -328,7 +342,7 @@
     background-color: rgb(220, 220, 220);
 }
 
-.mb-3 button{
+.mb-3 button {
     width: 100%;
     padding: 6px 20px;
     margin: 8px 0;
@@ -338,7 +352,7 @@
     background-color: #343c44;
     font-weight: 450;
 }
-.favoriteButton{
+.favoriteButton {
     width: 100%;
     padding: 6px 20px;
     margin: 8px 0;
@@ -348,7 +362,6 @@
     background-color: #343c44;
     font-weight: 450;
 }
-
 
 .active-friend {
     background-color: rgb(220, 220, 220);
@@ -529,4 +542,16 @@
     margin-right: 5px;
     width: 200px;
     height: 470px;
+}
+
+.user-card {
+    padding: 10px;
+    text-align: center;
+}
+
+.card-image {
+    border-bottom: 1px solid lightgrey;
+    border-top: 1px solid lightgrey;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }

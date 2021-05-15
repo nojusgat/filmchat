@@ -8,7 +8,9 @@ use App\Events\FriendRequestSent;
 use App\Events\FriendRequestCountChanged;
 use App\Events\Unfriended;
 use App\Models\FavoriteMovie;
+use Favorites;
 use Hootlex\Friendships\Models\Friendship;
+use Illuminate\Support\Facades\DB;
 
 class FriendsController extends Controller
 {
@@ -148,5 +150,25 @@ class FriendsController extends Controller
     {
         $userId = auth()->user()->id;
         return User::where("id", "!=", $userId)->count();
+    }
+
+    public function getSuggested()
+    {
+        $userID = auth()->user()->id;
+        $self = auth()->user();
+        // Gets my favorite movie ids
+        $myFavs = FavoriteMovie::select('movie_id')->where('user_id', $userID)->get();
+        // Gets user ids which have 5 or more shared favorite movies
+        $suitableUsersIds = FavoriteMovie::groupBy('user_id')->selectRaw('user_id, count(*) as total')->where('user_id', '!=', $userID)->whereIn('movie_id', $myFavs)->having('total', '>=', 5)->get();
+        $suitableUsers = [];
+        foreach ($suitableUsersIds as $value) {
+            $user = $this->getUserByID($value->user_id);
+            if (!$self->isFriendWith($user)) {
+                $user['shared_movies'] = $value->total;
+                $suitableUsers[] = $user;
+            }
+        }
+
+        return $suitableUsers;
     }
 }

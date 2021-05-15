@@ -361,7 +361,7 @@ class Chat extends Component {
                                             </p>
                                         </div>
                                         <div className="messages">
-                                            {displayMessages}
+                                            {this.state.allMessages.length === 0 ? <div style={{ textAlign: "center", marginTop: "50px" }}>No messages.</div> : displayMessages}
                                             <div
                                                 ref={(el) => {
                                                     this.messagesEnd = el;
@@ -380,7 +380,7 @@ class Chat extends Component {
                                                         this.keyDownHandler
                                                     }
                                                 ></Input>
-                                                <InputGroupAddon>
+                                                <InputGroupAddon addonType="append">
                                                     <Button
                                                         outline
                                                         onClick={

@@ -159,7 +159,7 @@ class FriendsController extends Controller
         // Gets my favorite movie ids
         $myFavs = FavoriteMovie::select('movie_id')->where('user_id', $userID)->get();
         // Gets user ids which have 5 or more shared favorite movies
-        $suitableUsersIds = FavoriteMovie::groupBy('user_id')->selectRaw('user_id, count(*) as total')->where('user_id', '!=', $userID)->whereIn('movie_id', $myFavs)->having('total', '>=', 5)->get();
+        $suitableUsersIds = FavoriteMovie::groupBy('user_id')->selectRaw('user_id, count(*) as total')->where('user_id', '!=', $userID)->whereIn('movie_id', $myFavs)->having('total', '>=', 1)->orderByDesc('total')->get();
         $suitableUsers = [];
         foreach ($suitableUsersIds as $value) {
             $user = $this->getUserByID($value->user_id);

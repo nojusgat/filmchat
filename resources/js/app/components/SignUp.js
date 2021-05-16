@@ -51,14 +51,14 @@ class SignUp extends Component {
     switch (name) {
       case 'firstname':
         errors.firstname = 
-          value.length < 5
-            ? 'First name must be 5 characters long!'
+          value.length < 2
+            ? 'First name must be 2 characters long!'
             : '';
         break;
       case 'lastname':
         errors.lastname = 
-          value.length < 5
-            ? 'Last name must be 5 characters long!'
+          value.length < 2
+            ? 'Last name must be 2 characters long!'
             : '';
         break;
       case 'email': 

@@ -98,8 +98,8 @@ class AuthController extends Controller
      */
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
-            'firstname' => 'required|string|between:3,100',
-            'lastname' => 'required|string|between:3,100',
+            'firstname' => 'required|string|between:2,100',
+            'lastname' => 'required|string|between:2,100',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|min:8',
             'gender' => 'required|in:Male,Female,Other',
@@ -265,8 +265,8 @@ class AuthController extends Controller
 
         if(!is_null($user_id)) {
             $validator = Validator::make($request->all(), [
-                'firstname' => 'string|between:5,100',
-                'lastname' => 'string|between:5,100',
+                'firstname' => 'string|between:2,100',
+                'lastname' => 'string|between:2,100',
                 'gender' => Rule::in(['Male', 'Female', 'Other']),
                 'about' => 'string',
                 'password_current' => 'password|min:8',

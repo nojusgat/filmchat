@@ -18,8 +18,8 @@ describe('Change profile details testing', () => {
 
         cy.get('input[name="name"]')
             .clear()
-            .type("test")
-            .should('have.value', "test")
+            .type("a")
+            .should('have.value', "a")
         cy.get('.profile:first').within(() => {
             cy.get('button:first').click()
         })
@@ -31,7 +31,7 @@ describe('Change profile details testing', () => {
     it('Succeed at changing name', function () {
         cy.intercept('/api/auth/change/details').as('responseEdit');
 
-        const randomFirstName = faker.name.firstName()+faker.name.firstName()
+        const randomFirstName = faker.name.firstName()
 
         cy.get('input[name="name"]')
             .clear()
@@ -50,8 +50,8 @@ describe('Change profile details testing', () => {
 
         cy.get('input[name="surname"]')
             .clear()
-            .type("test")
-            .should('have.value', "test")
+            .type("a")
+            .should('have.value', "a")
         cy.get('.profile:first').within(() => {
             cy.get('button:first').click()
         })
@@ -63,7 +63,7 @@ describe('Change profile details testing', () => {
     it('Succeed at changing surname', function () {
         cy.intercept('/api/auth/change/details').as('responseEdit');
 
-        const randomLastName = faker.name.lastName()+faker.name.lastName()
+        const randomLastName = faker.name.lastName()
 
         cy.get('input[name="surname"]')
             .clear()
@@ -99,13 +99,13 @@ describe('Change profile details testing', () => {
 
         cy.get('input[name="name"]')
             .clear()
-            .type("test")
-            .should('have.value', "test")
+            .type("a")
+            .should('have.value', "a")
 
         cy.get('input[name="surname"]')
             .clear()
-            .type("test")
-            .should('have.value', "test")
+            .type("a")
+            .should('have.value', "a")
 
         cy.get('.profile:first').within(() => {
             cy.get('button:first').click()
@@ -118,14 +118,14 @@ describe('Change profile details testing', () => {
     it('Succeed at changing name, surname, gender at the same time', function () {
         cy.intercept('/api/auth/change/details').as('responseEdit');
 
-        const randomFirstName = faker.name.firstName()+faker.name.firstName()
+        const randomFirstName = faker.name.firstName()
 
         cy.get('input[name="name"]')
             .clear()
             .type(randomFirstName)
             .should('have.value', randomFirstName)
 
-        const randomLastName = faker.name.lastName()+faker.name.lastName()
+        const randomLastName = faker.name.lastName()
 
         cy.get('input[name="surname"]')
             .clear()

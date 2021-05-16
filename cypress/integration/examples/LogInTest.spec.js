@@ -9,30 +9,6 @@ describe('Login test', function () {
           .its('body')
           .as('currentUser')
       })
-    it('Login in using existing user info', function () {
-
-        const user = this.currentUser
-        console.log(user)
-        
-        cy.visit('http://127.0.0.1:8000/signin')
-        //cy.get('.navbar-nav').contains('Home').click()
-
-        cy.get('form').within(() => {
-            cy.get('input[id="email"]')
-            .type(user.email)
-            .should('have.value', user.email)
-
-            cy.get('input[id="password"]')
-            .type('password')
-            .should('have.value', 'password')
-
-            cy.get('button:first').click()
-
-        })
-
-        cy.url()
-            .should('include', '/home')
-    })
 
     it('Login in using bad user info failed', function () {
 
@@ -55,5 +31,31 @@ describe('Login test', function () {
 
         cy.url()
             .should('include', '/signin')
+    })
+
+    it('Login in using existing user info', function () {
+
+        const user = this.currentUser
+        
+        //cy.visit('http://127.0.0.1:8000/signin')
+        //cy.get('.navbar-nav').contains('Home').click()
+
+        cy.get('form').within(() => {
+            cy.get('input[id="email"]')
+            .clear()
+            .type(user.email)
+            .should('have.value', user.email)
+
+            cy.get('input[id="password"]')
+            .clear()
+            .type('password')
+            .should('have.value', 'password')
+
+            cy.get('button:first').click()
+
+        })
+
+        cy.url()
+            .should('include', '/home')
     })
 })

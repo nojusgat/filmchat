@@ -42,16 +42,15 @@ class Profile extends Component {
             favorites: []
         });
 
-        user.user.favorites.forEach(data => {
-            BackendService.getInfoById(data.movie_id).then(
-                (response) => {
-                    this.setState({ favorites: [...this.state.favorites, response.data] })
-                },
-                (error) => {
-                    console.log("Error getting movie info: " + error.toString());
-                }
-            );
-        });
+
+        BackendService.getInfosByIds(user.user.favorites).then(
+            (response) => {
+                this.setState({ favorites: response.data })
+            },
+            (error) => {
+                console.log("Error getting movie info: " + error.toString());
+            }
+        )
     }
 
     onEntered() {

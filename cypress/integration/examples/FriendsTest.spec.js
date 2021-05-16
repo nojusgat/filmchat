@@ -1,4 +1,4 @@
-describe('Movie search test', () => {
+describe('Friends system testing', () => {
     beforeEach(() => {
         cy.restoreLocalStorage();
     })
@@ -20,9 +20,10 @@ describe('Movie search test', () => {
         cy.get('[name="search"]').should('be.visible')
     })
 
-    it('From User 2 add User 1 to friends', function () {
+    it('From User 2 send friend request to User 1', function () {
         //cy.reload()
         cy.intercept('/api/auth/get/user').as('responseuserInfo');
+        cy.intercept('/api/auth/users/friend').as('responseAddedFriend');
         cy.get('.user-card:first').within(() => {
             cy.get('button:first').click()
         })
@@ -31,35 +32,129 @@ describe('Movie search test', () => {
         cy.wait('@responseuserInfo').then(() => {
             cy.get('button.btn-success:first').click()
         });
+
+        cy.wait('@responseAddedFriend').then(() => {
+            cy.contains('Sent friend request to TestUserName1 TestUserSurname1.').should('be.visible')
+        });
     })
 
-    /*it('Search "Inception" - find successfull', function () {
-        cy.get('input[name="search"]')
-            .clear()
-            .should('have.value', "")
-        cy.get('input[name="search"]')
-            .type("Inception")
-            .should('have.value', "Inception")
+    it('Check User 1 friend requests and accept a friend request from User 2', function () {
+        cy.loginSpecific("test1@example.com");
+        cy.saveLocalStorage();
+        cy.intercept('/api/auth/get/sentrequests').as('responseRequests');
+        cy.visit('http://127.0.0.1:8000/requests')
 
-        cy.get('button[name="search"]').click()
+        cy.contains('Incoming friend requests').should('be.visible')
 
-        cy.get('h5:first').should(($p) => {
-            expect($p.first()).to.contain('Inception')
-          })
+        cy.wait('@responseRequests').then(() => {
+            cy.get('button.btn-success:first').click()
+        });
     })
 
-    it('Search "Inception" - fail to find', function () {
-        cy.get('input[name="search"]')
-            .clear()
-            .should('have.value', "")
-        cy.get('input[name="search"]')
-            .type("Avengers")
-            .should('have.value', "Avengers")
+    it('Check if User 1 has User 2 in their friends list', function () {
+        cy.intercept('/api/auth/get/friends').as('responseFriends');
+        cy.visit('http://127.0.0.1:8000/friends')
 
-        cy.get('button[name="search"]').click()
+        cy.contains('Friends (').should('be.visible')
 
-        cy.get('h5:first').should(($p) => {
-            expect($p.first()).not.to.contain('Inception')
-          })
-    })*/
+        cy.wait('@responseFriends').then(() => {
+            cy.contains('TestUserName2 TestUserSurname2').should('be.visible')
+        });
+    })
+
+    it('Check if User 2 has User 1 in their friends list', function () {
+        cy.loginSpecific("test2@example.com");
+        cy.saveLocalStorage();
+        cy.intercept('/api/auth/get/friends').as('responseFriends');
+        cy.visit('http://127.0.0.1:8000/friends')
+
+        cy.contains('Friends (').should('be.visible')
+
+        cy.wait('@responseFriends').then(() => {
+            cy.contains('TestUserName1 TestUserSurname1').should('be.visible')
+        });
+    })
+
+    it('From User 2 send chat message to User 1', function () {
+        cy.intercept('/api/auth/messages/send').as('responseSendMessage');
+
+        cy.get('.user-card:first').should('be.visible').within(() => {
+            cy.get('button.btn-success:first').should('be.visible').click()
+        })
+
+        cy.url().should('include', '/chat/')
+
+        cy.get('.message-input:first').should('be.visible').within(() => {
+            cy.get('input')
+            .type('Test message from User 2 to User 1')
+            .should('have.value', 'Test message from User 2 to User 1')
+
+            cy.get('button.btn-outline-secondary:first').should('be.visible').click()
+        })
+
+        cy.wait('@responseSendMessage').then(() => {
+            cy.get('.sent-message:first').should('be.visible').within(() => {
+                cy.contains('Test message from User 2 to User 1').should('be.visible')
+            })
+        });
+    })
+
+    it('Check if User 1 received a message from User 2 and send a message back', function () {
+        cy.loginSpecific("test1@example.com");
+        cy.saveLocalStorage();
+        cy.visit('http://127.0.0.1:8000/friends')
+
+        cy.contains('Friends (').should('be.visible')
+
+        cy.intercept('/api/auth/messages/send').as('responseSendMessage');
+        cy.intercept('/api/auth/messages/get').as('responseRecieveMessage');
+
+        cy.get('.user-card:first').should('be.visible').within(() => {
+            cy.get('button.btn-success:first').should('be.visible').click()
+        })
+
+        cy.url().should('include', '/chat/')
+
+        cy.wait('@responseRecieveMessage').then(() => {
+            cy.get('.received-message:first').should('be.visible').within(() => {
+                cy.contains('Test message from User 2 to User 1').should('be.visible')
+            })
+        });
+
+        cy.get('.message-input:first').should('be.visible').within(() => {
+            cy.get('input')
+            .type('Test message from User 1 to User 2')
+            .should('have.value', 'Test message from User 1 to User 2')
+
+            cy.get('button.btn-outline-secondary:first').should('be.visible').click()
+        })
+
+        cy.wait('@responseSendMessage').then(() => {
+            cy.get('.sent-message:first').should('be.visible').within(() => {
+                cy.contains('Test message from User 1 to User 2').should('be.visible')
+            })
+        });
+    })
+
+    it('Check if User 2 received a message from User 1', function () {
+        cy.loginSpecific("test2@example.com");
+        cy.saveLocalStorage();
+        cy.visit('http://127.0.0.1:8000/friends')
+
+        cy.contains('Friends (').should('be.visible')
+
+        cy.intercept('/api/auth/messages/get').as('responseRecieveMessage');
+
+        cy.get('.user-card:first').should('be.visible').within(() => {
+            cy.get('button.btn-success:first').should('be.visible').click()
+        })
+
+        cy.url().should('include', '/chat/')
+
+        cy.wait('@responseRecieveMessage').then(() => {
+            cy.get('.received-message:first').should('be.visible').within(() => {
+                cy.contains('Test message from User 1 to User 2').should('be.visible')
+            })
+        });
+    })
   })

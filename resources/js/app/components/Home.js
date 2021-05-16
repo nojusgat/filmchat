@@ -10,9 +10,6 @@ import {
     InputGroup,
     Input,
     InputGroupAddon,
-    Pagination,
-    PaginationItem,
-    PaginationLink,
     Dropdown,
     DropdownToggle,
     DropdownMenu,
@@ -21,6 +18,8 @@ import {
 
 import { AiOutlineSearch } from 'react-icons/ai';
 import BackendService from '../services/BackendService';
+
+import Paginate from "../child-components/Paginate";
 
 class Home extends Component {
 
@@ -79,6 +78,45 @@ class Home extends Component {
         }
     }
 
+    showMovies = (page) => {
+        switch (this.state.method) {
+            case "popular":
+                BackendService.getInfoByPopular(page).then(
+                    response => {
+                        this.setState({ items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages, isLoading: false }, this.props.history.push({ state: this.state }));
+                    },
+                    error => {
+                        console.log("Error in getInfoByGenrePage: " + error.toString());
+                    }
+                );
+                break;
+            case "search":
+                BackendService.getInfoByTitle(this.state.search, page).then(
+                    response => {
+                        this.setState({ items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages, isLoading: false }, this.props.history.push({ state: this.state }));
+                    },
+                    error => {
+                        console.log("Error in getInfoByTitle: " + error.toString());
+                    }
+                );
+                break;
+            case "category":
+                BackendService.getInfoByGenre(this.state.additional, page).then(
+                    response => {
+                        this.setState({ items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages, isLoading: false }, this.props.history.push({ state: this.state }));
+                    },
+                    error => {
+                        console.log("Error in getInfoByGenrePage: " + error.toString());
+                    }
+                );
+                break;
+            default:
+                console.log("error");
+                break;
+
+        }
+    }
+
     changeHandler = (event) => {
         let nam = event.target.name;
         let val = event.target.value;
@@ -118,96 +156,7 @@ class Home extends Component {
         );
     }
 
-    pageHandler = (event) => {
-        let nam = event.target.name;
-        let val = event.target.value;
-        this.setState({ [nam]: val, isLoading: true });
-
-        window.scrollTo(0, 0);
-
-        switch (this.state.method) {
-            case "category":
-                BackendService.getInfoByGenre(this.state.additional, val).then(
-                    response => {
-                        this.setState({ items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages, isLoading: false });
-                        this.props.history.push({ state: this.state });
-                    },
-                    error => {
-                        console.log("Error in getInfoByGenrePage: " + error.toString());
-                    }
-                );
-                break;
-            case "search":
-                BackendService.getInfoByTitle(this.state.search, val).then(
-                    response => {
-                        this.setState({ items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages, isLoading: false });
-                        this.props.history.push({ state: this.state });
-                    },
-                    error => {
-                        console.log("Error in getInfoByTitle: " + error.toString());
-                    }
-                );
-                break;
-            case "popular":
-                BackendService.getInfoByPopular(val).then(
-                    response => {
-                        this.setState({ items: response.data.results, page: response.data.this_page, total_pages: response.data.total_pages, isLoading: false });
-                        this.props.history.push({ state: this.state });
-                    },
-                    error => {
-                        console.log("Error in getInfoByGenrePage: " + error.toString());
-                    }
-                );
-                break;
-            default:
-                console.log("error");
-                break;
-        }
-    }
-
     render() {
-        var page_items = [];
-        var currentPage = this.state.page;
-        var totalPages = this.state.total_pages;
-        var firstPageDisabled = false;
-        var lastPageDisabled = false;
-
-        if (currentPage == 1)
-            var firstPageDisabled = true;
-
-        if (currentPage == totalPages)
-            var lastPageDisabled = true;
-
-        var startPage = 0, endPage = 0, showPages = 7;
-        if (Number(totalPages) <= Number(showPages)) {
-            startPage = 1;
-            endPage = Number(totalPages);
-        } else {
-            if (Number(currentPage) <= (Math.floor(showPages / 2) + 1)) {
-                startPage = 1;
-                endPage = Number(showPages);
-            } else if (Number(currentPage) + (Math.floor(showPages / 2) - 1) >= totalPages) {
-                startPage = Number(totalPages) - (showPages - 1);
-                endPage = Number(totalPages);
-            } else {
-                startPage = Number(currentPage) - Math.floor(showPages / 2);
-                endPage = Number(currentPage) + Math.floor(showPages / 2);
-            }
-        }
-
-        for (var i = startPage; i <= endPage; i++) {
-            var active_status = false;
-            if (i == this.state.page) {
-                active_status = true;
-            }
-            page_items.push(
-                <PaginationItem key={i.toString()} active={active_status}>
-                    <PaginationLink name="page" value={i} onClick={this.pageHandler}>
-                        {i}
-                    </PaginationLink>
-                </PaginationItem>
-            );
-        }
 
         const cat_items = this.state.catItems.map((data) =>
             <DropdownItem id={data.id} key={data.id.toString()} name={data.name} onClick={this.categoryClickHandler}>{data.name}</DropdownItem>
@@ -254,20 +203,28 @@ class Home extends Component {
                                 } else {
                                     return (
                                         <div style={{ marginTop: "20px" }}>
+                                            {this.state.tota_pages != 0
+                                                ?
+                                                <Paginate
+                                                    setPage={this.showMovies}
+                                                    totalPages={this.state.total_pages}
+                                                    currentPage={this.state.page}
+                                                    perPage={this.state.perPage}
+                                                />
+                                                : ""
+                                            }
                                             {this.state.items.length == 0
                                                 ? "No items found."
                                                 : <MovieCard data={this.state.items} />
                                             }
-                                            {totalPages != 0
-                                                ? <Pagination aria-label="Page navigation example">
-                                                    <PaginationItem disabled={firstPageDisabled}>
-                                                        <PaginationLink name="page" value="1" onClick={this.pageHandler} first />
-                                                    </PaginationItem>
-                                                    {page_items}
-                                                    <PaginationItem disabled={lastPageDisabled}>
-                                                        <PaginationLink name="page" value={totalPages} onClick={this.pageHandler} last />
-                                                    </PaginationItem>
-                                                </Pagination>
+                                            {this.state.tota_pages != 0
+                                                ?
+                                                <Paginate
+                                                    setPage={this.showMovies}
+                                                    totalPages={this.state.total_pages}
+                                                    currentPage={this.state.page}
+                                                    perPage={this.state.perPage}
+                                                />
                                                 : ""
                                             }
                                         </div>

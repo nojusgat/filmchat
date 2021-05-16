@@ -38,7 +38,7 @@ services:
       test: ["CMD", "mysqladmin", "ping"]
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    restart: always
+    # restart: always
     container_name: phpmyadmin
     depends_on:
       - mysql

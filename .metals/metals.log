@@ -1,0 +1,6 @@
+[0m2021.05.16 19:00:35 INFO  Started: Metals version 0.10.2 in workspace 'C:\filmchat' for client vscode 1.56.2.[0m
+[0m2021.05.16 19:00:40 INFO  time: initialize in 4.13s[0m
+[0m2021.05.16 19:00:41 WARN  Build server is not auto-connectable.[0m
+[0m2021.05.16 19:00:41 WARN  no build tool detected in workspace 'C:\filmchat'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. [0m
+geg. 16, 2021 8:17:58 POPIET org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTraceNotification

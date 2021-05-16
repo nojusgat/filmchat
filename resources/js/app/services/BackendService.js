@@ -20,6 +20,13 @@ class BackendService {
     });
   }
 
+  getInfosByIds = async(ids) => {
+    return axios.post("/api/auth/movie/show", {
+      by: "ids",
+      param: ids
+    });
+  }
+
   getInfoByPopular = async(page) => {
     return axios.post("/api/auth/movie/show", {
       by: "category",

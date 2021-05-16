@@ -77,20 +77,14 @@ class UserProfile extends Component {
     }
 
     getFavMovies() {
-        this.state.favoritesIDs.map((data) => {
-            BackendService.getInfoById(data.movie_id).then(
-                (response) => {
-                    this.setState({
-                        favorites: [...this.state.favorites, response.data],
-                    });
-                },
-                (error) => {
-                    console.log(
-                        "Error getting movie info: " + error.toString()
-                    );
-                }
-            );
-        });
+        BackendService.getInfosByIds(this.state.favoritesIDs).then(
+            (response) => {
+                this.setState({ favorites: response.data })
+            },
+            (error) => {
+                console.log("Error getting movie info: " + error.toString());
+            }
+        )
     }
 
     sendFriendRequest(otherId) {

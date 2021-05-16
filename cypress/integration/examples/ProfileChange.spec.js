@@ -1,6 +1,6 @@
 var faker = require('faker');
 
-describe('Favorite movie test', () => {
+describe('Change profile details testing', () => {
     beforeEach(() => {
         cy.restoreLocalStorage();
     })
@@ -13,7 +13,7 @@ describe('Favorite movie test', () => {
         cy.contains("Upload your avatar").should('be.visible')
     })
 
-    it('Change name - fail', function () {
+    it('Fail at changing name - too short name', function () {
         cy.intercept('/api/auth/change/details').as('responseEdit');
 
         cy.get('input[name="name"]')
@@ -28,7 +28,7 @@ describe('Favorite movie test', () => {
         cy.saveLocalStorage();
     })
 
-    it('Change name - success', function () {
+    it('Succeed at changing name', function () {
         cy.intercept('/api/auth/change/details').as('responseEdit');
 
         const randomFirstName = faker.name.firstName()+faker.name.firstName()
@@ -45,7 +45,7 @@ describe('Favorite movie test', () => {
         cy.saveLocalStorage();
     })
 
-    it('Change surname - fail', function () {
+    it('Fail at changing surname - too short surname', function () {
         cy.intercept('/api/auth/change/details').as('responseEdit');
 
         cy.get('input[name="surname"]')
@@ -60,7 +60,7 @@ describe('Favorite movie test', () => {
         cy.saveLocalStorage();
     })
 
-    it('Change surname - success', function () {
+    it('Succeed at changing surname', function () {
         cy.intercept('/api/auth/change/details').as('responseEdit');
 
         const randomLastName = faker.name.lastName()+faker.name.lastName()
@@ -77,7 +77,7 @@ describe('Favorite movie test', () => {
         cy.saveLocalStorage();
     })
 
-    it('Change gender', function () {
+    it('Succeed at changing gender', function () {
         cy.intercept('/api/auth/change/details').as('responseEdit');
 
         const genders = ['Male', 'Female', 'Other']
@@ -94,7 +94,7 @@ describe('Favorite movie test', () => {
         cy.saveLocalStorage();
     })
 
-    it('Change all at the same time - fail', function () {
+    it('Fail at changing name and surname at the same time - too short name, surname', function () {
         cy.intercept('/api/auth/change/details').as('responseEdit');
 
         cy.get('input[name="name"]')
@@ -115,7 +115,7 @@ describe('Favorite movie test', () => {
         cy.saveLocalStorage();
     })
 
-    it('Change all at the same time - success', function () {
+    it('Succeed at changing name, surname, gender at the same time', function () {
         cy.intercept('/api/auth/change/details').as('responseEdit');
 
         const randomFirstName = faker.name.firstName()+faker.name.firstName()

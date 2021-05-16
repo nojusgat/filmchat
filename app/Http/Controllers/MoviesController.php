@@ -46,6 +46,13 @@ class MoviesController extends Controller
             case "id":
                 return $this->getInfoById($request->param);
                 break;
+            case "ids":
+                $return = array();
+                foreach($request->param as $favorites) {
+                    $return[] = json_decode($this->getInfoById($favorites['movie_id']));
+                }
+                return $return;
+                break;
             case "title":
                 $options = array();
                 if(isset($request->param))

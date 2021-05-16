@@ -205,7 +205,7 @@ class AuthController extends Controller
             $subject = "Password reset request";
             Mail::send('email.lostpasssword', ['username' => $check->firstname." ".$check->lastname, 'recover_token' => $recover_token, 'email' => $email],
                 function($mail) use ($email, $check, $subject){
-                    $mail->from(env('MAIL_FROM_ADDRESS', 'hello@example.com'), env('MAIL_FROM_NAME', 'Example'));
+                    $mail->from(env('MAIL_FROM_ADDRESS', 'hello@example.com'), env('MAIL_FROM_NAME', 'FilmChat'));
                     $mail->to($email, $check->firstname." ".$check->lastname);
                     $mail->subject($subject);
                 });

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import AppNavbar from "../child-components/AppNavbar";
-import { Button, Container } from "reactstrap";
+import { Button, Container, Spinner } from "reactstrap";
 import {
     Form,
     CustomInput,
@@ -43,6 +43,7 @@ class UserProfile extends Component {
             about: "",
             avatar: "",
             modal: false,
+            isLoading: true
         };
     }
 
@@ -66,6 +67,7 @@ class UserProfile extends Component {
                         isFriend: response.data.isFriend,
                         favoritesIDs: response.data.favorites,
                         favorites: [],
+                        isLoading: false
                     },
                     this.getFavMovies
                 );
@@ -143,187 +145,202 @@ class UserProfile extends Component {
 
     render() {
         const toggle = () => this.setState({ modal: !this.state.modal });
-        return (
-            <div>
+        if (this.state.isLoading) {
+            return (
+                <div>
                 <AppNavbar />
                 <Container fluid>
-                    <Row
-                        style={{
-                            margin: "auto",
-                            marginTop: "30px",
-                            paddingBottom: "30px",
-                            width: "60%",
-                            borderBottom: "solid 1px lightgrey",
-                        }}
-                    >
-                        <Col sm md={{ offset: 1 }}>
-                            <div className="rect-img-container">
-                                <img
-                                    className="received-image rect-img"
-                                    src={
-                                        "/storage/images/avatars/" +
-                                        this.state.avatar
-                                    }
-                                    alt={
-                                        this.state.firstname +
-                                        " " +
-                                        this.state.lastname
-                                    }
-                                />
-                            </div>
-                        </Col>
-                        <Col sm="12" md={{ size: 3, offset: 0 }}>
-                            <Form style={{ width: "100%" }}>
-                                <FormGroup>
-                                    <Label for="Name">
-                                        <strong>Name</strong>
-                                    </Label>
-                                    <Input value={this.state.name} disabled />
-                                    <Label for="Surname">
-                                        <strong>Surname</strong>
-                                    </Label>
-                                    <Input
-                                        value={this.state.surname}
-                                        disabled
-                                    />
-                                    <Label for="Email">
-                                        <strong>Email</strong>
-                                    </Label>
-                                    <Input
-                                        disabled
-                                        value={this.state.email}
-                                        disabled
-                                    />
-                                    <Label for="gender">Gender</Label>
-                                    <div>
-                                        <CustomInput
-                                            disabled
-                                            type="radio"
-                                            value="Male"
-                                            id="Male"
-                                            name="gender"
-                                            label="Male"
-                                            checked={
-                                                this.state.gender == "Male"
-                                            }
-                                        />
-                                        <CustomInput
-                                            disabled
-                                            type="radio"
-                                            value="Female"
-                                            id="Female"
-                                            name="gender"
-                                            label="Female"
-                                            checked={
-                                                this.state.gender == "Female"
-                                            }
-                                        />
-                                        <CustomInput
-                                            disabled
-                                            type="radio"
-                                            value="Other"
-                                            id="Other"
-                                            name="gender"
-                                            label="Other"
-                                            checked={
-                                                this.state.gender == "Other"
-                                            }
-                                        />
-                                    </div>
-                                </FormGroup>
-                            </Form>
-                        </Col>
-                        <Col style={{ flexDirection: "column" }}>
-                            <div style={{ marginBottom: "10px" }}>
-                                {this.state.isFriend ? (
-                                    <Button color="danger" onClick={toggle}>
-                                        <AiOutlineUserDelete /> Remove from
-                                        friends
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        color="success"
-                                        onClick={() =>
-                                            this.sendFriendRequest(
-                                                this.props.match.params.id
-                                            )
-                                        }
-                                    >
-                                        <AiOutlineUserAdd /> Add to friends
-                                    </Button>
-                                )}
-                            </div>
-                            <div>
-                                <Link
-                                    to={
-                                        "/chat/" +
-                                        this.props.match.params.id.toString()
-                                    }
-                                >
-                                    <Button
-                                        color="success"
-                                        disabled={!this.state.isFriend}
-                                    >
-                                        <AiOutlineMessage /> Chat
-                                    </Button>
-                                </Link>
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row
-                        style={{
-                            margin: "auto",
-                            marginTop: "30px",
-                            width: "90%",
-                        }}
-                    >
-                        <Col sm="12" md={{ size: 8, offset: 2 }}>
-                            <Card>
-                                <CardBody>
-                                    {this.state.about != ""
-                                        ? this.state.about
-                                        : "Nothing here."}
-                                </CardBody>
-                            </Card>
-                        </Col>
-                    </Row>
-                    <Col sm="12" md={{ size: 8, offset: 2 }}>
-                        <Row style={{ marginTop: "30px" }}>
-                            <Col></Col>
-                        </Row>
-                        {this.state.favorites != null &&
-                            this.state.favorites.length > 0 ? (
-                            <MovieCard data={this.state.favorites} />
-                        ) : (
-                            ""
-                        )}
-                        <Row style={{ marginTop: "30px" }}>
-                            <Col></Col>
-                        </Row>
-                    </Col>
+                    <div style={{ marginTop: "20px" }} className="spinner">
+                        <Spinner color="secondary" style={{ width: "100px", height: "100px" }} />
+                    </div>
                 </Container>
-                <Modal isOpen={this.state.modal} toggle={toggle}>
-                    <ModalHeader toggle={toggle}>
-                        Are you sure you want to remove {this.state.name}{" "}
-                        {this.state.surname} from your friends?
-                    </ModalHeader>
-                    <ModalFooter>
-                        <Button
-                            color="success"
-                            onClick={() => {
-                                toggle();
-                                this.unfriend(this.props.match.params.id);
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <AppNavbar />
+                    <Container fluid>
+                        <Row
+                            style={{
+                                margin: "auto",
+                                marginTop: "30px",
+                                paddingBottom: "30px",
+                                width: "60%",
+                                borderBottom: "solid 1px lightgrey",
                             }}
                         >
-                            <AiOutlineCheck /> Remove
-                        </Button>
-                        <Button color="danger" onClick={toggle}>
-                            <AiOutlineClose /> Cancel
-                        </Button>
-                    </ModalFooter>
-                </Modal>
-            </div>
-        );
+                            <Col sm md={{ offset: 1 }}>
+                                <div className="rect-img-container">
+                                    <img
+                                        className="received-image rect-img"
+                                        src={
+                                            "/storage/images/avatars/" +
+                                            this.state.avatar
+                                        }
+                                        alt={
+                                            this.state.firstname +
+                                            " " +
+                                            this.state.lastname
+                                        }
+                                    />
+                                </div>
+                            </Col>
+                            <Col sm="12" md={{ size: 3, offset: 0 }}>
+                                <Form style={{ width: "100%" }}>
+                                    <FormGroup>
+                                        <Label for="Name">
+                                            <strong>Name</strong>
+                                        </Label>
+                                        <Input value={this.state.name} disabled />
+                                        <Label for="Surname">
+                                            <strong>Surname</strong>
+                                        </Label>
+                                        <Input
+                                            value={this.state.surname}
+                                            disabled
+                                        />
+                                        <Label for="Email">
+                                            <strong>Email</strong>
+                                        </Label>
+                                        <Input
+                                            disabled
+                                            value={this.state.email}
+                                            disabled
+                                        />
+                                        <Label for="gender">
+                                            <strong>Gender</strong>
+                                        </Label>
+                                        <div>
+                                            <CustomInput
+                                                disabled
+                                                type="radio"
+                                                value="Male"
+                                                id="Male"
+                                                name="gender"
+                                                label="Male"
+                                                checked={
+                                                    this.state.gender == "Male"
+                                                }
+                                            />
+                                            <CustomInput
+                                                disabled
+                                                type="radio"
+                                                value="Female"
+                                                id="Female"
+                                                name="gender"
+                                                label="Female"
+                                                checked={
+                                                    this.state.gender == "Female"
+                                                }
+                                            />
+                                            <CustomInput
+                                                disabled
+                                                type="radio"
+                                                value="Other"
+                                                id="Other"
+                                                name="gender"
+                                                label="Other"
+                                                checked={
+                                                    this.state.gender == "Other"
+                                                }
+                                            />
+                                        </div>
+                                    </FormGroup>
+                                </Form>
+                            </Col>
+                            <Col style={{ flexDirection: "column" }}>
+                                <div style={{ marginBottom: "10px" }}>
+                                    {this.state.isFriend ? (
+                                        <Button color="danger" onClick={toggle}>
+                                            <AiOutlineUserDelete /> Remove from
+                                            friends
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            color="success"
+                                            onClick={() =>
+                                                this.sendFriendRequest(
+                                                    this.props.match.params.id
+                                                )
+                                            }
+                                        >
+                                            <AiOutlineUserAdd /> Add to friends
+                                        </Button>
+                                    )}
+                                </div>
+                                <div>
+                                    <Link
+                                        to={
+                                            "/chat/" +
+                                            this.props.match.params.id.toString()
+                                        }
+                                    >
+                                        <Button
+                                            color="success"
+                                            disabled={!this.state.isFriend}
+                                        >
+                                            <AiOutlineMessage /> Chat
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row
+                            style={{
+                                margin: "auto",
+                                marginTop: "30px",
+                                width: "90%",
+                            }}
+                        >
+                            <Col sm="12" md={{ size: 8, offset: 2 }}>
+                                <Card>
+                                    <CardBody>
+                                        {this.state.about != "" && this.state.about != null
+                                            ? this.state.about
+                                            : "Nothing here."}
+                                    </CardBody>
+                                </Card>
+                            </Col>
+                        </Row>
+                        <Col sm="12" md={{ size: 8, offset: 2 }}>
+                            <Row style={{ marginTop: "30px" }}>
+                                <Col></Col>
+                            </Row>
+                            {this.state.favorites != null &&
+                                this.state.favorites.length > 0 ? (
+                                <MovieCard data={this.state.favorites} />
+                            ) : (
+                                ""
+                            )}
+                            <Row style={{ marginTop: "30px" }}>
+                                <Col></Col>
+                            </Row>
+                        </Col>
+                    </Container>
+                    <Modal isOpen={this.state.modal} toggle={toggle}>
+                        <ModalHeader toggle={toggle}>
+                            Are you sure you want to remove {this.state.name}{" "}
+                            {this.state.surname} from your friends?
+                        </ModalHeader>
+                        <ModalFooter>
+                            <Button
+                                color="success"
+                                onClick={() => {
+                                    toggle();
+                                    this.unfriend(this.props.match.params.id);
+                                }}
+                            >
+                                <AiOutlineCheck /> Remove
+                            </Button>
+                            <Button color="danger" onClick={toggle}>
+                                <AiOutlineClose /> Cancel
+                            </Button>
+                        </ModalFooter>
+                    </Modal>
+                </div>
+            );
+        }
     }
 }
 

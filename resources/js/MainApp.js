@@ -54,6 +54,7 @@ class MainApp extends Component {
                     <LoggedInRoute path='/user/:id' exact={true} component={UserProfile} />
                     <LoggedInRoute path='/requests' exact={true} component={FriendRequests} />
                     <LoggedInRoute path='/friends' exact={true} component={Friends} />
+                    <LoggedInRoute path='/chat' exact={true} component={Chat} />
                     <LoggedInRoute path='/chat/:id' exact={true} component={Chat} />
                 </Switch>
             </Router>

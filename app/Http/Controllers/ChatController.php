@@ -17,10 +17,19 @@ class ChatController extends Controller
         $this->middleware('auth:api');
     }
 
+    private function getUserByID($id)
+    {
+        return User::where('id', $id)->get()[0];
+    }
+
     public function sendMessage(Request $request)
     {
         $user = Auth::user();
         $recipientId = $request->recipientId;
+        $other = $this->getUserByID($recipientId);
+        if(!$user->isFriendWith($other)) {
+            return;
+        }
         $message = $user->messages()->create([
             "recipient_id" => $request->recipientId,
             "body" => $request->message
@@ -33,6 +42,11 @@ class ChatController extends Controller
     {
         $senderId = auth()->user()->id;
         $recipientId = $request->recipientId;
+        $user = $this->getUserByID($senderId);
+        $other = $this->getUserByID($recipientId);
+        if(!$user->isFriendWith($other)) {
+            return;
+        }
         $result = Message::with('sender', 'recipient')->where([
             ['sender_id', '=', $senderId],
             ['recipient_id', '=', $recipientId]

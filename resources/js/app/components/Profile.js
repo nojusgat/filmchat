@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import AppNavbar from '../child-components/AppNavbar';
 import { Link } from 'react-router-dom';
 import { Button, Container } from 'reactstrap';
-import { Form, Alert, CustomInput, FormGroup, Input, Label, Row, Col } from "reactstrap";
+import { Form, Alert, CustomInput, FormGroup, Input, Label, Row, Col, Spinner } from "reactstrap";
 import { useState } from 'react';
 import { Collapse, CardBody, Card } from 'reactstrap';
 
@@ -28,7 +28,8 @@ class Profile extends Component {
             surname: '',
             email: '',
             gender: '',
-            about: ''
+            about: '',
+            isFavoritesLoading: true
         };
     }
     componentDidMount() {
@@ -45,7 +46,7 @@ class Profile extends Component {
 
         BackendService.getInfosByIds(user.user.favorites).then(
             (response) => {
-                this.setState({ favorites: response.data })
+                this.setState({ favorites: response.data, isFavoritesLoading: false })
             },
             (error) => {
                 console.log("Error getting movie info: " + error.toString());
@@ -283,9 +284,17 @@ class Profile extends Component {
                         <Row style={{ marginTop: "30px" }}>
                             <Col></Col>
                         </Row>
-                        {this.state.favorites != null && this.state.favorites.length > 0 ?
-                            <MovieCard data={this.state.favorites} />
-                            : ""}
+                        {(() => {
+                            if(this.state.favorites != null && this.state.favorites.length > 0){
+                                return (<MovieCard data={this.state.favorites} />);
+                            } else if (this.state.isFavoritesLoading) {
+                                return (
+                                    <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+                                        <Spinner color="secondary" style={{ width: "100px", height: "100px" }} />
+                                    </div>
+                                );
+                            }
+                        })()}
 
                         <Row style={{ marginTop: "30px" }}>
                             <Col></Col>

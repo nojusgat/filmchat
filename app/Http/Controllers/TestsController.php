@@ -13,6 +13,11 @@ class TestsController extends Controller
         return User::factory()->create();
     }
 
+    public function GenerateUserSpecific(Request $request)
+    {
+        return User::factory()->customName($request->name, $request->surname, $request->email)->create();
+    }
+
     public function GetEmailToken(Request $request)
     {
         $db = DB::table('user_verifications')->where('user_id', $request->user_id)->first();

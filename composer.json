@@ -8,8 +8,19 @@
     ],
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/DevKhris/laravel-friendships"
+            "type": "package",
+            "package": {
+                "name": "hootlex/laravel-friendships",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/DevKhris/laravel-friendships.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "classmap": [""]
+                }
+            }
         }
     ],
     "license": "MIT",

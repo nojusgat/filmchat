@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66a95363b001926311278071ee80b140",
+    "content-hash": "52486df0eab62e014c4714d37df97f59",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1105,63 +1105,15 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/hootlex/laravel-friendships.git",
-                "reference": "0100718545bad757006737c21a7b35dc5c52b443"
+                "url": "https://github.com/DevKhris/laravel-friendships.git",
+                "reference": "master"
             },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hootlex/laravel-friendships/zipball/0100718545bad757006737c21a7b35dc5c52b443",
-                "reference": "0100718545bad757006737c21a7b35dc5c52b443",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "codeclimate/php-test-reporter": "^0.3.2",
-                "doctrine/dbal": "^2.5",
-                "fzaninotto/faker": "~1.4",
-                "laravel/laravel": "5.*",
-                "mockery/mockery": "^0.9.5",
-                "phpunit/phpunit": "5.*"
-            },
-            "default-branch": true,
             "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Hootlex\\Friendships\\FriendshipsServiceProvider"
-                    ]
-                }
-            },
             "autoload": {
-                "psr-4": {
-                    "Hootlex\\Friendships\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Hootlex",
-                    "email": "hootlex@icloud.com"
-                }
-            ],
-            "description": "This package gives Eloquent models the ability to manage their friendships.",
-            "keywords": [
-                "eloquent",
-                "friend-system",
-                "friends",
-                "friendships",
-                "laravel"
-            ],
-            "support": {
-                "issues": "https://github.com/hootlex/laravel-friendships/issues",
-                "source": "https://github.com/hootlex/laravel-friendships/tree/v1.0.24"
-            },
-            "time": "2018-07-03T09:16:10+00:00"
+                "classmap": [
+                    ""
+                ]
+            }
         },
         {
             "name": "laravel/framework",

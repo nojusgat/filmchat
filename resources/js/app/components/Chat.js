@@ -186,15 +186,15 @@ class Chat extends Component {
 
     messageDate = (date) => {
         var now = new Date();
-        if (date.getYear() === now.getYear() && date.getMonth() === now.getMonth() && date.getDay() === now.getDay()) {
+        if (date.getYear() === now.getYear() && date.getMonth() === now.getMonth() && date.getDate() === now.getDate()) {
             return "Today";
-        } else if (date.getYear() === now.getYear() && date.getMonth() === now.getMonth() && date.getDay() === now.getDay() - 1) {
+        } else if (date.getYear() === now.getYear() && date.getMonth() === now.getMonth() && date.getDate() === now.getDate() - 1) {
             return "Yesterday";
         } else {
             const month = Intl.DateTimeFormat("default", {
                 month: "long",
             }).format(date);
-            return `${month} ${date.getDay()}`;
+            return `${month} ${date.getDate()}`;
         }
     };
 

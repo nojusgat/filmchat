@@ -135,6 +135,7 @@ class AppNavbar extends Component {
                     <Nav className="mr-auto" navbar>
                         <NavLink tag={RRNavLink} to="/home" activeClassName="active">Home</NavLink>
                         <NavLink tag={RRNavLink} to="/users" activeClassName="active">Find friends</NavLink>
+                        <NavLink tag={RRNavLink} to="/chat" activeClassName="active">Chat</NavLink>
                         <NavLink tag={RRNavLink} to="/about" activeClassName="active">About us</NavLink>
                     </Nav>
                     {

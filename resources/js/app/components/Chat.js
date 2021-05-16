@@ -24,7 +24,7 @@ class Chat extends Component {
 
         this.state = {
             user: JSON.parse(localStorage.user).user,
-            recipientId: this.props.match.params.id,
+            recipientId: this.props.match.params.id || null,
             recipient: [],
             allMessages: [],
             allFriends: [],
@@ -64,14 +64,18 @@ class Chat extends Component {
     }
 
     isFriend() {
-        FriendsService.isFriendsWith(this.state.recipientId).then(
-            response => {
-                response.data ? this.loadChat() : console.log("not friend");
-            },
-            error => {
-                console.log("Error in isFriendsWith: " + error.toString());
-            }
-        );
+        if(this.state.recipientId != null) {
+            FriendsService.isFriendsWith(this.state.recipientId).then(
+                response => {
+                    response.data ? this.loadChat() : console.log("not friend");
+                },
+                error => {
+                    console.log("Error in isFriendsWith: " + error.toString());
+                }
+            );
+        } else {
+            this.loadChat();
+        }
     }
 
     scrollToBottom = () => {
@@ -81,23 +85,27 @@ class Chat extends Component {
     };
 
     getMessages() {
-        ChatService.getMessages(this.state.recipientId).then(
-            (response) => {
-                this.setState(
-                    {
-                        allMessages: response.data.messages,
-                        isMessagesLoading: false,
-                        recipient: response.data.recipient,
-                    },
-                    () => {
-                        this.scrollToBottom();
-                    }
-                );
-            },
-            (error) => {
-                console.log("Error in getMessages: " + error.toString());
-            }
-        );
+        if(this.state.recipientId != null) {
+            ChatService.getMessages(this.state.recipientId).then(
+                (response) => {
+                    this.setState(
+                        {
+                            allMessages: response.data.messages,
+                            isMessagesLoading: false,
+                            recipient: response.data.recipient,
+                        },
+                        () => {
+                            this.scrollToBottom();
+                        }
+                    );
+                },
+                (error) => {
+                    console.log("Error in getMessages: " + error.toString());
+                }
+            );
+        } else {
+            this.setState({isMessagesLoading: false});
+        }
     }
 
     getFriends() {
@@ -178,9 +186,9 @@ class Chat extends Component {
 
     messageDate = (date) => {
         var now = new Date();
-        if (date.getDay() === now.getDay()) {
+        if (date.getYear() === now.getYear() && date.getMonth() === now.getMonth() && date.getDay() === now.getDay()) {
             return "Today";
-        } else if (date.getDay() === now.getDay() - 1) {
+        } else if (date.getYear() === now.getYear() && date.getMonth() === now.getMonth() && date.getDay() === now.getDay() - 1) {
             return "Yesterday";
         } else {
             const month = Intl.DateTimeFormat("default", {
@@ -301,7 +309,7 @@ class Chat extends Component {
                 <Container className="message-container">
                     {(() => {
                         if (
-                            this.state.isMessagesLoading &&
+                            this.state.isMessagesLoading ||
                             this.state.isFriendsLoading
                         ) {
                             return (
@@ -326,73 +334,81 @@ class Chat extends Component {
                                             <p>My friends</p>
                                         </div>
                                         <div className="friends-list">
-                                            {displayFriends}
+                                            {this.state.allFriends.length > 0 ? displayFriends : "You don't have any friends."}
                                         </div>
                                     </Col>
-                                    <Col xs="8" className="messages-main">
-                                        <div className="messages-main-header">
-                                            <div
-                                                className="received-image-container rect-img-container"
-                                                style={{
-                                                    verticalAlign: "middle",
-                                                    position: "relative",
-                                                    right: "5px",
-                                                }}
-                                            >
-                                                <img
-                                                    className="received-image rect-img"
-                                                    src={
-                                                        "/storage/images/avatars/" +
-                                                        this.state.recipient
-                                                            .avatar
-                                                    }
-                                                    alt={
-                                                        this.state.recipient
-                                                            .firstname +
-                                                        " " +
-                                                        this.state.recipient
-                                                            .lastname
-                                                    }
-                                                />
-                                            </div>
-                                            <p className="messages-main-header-p">
-                                                {this.state.recipient.firstname}{" "}
-                                                {this.state.recipient.lastname}
-                                            </p>
-                                        </div>
-                                        <div className="messages">
-                                            {this.state.allMessages.length === 0 ? <div style={{ textAlign: "center", marginTop: "50px" }}>No messages.</div> : displayMessages}
-                                            <div
-                                                ref={(el) => {
-                                                    this.messagesEnd = el;
-                                                }}
-                                            ></div>
-                                        </div>
-                                        <Row className="message-input">
-                                            <InputGroup>
-                                                <Input
-                                                    placeholder="Type a message..."
-                                                    value={this.state.message}
-                                                    onChange={
-                                                        this.changeHandler
-                                                    }
-                                                    onKeyDown={
-                                                        this.keyDownHandler
-                                                    }
-                                                ></Input>
-                                                <InputGroupAddon addonType="append">
-                                                    <Button
-                                                        outline
-                                                        onClick={
-                                                            this.sendHandler
-                                                        }
-                                                    >
-                                                        <AiOutlineSend />
-                                                    </Button>
-                                                </InputGroupAddon>
-                                            </InputGroup>
-                                        </Row>
-                                    </Col>
+                                    {(() => {
+                                        if(this.state.recipient == null || this.state.recipient.length < 1) {
+                                            return;
+                                        } else {
+                                            return (
+                                                <Col xs="8" className="messages-main">
+                                                    <div className="messages-main-header">
+                                                        <div
+                                                            className="received-image-container rect-img-container"
+                                                            style={{
+                                                                verticalAlign: "middle",
+                                                                position: "relative",
+                                                                right: "5px",
+                                                            }}
+                                                        >
+                                                            <img
+                                                                className="received-image rect-img"
+                                                                src={
+                                                                    "/storage/images/avatars/" +
+                                                                    this.state.recipient
+                                                                        .avatar
+                                                                }
+                                                                alt={
+                                                                    this.state.recipient
+                                                                        .firstname +
+                                                                    " " +
+                                                                    this.state.recipient
+                                                                        .lastname
+                                                                }
+                                                            />
+                                                        </div>
+                                                        <p className="messages-main-header-p">
+                                                            {this.state.recipient.firstname}{" "}
+                                                            {this.state.recipient.lastname}
+                                                        </p>
+                                                    </div>
+                                                    <div className="messages">
+                                                        {this.state.allMessages.length === 0 ? <div style={{ textAlign: "center", marginTop: "50px" }}>No messages.</div> : displayMessages}
+                                                        <div
+                                                            ref={(el) => {
+                                                                this.messagesEnd = el;
+                                                            }}
+                                                        ></div>
+                                                    </div>
+                                                    <Row className="message-input">
+                                                        <InputGroup>
+                                                            <Input
+                                                                placeholder="Type a message..."
+                                                                value={this.state.message}
+                                                                onChange={
+                                                                    this.changeHandler
+                                                                }
+                                                                onKeyDown={
+                                                                    this.keyDownHandler
+                                                                }
+                                                            ></Input>
+                                                            <InputGroupAddon addonType="append">
+                                                                <Button
+                                                                    outline
+                                                                    onClick={
+                                                                        this.sendHandler
+                                                                    }
+                                                                >
+                                                                    <AiOutlineSend />
+                                                                </Button>
+                                                            </InputGroupAddon>
+                                                        </InputGroup>
+                                                    </Row>
+                                                </Col>
+                                            );
+                                        }
+                                    })()}
                                 </Row>
                             );
                         }

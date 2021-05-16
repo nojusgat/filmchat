@@ -95,9 +95,15 @@ class Friends extends Component {
                                         );
                                     });
 
-                                    return (
-                                        <Row className="mb-2">{listUsers}</Row>
-                                    );
+                                    if(this.state.friendsList.length > 0) {
+                                        return (
+                                            <Row className="mb-2">{listUsers}</Row>
+                                        );
+                                    } else {
+                                        return (
+                                            <Row className="mb-2" style={{paddingBottom: "20vh"}}>You don't have any friends.</Row>
+                                        );
+                                    }
                                 }
                             })()}
                         </Col>

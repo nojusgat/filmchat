@@ -4,7 +4,7 @@ describe('Friends system testing', () => {
     })
   
     it('Create User 1 and login without UI', function () {
-        cy.exec('php artisan migrate:fresh && php artisan db:seed')
+        cy.exec('php artisan migrate:fresh')
         cy.createUserAndloginSpecific("TestUserName1", "TestUserSurname1", "test1@example.com");
         cy.saveLocalStorage();
         cy.visit('http://127.0.0.1:8000/users')

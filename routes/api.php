@@ -24,6 +24,7 @@ Route::group([
 
 ],function ($router) {
     Route::get('/generate/user', [TestsController::class, 'GenerateUser']);
+    Route::post('/generate/user', [TestsController::class, 'GenerateUserSpecific']);
     Route::post('/generate/emailToken', [TestsController::class, 'GetEmailToken']);
 });
 

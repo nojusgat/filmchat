@@ -38,3 +38,24 @@ Cypress.Commands.add('login', () => {
     })
 
 });
+
+Cypress.Commands.add('createUserAndloginSpecific', (name, surname, email) => {
+    cy.request('POST', 'http://127.0.0.1:8000/api/test/generate/user', {name: name, surname: surname, email: email})
+    .its('body')
+    .then(body => {
+        cy.request('POST', 'http://127.0.0.1:8000/api/auth/login', {email: body.email, password: 'password', remember: false})
+        .its('body')
+        .then(body => {
+            cy.setLocalStorage("user", JSON.stringify(body));
+        })
+    })
+
+});
+
+Cypress.Commands.add('loginSpecific', (email) => {
+    cy.request('POST', 'http://127.0.0.1:8000/api/auth/login', {email: email, password: 'password', remember: false})
+    .its('body')
+    .then(body => {
+        cy.setLocalStorage("user", JSON.stringify(body));
+    })
+});

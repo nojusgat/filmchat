@@ -1,7 +1,7 @@
 describe('My First test', function () {
     beforeEach(() => {
         // reset and seed the database prior to every test
-        cy.exec('php artisan migrate:fresh && php artisan db:seed')
+        //cy.exec('php artisan migrate:fresh && php artisan db:seed')
     
         // seed a user in the DB that we can control from our tests
         // assuming it generates a random password for us
